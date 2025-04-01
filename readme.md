@@ -28,7 +28,7 @@ O desenvolvimento do projeto está dividido em dois módulos principais:
 
 - **MySQL** - Banco de dados relacional
 - **SQL** - Linguagem para manipulação dos dados
-- **Diagrama ER** - Modelagem do banco de dados
+- **BR Modelo** - Modelagem do banco de dados
 - **DBeaver** - Ferramentas de gerenciamento
 
 ## 🚀 Como Executar o Projeto
