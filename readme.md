@@ -4,55 +4,31 @@
 
 Este projeto visa modelar e implementar um banco de dados para uma empresa de logística que realiza transporte de mercadorias e passageiros. O sistema gerencia motoristas, clientes, serviços, pagamentos e veículos de forma estruturada, garantindo eficiência e segurança nas operações.
 
-## 🏢 Mini-Mundo
+## 🏗 Estrutura do Projeto
 
-A empresa de logística oferece dois tipos de serviço:
-- **Transporte de mercadorias**: realizado exclusivamente por motos, com limite de carga de 50 kg.
-- **Transporte de passageiros**: realizado por vans, com limite de passageiros definido pela capacidade do veículo.
+O desenvolvimento do projeto está dividido em dois módulos principais:
 
-## 🚗 Frota
+### 🏛 Módulo 1
+- Modelagem do banco de dados:
+  - Diagrama Conceitual
+  - Diagrama Lógico
+- Scripts SQL:
+  - Criação das tabelas
+  - Inserção de dados iniciais
+- Desenvolvimento de um CRUD funcional com interface simples
+- Relatório versão 1.0: Documentação das etapas do processo
 
-- Veículos podem ser motos ou vans, pertencendo à empresa ou a terceiros.
-- Cada veículo possui **placa, capacidade e proprietário cadastrado**.
-- Apenas um motorista conduz um veículo por vez.
-
-## 👨‍✈️ Motoristas
-
-- Podem ser **fixos** (apenas da empresa) ou **terceirizados** (podem ter veículo próprio).
-- Possuem registro com **nome, CPF, CNH, categoria de habilitação e contato**.
-
-## 🏠 Clientes
-
-- Devem fornecer **CPF, nome, sobrenome, endereço e telefone**.
-- Podem solicitar múltiplos serviços simultaneamente.
-
-## 💰 Pagamento
-
-- Realizado antecipadamente por **Pix, cartão de crédito ou dinheiro**.
-- O transporte de passageiros custa **R$ 100,00 por pessoa**.
-- A entrega de mercadorias custa **R$ 30,00 por envio**.
-- O status do pagamento pode ser **Em andamento, Cancelado ou Aprovado**.
-- Em caso de cancelamento, o cliente tem direito a **reembolso**.
-
-## 📍 Pontos de Encontro e Coleta
-
-- O transporte de passageiros parte de **três pontos fixos**.
-- As entregas são deixadas em **pontos de coleta fixos** e devem incluir informações como **destinatário, endereço de entrega e descrição do produto**.
-
-## 📊 Registro de Viagens
-
-Cada viagem é registrada com:
-- **Data e horário**
-- **Rota**
-- **Motorista e veículo utilizados**
-- **Tipo de serviço**
-- **Clientes transportados ou detalhes do produto entregue**
+### 🚀 Módulo 2
+- Interface versão 2.0 com melhorias na usabilidade
+- Dashboard para visualização de dados
+- Scripts avançados de consultas SQL
+- Relatório final detalhando a conclusão do projeto
 
 ## 📌 Tecnologias Utilizadas
 
 - **MySQL** - Banco de dados relacional
 - **SQL** - Linguagem para manipulação dos dados
-- **BRModelo** - Modelagem do banco de dados
+- **Diagrama ER** - Modelagem do banco de dados
 - **DBeaver** - Ferramentas de gerenciamento
 
 ## 🚀 Como Executar o Projeto
