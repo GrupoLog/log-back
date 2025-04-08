@@ -41,10 +41,10 @@ Clone o repositório:
 
 ## 👥 Integrantes do Grupo
 
-- **Nome 1** - [asc@cesar.school](mailto:asc@cesar.school)
-- **Nome 2** - [ec2@cesar.school](mailto:ec2@cesar.school)
-- **Nome 3** - [jamlp@cesar.school](mailto:jamlp@cesar.school)
-- **Nome 4** - [pcm7@cesar.school](mailto:pcm7@cesar.school)
+- **Arthur Capistrano** - [asc@cesar.school](mailto:asc@cesar.school)
+- **Érico Chen** - [ec2@cesar.school](mailto:ec2@cesar.school)
+- **João Antônio** - [jamlp@cesar.school](mailto:jamlp@cesar.school)
+- **Pablo Muniz** - [pcm7@cesar.school](mailto:pcm7@cesar.school)
 
 ## 📄 Licença
 
