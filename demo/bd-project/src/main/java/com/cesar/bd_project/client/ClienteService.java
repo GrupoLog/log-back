@@ -16,7 +16,7 @@ public class ClienteService {
     }
 
     public void cadastrarCliente(ClientModel cliente) throws SQLException {
-        // Exemplo de regra: nome não pode ser vazio
+        // Nome não pode ser vazio
         if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
@@ -28,5 +28,19 @@ public class ClienteService {
         return dao.listarTodos();
     }
 
-    // Demais métodos podem ser implementados aqui, como atualizar, deletar, buscarPorId, etc.
+    public ClientModel buscarClientePorCpf(String cpf) throws SQLException {
+        return dao.buscarPorCpf(cpf);
+    }
+
+    public void atualizarCliente(ClientModel cliente) throws SQLException {
+
+        dao.atualizar(cliente);
+    }
+
+    public void deletarCliente(String cpf) throws SQLException {
+
+        dao.deletar(cpf);
+    }
+
+
 }
