@@ -1,3 +1,50 @@
+# Ignorar arquivos do Maven
+target/
+!target/*.jar
+!target/*.war
+
+# Arquivos de configuração do IntelliJ IDEA
+.idea/
+*.iml
+
+# Arquivos de configuração do Eclipse
+.project
+.classpath
+.settings/
+
+# Arquivos de configuração do NetBeans
+nbproject/
+
+# Arquivos do sistema operacional
+.DS_Store
+Thumbs.db
+
+# Arquivos de compilação do Gradle
+.gradle/
+
+# Dependências locais do Maven
+.m2/
+
+# Logs e arquivos temporários
+*.log
+*.out
+
+# Arquivos de compilação do Maven (não apenas o diretório target, mas também arquivos de plugin)
+*.class
+*.jar
+*.war
+*.ear
+
+# Arquivos de configuração de logs
+log/
+
+# Arquivos de configuração do Spring Boot (por exemplo, arquivos de banco de dados)
+application.properties
+
+# Outros arquivos temporários
+*.swp
+*~
+
 HELP.md
 target/
 !.mvn/wrapper/maven-wrapper.jar
