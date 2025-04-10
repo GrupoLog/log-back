@@ -1,6 +1,8 @@
 package com.cesar.bd_project.client;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -14,16 +16,18 @@ public class ClientController {
     private ClienteService clienteService;
 
     @PostMapping
-    public String cadastrarCliente(@RequestBody ClientModel cliente) {
+    public ResponseEntity<?> cadastrarCliente(@RequestBody ClientModel cliente) {
         try {
-            clienteService.cadastrarCliente(cliente);
-            return "Cliente cadastrado com sucesso!";
+            ClientModel clienteSalvo = clienteService.cadastrarCliente(cliente);
+            return ResponseEntity.status(HttpStatus.CREATED).body(clienteSalvo);
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
         } catch (SQLException e) {
-            return "Erro ao salvar cliente no banco de dados: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar cliente no banco de dados: " + e.getMessage());
         }
     }
+    
+
 
 
     @GetMapping

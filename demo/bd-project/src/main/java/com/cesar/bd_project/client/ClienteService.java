@@ -15,14 +15,16 @@ public class ClienteService {
         this.dao = dao;
     }
 
-    public void cadastrarCliente(ClientModel cliente) throws SQLException {
-        // Nome não pode ser vazio
+    public ClientModel cadastrarCliente(ClientModel cliente) throws SQLException {
+        // Validação
         if (cliente.getNome() == null || cliente.getNome().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
-
-        dao.salvar(cliente);
+    
+        // Salvar e retornar
+        return dao.salvar(cliente);
     }
+    
 
     public List<ClientModel> listarClientes() throws SQLException {
         return dao.listarTodos();

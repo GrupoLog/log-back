@@ -14,12 +14,12 @@ import com.cesar.bd_project.utils.ConnectionFactory;
 
 @Repository
 public class ClientDAO {
-    public void salvar(ClientModel client) throws SQLException {
+    public ClientModel salvar(ClientModel client) throws SQLException {
         String sql = "INSERT INTO Clientes (CPF, nome, sobrenome, rua, bairro, numero, cidade) VALUES (?, ?, ?, ?, ?, ?, ?)";
-
+    
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
-
+    
             stmt.setString(1, client.getCpf());
             stmt.setString(2, client.getNome());
             stmt.setString(3, client.getSobrenome());
@@ -27,9 +27,13 @@ public class ClientDAO {
             stmt.setString(5, client.getBairro());
             stmt.setInt(6, client.getNumero());
             stmt.setString(7, client.getCidade());
+    
             stmt.executeUpdate();
+    
+            return client;
         }
     }
+    
 
     public List<ClientModel> listarTodos() throws SQLException {
         List<ClientModel> lista = new ArrayList<>();
