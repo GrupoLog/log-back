@@ -48,14 +48,17 @@ public class ClientController {
 
 
     @PutMapping("/{cpf}")
-    public String atualizarCliente(@PathVariable String cpf, @RequestBody ClientModel cliente) {
+    public ResponseEntity<MessageResponse> atualizarCliente(@PathVariable String cpf, @RequestBody ClientModel cliente) {
         try {
             clienteService.atualizarCliente(cliente);
-            return "Cliente atualizado com sucesso!";
+            return ResponseEntity.ok(new MessageResponse("Cliente atualizado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
+            //return "Erro de validação: " + e.getMessage();
+            return ResponseEntity.ok(new MessageResponse("Erro de validação!"));
         } catch (SQLException e) {
-            return "Erro ao atualizar cliente no banco de dados: " + e.getMessage();
+            //return "Erro ao atualizar cliente no banco de dados: " + e.getMessage();
+            return ResponseEntity.ok(new MessageResponse("Erro ao atualizar cliente no banco de dados"));
+
         }
     }
 
