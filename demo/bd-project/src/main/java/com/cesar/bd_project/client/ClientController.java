@@ -27,9 +27,6 @@ public class ClientController {
         }
     }
     
-
-
-
     @GetMapping
     public List<ClientModel> listarClientes() {
         try {
@@ -50,8 +47,8 @@ public class ClientController {
     }
 
 
-    @PutMapping
-    public String atualizarCliente(@RequestBody ClientModel cliente) {
+    @PutMapping("/{cpf}")
+    public String atualizarCliente(@PathVariable String cpf, @RequestBody ClientModel cliente) {
         try {
             clienteService.atualizarCliente(cliente);
             return "Cliente atualizado com sucesso!";
