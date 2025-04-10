@@ -3,13 +3,10 @@ package com.cesar.bd_project.dao;
 import com.cesar.bd_project.model.ProductModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 
 
 public class ProductDao implements GenericDao<ProductModel>{
@@ -33,7 +30,6 @@ public class ProductDao implements GenericDao<ProductModel>{
                 lista.add(product);
             }
         }
-
         return lista;
     }
 
@@ -41,7 +37,6 @@ public class ProductDao implements GenericDao<ProductModel>{
     public void create(ProductModel productModel) {
 
     }
-
     @Override
     public Optional<ProductModel> get(int id) {
         return Optional.empty();

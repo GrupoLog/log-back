@@ -63,11 +63,7 @@ public class ClientDAO {
         String sql = "SELECT * FROM Clientes WHERE CPF = ?";
         ClientModel client = null;
 
-        // Verifica se o CPF é nulo ou vazio
-        if (cpf == null || cpf.isEmpty()) {
-            System.err.println("CPF não pode ser nulo ou vazio");
-            return null;        
-        }        
+
         
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -96,17 +92,6 @@ public class ClientDAO {
 
     public boolean atualizar(ClientModel client) throws SQLException {
         String sql = "UPDATE Clientes SET nome = ?, sobrenome = ?, rua = ?, bairro = ?, numero = ?, cidade = ? WHERE CPF = ?";
-
-        // Verifica se o CPF é nulo ou vazio
-        if (client.getCpf() == null || client.getCpf().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
-
-        // Verifica se o cliente existe
-        ClientModel existingClient = buscarPorCpf(client.getCpf());
-        if (existingClient == null) {
-            throw new IllegalArgumentException("Cliente com o CPF " + client.getCpf() + " não encontrado.");
-        }
         
         // Atualiza os dados do cliente
         try (Connection conn = ConnectionFactory.getConnection();
@@ -130,18 +115,6 @@ public class ClientDAO {
 
     public boolean deletar(String cpf) throws SQLException {
         String sql = "DELETE FROM Clientes WHERE CPF = ?";
-
-        // Verifica se o CPF é nulo ou vazio
-        if (cpf == null || cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
-
-        // Verifica se o cliente existe
-        ClientModel existingClient = buscarPorCpf(cpf);
-        if (existingClient == null) {
-            throw new IllegalArgumentException("Cliente com o CPF " + cpf + " não encontrado.");
-        }
-
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
 
