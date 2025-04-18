@@ -7,10 +7,9 @@ import org.springframework.stereotype.Repository;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @Repository
-public class ProductDao implements GenericDao<ProductModel>{
+public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public List<ProductModel> list() throws SQLException {
@@ -49,17 +48,47 @@ public class ProductDao implements GenericDao<ProductModel>{
     }
 
     @Override
-    public Optional<ProductModel> get(int id) {
-        return Optional.empty();
+    public ProductModel findById(Integer id) throws SQLException {
+        String sql = "SELET * FROM Produtos WHERE id_produto = ?";
+        ProductModel product = null;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                product = new ProductModel();
+                product.setIdProduto(rs.getInt("id_produto"));
+                product.setPeso(rs.getInt("peso"));
+                product.setDataValidade(rs.getDate("data_validade").toLocalDate());
+                product.setDescricao(rs.getString("descricao"));
+            }
+
+        }
+        return null;
+    }
+
+
+    @Override
+    public void update(ProductModel product) throws SQLException {
+        String sql = "UPDATE Produtos SET peso = ?, data_validade = ?, descricao = ? WHERE id_produto = ?";
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, product.getPeso());
+            stmt.setDate(2, java.sql.Date.valueOf(product.getDataValidade()));
+            stmt.setString(3, product.getDescricao());
+            stmt.setInt(4, product.getIdProduto());
+            stmt.executeUpdate();
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar produto: " + e.getMessage(), e);
+        }
     }
 
     @Override
-    public void update(ProductModel productModel, int id) {
-
-    }
-
-    @Override
-    public void delete(int id) {
+    public void delete(Integer id) {
 
     }
 }

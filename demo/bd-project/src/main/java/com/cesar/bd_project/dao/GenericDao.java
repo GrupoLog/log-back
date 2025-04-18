@@ -6,16 +6,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-public interface GenericDao<T> {
+public interface GenericDao<T, ID> {
 
     List<T> list() throws SQLException;
 
-    ProductModel save(T t) throws SQLException;
+    T save(T t) throws SQLException;
 
-    Optional<T> get(int id);
+    T findById(ID id) throws SQLException;
 
-    void update(T t, int id);
+    void update(T t) throws SQLException;
 
-    void delete(int id);
-
+    void delete(ID id);
 }

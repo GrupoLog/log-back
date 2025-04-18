@@ -28,4 +28,12 @@ public class ProductService {
 
         return dao.save(product);
     }
+
+    public void updateProduct(ProductModel productModel) throws SQLException {
+        dao.update(productModel);
+    }
+
+//    public void deleteProduct(int id) {
+//        dao.delete(id);
+//    }
 }
