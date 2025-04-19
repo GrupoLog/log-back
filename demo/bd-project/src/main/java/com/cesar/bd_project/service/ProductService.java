@@ -21,19 +21,40 @@ public class ProductService {
     }
 
     public ProductModel insertProduct(ProductModel product) throws SQLException {
-        // Validação
-        if (product.getIdProduto() == null) {
-            throw new IllegalArgumentException("Id_produto é obrigatório");
+        // Verifica se o id_produto não é nulo
+        if(product.getIdProduto() == null){
+            throw new IllegalArgumentException("id_produto é obrigatório");
+        }
+
+        // Verica se já existe no banco de dados
+        if (dao.findById(product.getIdProduto()) != null) {
+            throw new IllegalArgumentException("Produto já cadastrado!");
         }
 
         return dao.save(product);
     }
 
-    public void updateProduct(ProductModel productModel) throws SQLException {
-        dao.update(productModel);
+    public ProductModel findById(Integer id) throws SQLException{
+        return dao.findById(id);
     }
 
-//    public void deleteProduct(int id) {
-//        dao.delete(id);
-//    }
+    public void updateProduct(ProductModel product) throws SQLException {
+        if(product.getIdProduto() == null){
+            throw new IllegalArgumentException("O campo id_produto é obrigatório!");
+        }
+
+        ProductModel existingProduct = dao.findById(product.getIdProduto());
+        if(existingProduct == null){
+            System.err.println("Produto não encontrado!");
+        }
+
+        dao.update(product);
+    }
+
+    public void deleteProduct(Integer id) throws SQLException{
+        if (dao.findById(id) == null) {
+            throw new IllegalArgumentException("Produto não encontrado!");
+        }
+        dao.delete(id);
+    }
 }

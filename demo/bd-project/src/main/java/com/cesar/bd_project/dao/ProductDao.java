@@ -36,8 +36,10 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     @Override
     public ProductModel save(ProductModel productModel) throws SQLException {
         String sql = "INSERT INTO Produtos(id_produto, peso, data_validade, descricao) VALUES(?, ?, ?, ?)";
+
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(sql)) {
+
             stmt.setInt(1, productModel.getIdProduto());
             stmt.setInt(2, productModel.getPeso());
             stmt.setDate(3, java.sql.Date.valueOf(productModel.getDataValidade()));
@@ -49,7 +51,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public ProductModel findById(Integer id) throws SQLException {
-        String sql = "SELET * FROM Produtos WHERE id_produto = ?";
+        String sql = "SELECT * FROM Produtos WHERE id_produto = ?";
         ProductModel product = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -57,7 +59,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()){
+            if(rs.next()) {
                 product = new ProductModel();
                 product.setIdProduto(rs.getInt("id_produto"));
                 product.setPeso(rs.getInt("peso"));
@@ -66,7 +68,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
             }
 
         }
-        return null;
+        return product;
     }
 
 
@@ -88,7 +90,13 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     }
 
     @Override
-    public void delete(Integer id) {
+    public void delete(Integer id) throws SQLException{
+        String sql = "DELETE FROM Produtos WHERE id_produto = ?";
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
 
+            stmt.setInt(1, id);
+            stmt.executeUpdate();
+        }
     }
 }

@@ -63,7 +63,6 @@ public class ClientDAO {
         String sql = "SELECT * FROM Clientes WHERE CPF = ?";
         ClientModel client = null;
 
-
         
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {

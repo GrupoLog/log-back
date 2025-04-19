@@ -30,7 +30,7 @@ class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertProduct(@RequestBody ProductModel product) {
+    public ResponseEntity<?> insertProduct( @RequestBody ProductModel product) {
         try {
             ProductModel savedProduct = productService.insertProduct(product);
             return ResponseEntity.status(HttpStatus.CREATED).body(savedProduct);
@@ -42,7 +42,8 @@ class ProductController {
     }
 
     @PutMapping("/{id-produto}")
-    public ResponseEntity<MessageResponse> updateProduct(@PathVariable("id-produto") Integer idProduto, @RequestBody ProductModel product) {
+    public ResponseEntity<MessageResponse> updateProduct(@PathVariable ("id-produto") Integer idProduto, @RequestBody ProductModel product) {
+        product.setIdProduto(idProduto);
         try {
             productService.updateProduct(product);
             return ResponseEntity.ok(new MessageResponse("Produto atualizado com sucesso!"));
@@ -57,16 +58,16 @@ class ProductController {
     }
 
 
-//    @DeleteMapping("/{id-produto}")
-//    public String deleteProduct(@PathVariable String cpf) {
-//        try {
-//            productService.deleteProduct(cpf);
-//            return "Produto deletado com sucesso!";
-//        } catch (IllegalArgumentException e) {
-//            return "Erro de validação: " + e.getMessage();
-//        } catch (SQLException e) {
-//            return "Erro ao deletar produto no banco de dados: " + e.getMessage();
-//        }
-//    }
+    @DeleteMapping("/{id-produto}")
+    public String deleteProduct(@PathVariable("id-produto") Integer idProduto) {
+        try {
+            productService.deleteProduct(idProduto);
+            return "Produto deletado com sucesso!";
+        } catch (IllegalArgumentException e) {
+            return "Erro de validação: " + e.getMessage();
+        } catch (SQLException e) {
+            return "Erro ao deletar produto no banco de dados: " + e.getMessage();
+        }
+    }
 
 }
