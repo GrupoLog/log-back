@@ -48,21 +48,20 @@ cd log-back
 ```
 
 ### 3. Configure o Banco de Dados
-Certifique-se de que o MySQL está instalado e configurado corretamente. Em seguida:
-- Crie um banco de dados chamado `GrupoLog_DB`.
-- Execute os scripts SQL localizados na pasta `scripts/` para criar as tabelas e inserir os dados iniciais:
-  ```sql
-  source scripts/criar_tabelas.sql;
-  source scripts/inserir_dados.sql;
-  ```
+Certifique-se de que o MySQL está instalado e configurado corretamente:
+- Conexão criada com um usuário e senha
+  
+Em seguida:
+- Crie um banco de dados chamado `GrupoLog`.
 
-### 4. Configure o Arquivo `application.properties`
+Este passo é essencial para o build da aplicação, pois Spring não cria banco de dados, apenas cria as tabelas.
+
+### 4. Configure o arquivo `application.properties`
 No diretório `src/main/resources`, edite o arquivo `application.properties` com as credenciais do seu banco de dados:
 ```properties
-spring.datasource.url=jdbc:mysql://localhost:3306/GrupoLog_DB
+spring.datasource.url=jdbc:mysql://localhost:3306/GrupoLog
 spring.datasource.username=seu_usuario
 spring.datasource.password=sua_senha
-spring.datasource.driver-class-name=com.mysql.cj.jdbc.Driver
 ```
 
 ### 5. Compile o Projeto
@@ -83,8 +82,16 @@ Após iniciar o servidor, acesse a aplicação no navegador:
 http://localhost:8080
 ```
 
-### 8. Por fim, Finalize o Processo
+### 8. Finalize o Processo
 Após testar, finalize o servidor com `Ctrl + C` no terminal.
+
+
+### 9. Por fim, alterar o arquivo `application.properties`
+No diretório `src/main/resources`, edite o arquivo `application.properties` com as credenciais do seu banco de dados:
+```
+spring.sql.init.mode=never
+```
+Este passo é essencial, caso deseje rodar a aplicação novamente. Dessa forma, ao inicializar a aplicação novamente, o Spring não vai executar os scripts sql (criando as mesmas tabelas e dados) e vai buildar normalmente.
 
 
 ## 👥 Integrantes do Grupo
