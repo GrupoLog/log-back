@@ -1,5 +1,3 @@
-CREATE DATABASE GrupoLog;
-
 USE GrupoLog;
 
 -- Tabela Produtos
