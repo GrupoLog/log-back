@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class PhoneDAO implements GenericDao<PhoneModel, String>{
+public class PhoneDao implements GenericDao<PhoneModel, String>{
     @Override
     public List<PhoneModel> list() throws SQLException {
 

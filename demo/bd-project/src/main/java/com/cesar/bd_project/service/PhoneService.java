@@ -1,6 +1,6 @@
 package com.cesar.bd_project.service;
 
-import com.cesar.bd_project.dao.PhoneDAO;
+import com.cesar.bd_project.dao.PhoneDao;
 import com.cesar.bd_project.model.PhoneModel;
 import org.springframework.stereotype.Service;
 
@@ -10,9 +10,9 @@ import java.util.List;
 @Service
 public class PhoneService {
 
-    private final PhoneDAO phoneDao;
+    private final PhoneDao phoneDao;
 
-    public PhoneService(PhoneDAO phoneDao){
+    public PhoneService(PhoneDao phoneDao){
         this.phoneDao = phoneDao;
     }
 
