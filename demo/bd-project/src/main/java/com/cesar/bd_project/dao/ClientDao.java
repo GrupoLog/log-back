@@ -91,11 +91,11 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
     public void update(ClientModel client) throws SQLException {
-        String sql = "UPDATE Clientes SET nome = ?, sobrenome = ?, rua = ?, bairro = ?, numero = ?, cidade = ? WHERE CPF = ?";
+        String SQL = "UPDATE Clientes SET nome = ?, sobrenome = ?, rua = ?, bairro = ?, numero = ?, cidade = ? WHERE CPF = ?";
 
         // Atualiza os dados do cliente
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setString(1, client.getNome());
             stmt.setString(2, client.getSobrenome());
@@ -116,9 +116,9 @@ public class ClientDao implements GenericDao<ClientModel, String> {
     @Override
     public void delete(String cpf) throws SQLException {
 
-        String sql = "DELETE FROM Clientes WHERE CPF = ?";
+        String SQL = "DELETE FROM Clientes WHERE CPF = ?";
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setString(1, cpf);
             stmt.executeUpdate();

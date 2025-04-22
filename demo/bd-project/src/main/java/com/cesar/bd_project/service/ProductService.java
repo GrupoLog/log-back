@@ -10,14 +10,14 @@ import java.util.List;
 @Service
 public class ProductService {
 
-    private final ProductDao dao;
+    private final ProductDao productDao;
 
-    public ProductService(ProductDao dao){
-        this.dao = dao;
+    public ProductService(ProductDao productDao){
+        this.productDao = productDao;
     }
 
     public List<ProductModel> listProducts() throws SQLException {
-        return dao.list();
+        return productDao.list();
     }
 
     public ProductModel insertProduct(ProductModel product) throws SQLException {
@@ -27,15 +27,15 @@ public class ProductService {
         }
 
         // Verica se já existe no banco de dados
-        if (dao.findById(product.getIdProduto()) != null) {
+        if (productDao.findById(product.getIdProduto()) != null) {
             throw new IllegalArgumentException("Produto já cadastrado!");
         }
 
-        return dao.save(product);
+        return productDao.save(product);
     }
 
     public ProductModel findById(Integer id) throws SQLException{
-        return dao.findById(id);
+        return productDao.findById(id);
     }
 
     public void updateProduct(ProductModel product) throws SQLException {
@@ -43,18 +43,18 @@ public class ProductService {
             throw new IllegalArgumentException("O campo id_produto é obrigatório!");
         }
 
-        ProductModel existingProduct = dao.findById(product.getIdProduto());
+        ProductModel existingProduct = productDao.findById(product.getIdProduto());
         if(existingProduct == null){
             System.err.println("Produto não encontrado!");
         }
 
-        dao.update(product);
+        productDao.update(product);
     }
 
     public void deleteProduct(Integer id) throws SQLException{
-        if (dao.findById(id) == null) {
+        if (productDao.findById(id) == null) {
             throw new IllegalArgumentException("Produto não encontrado!");
         }
-        dao.delete(id);
+        productDao.delete(id);
     }
 }

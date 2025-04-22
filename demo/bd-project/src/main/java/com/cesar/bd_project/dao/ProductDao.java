@@ -15,11 +15,11 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     public List<ProductModel> list() throws SQLException {
 
         List<ProductModel> productList = new ArrayList<>();
-        String sql = "SELECT * FROM Produtos";
+        String SQL = "SELECT * FROM Produtos";
 
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(SQL)) {
 
             while (rs.next()) {
                 ProductModel product = new ProductModel();
@@ -35,10 +35,10 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public ProductModel save(ProductModel productModel) throws SQLException {
-        String sql = "INSERT INTO Produtos(id_produto, peso, data_validade, descricao) VALUES(?, ?, ?, ?)";
+        String SQL = "INSERT INTO Produtos(id_produto, peso, data_validade, descricao) VALUES(?, ?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, productModel.getIdProduto());
             stmt.setInt(2, productModel.getPeso());
@@ -51,11 +51,11 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public ProductModel findById(Integer id) throws SQLException {
-        String sql = "SELECT * FROM Produtos WHERE id_produto = ?";
+        String SQL = "SELECT * FROM Produtos WHERE id_produto = ?";
         ProductModel product = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
@@ -74,9 +74,9 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public void update(ProductModel product) throws SQLException {
-        String sql = "UPDATE Produtos SET peso = ?, data_validade = ?, descricao = ? WHERE id_produto = ?";
+        String SQL = "UPDATE Produtos SET peso = ?, data_validade = ?, descricao = ? WHERE id_produto = ?";
         try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, product.getPeso());
             stmt.setDate(2, java.sql.Date.valueOf(product.getDataValidade()));
@@ -91,9 +91,9 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public void delete(Integer id) throws SQLException{
-        String sql = "DELETE FROM Produtos WHERE id_produto = ?";
+        String SQL = "DELETE FROM Produtos WHERE id_produto = ?";
         try(Connection conn = ConnectionFactory.getConnection();
-            PreparedStatement stmt = conn.prepareStatement(sql)) {
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
