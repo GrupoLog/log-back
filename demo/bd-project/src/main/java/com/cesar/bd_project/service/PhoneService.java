@@ -6,7 +6,6 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class PhoneService {
@@ -30,6 +29,7 @@ public class PhoneService {
         if(phone.getTelefone() == null){
             throw new IllegalArgumentException("telefone é obrigatório");
         }
+        // Falta validar o caso de o cpf não estiver no banco
 
         // Verica se já existe no banco de dados
         if (phone.getTelefone().equals(phoneDao.findById(phone.getClientesCpf()).getTelefone())) {
@@ -40,21 +40,23 @@ public class PhoneService {
     }
 
     public void updatePhone(PhoneModel phone) throws SQLException {
-        if(phone.getClientesCpf() == null){
-            throw new IllegalArgumentException("O campo id_produto é obrigatório!");
+        if(phone.getTelefone() == null){
+            throw new IllegalArgumentException("O campo telefone é obrigatório!");
         }
-
-        PhoneModel existingPhone = phoneDao.findById(phone.getClientesCpf());
-        if(existingPhone == null){
-            System.err.println("Produto não encontrado!");
-        }
+        // Falta validar caso o telefone não exista
+        // Falta validar caso o cpf não exista
+//        PhoneModel existingPhone = phoneDao.findById(phone.getClientesCpf());
+//        if(existingPhone == null){
+//            System.err.println("Telefone não encontrado!");
+//        }
 
         phoneDao.update(phone);
     }
 
+
     public void deletePhone(String cpf) throws SQLException{
         if (phoneDao.findById(cpf) == null) {
-            throw new IllegalArgumentException("Produto não encontrado!");
+            throw new IllegalArgumentException("PTelefone não encontrado!");
         }
         phoneDao.delete(cpf);
     }

@@ -40,4 +40,32 @@ public class PhoneController {
         }
     }
 
+    @PutMapping("/{clientes_cpf}")
+    public ResponseEntity<MessageResponse> updatePhone(@PathVariable ("clientes_cpf") String clientesCpf, @RequestBody PhoneModel phone) {
+        phone.setClientesCpf(clientesCpf);
+        try {
+            phoneService.updatePhone(phone);
+            return ResponseEntity.ok(new MessageResponse("Telefone atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            //return "Erro de validação: " + e.getMessage();
+            return ResponseEntity.ok(new MessageResponse("Erro de validação!"));
+        } catch (SQLException e) {
+            //return "Erro ao atualizar produto no banco de dados: " + e.getMessage();
+            return ResponseEntity.ok(new MessageResponse("Erro ao atualizar telefone no banco de dados"));
+
+        }
+    }
+
+    @DeleteMapping("/{clientes_cpf}")
+    public String deletePhone(@PathVariable("clientes_cpf") String clientesCpf) {
+        try {
+            phoneService.deletePhone(clientesCpf);
+            return "Telefone deletado com sucesso!";
+        } catch (IllegalArgumentException e) {
+            return "Erro de validação: " + e.getMessage();
+        } catch (SQLException e) {
+            return "Erro ao deletar deletar no banco de dados: " + e.getMessage();
+        }
+    }
+
 }
