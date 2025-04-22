@@ -1,4 +1,4 @@
-USE GrupoLog;
+USE GrupoLog_DB;
 
 -- Tabela Produtos
 INSERT INTO Produtos (peso, data_validade, descricao) VALUES

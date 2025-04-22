@@ -5,8 +5,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 
-import com.cesar.bd_project.client.ClientDAO;
-import com.cesar.bd_project.client.ClientModel;
+import com.cesar.bd_project.dao.ClientDAO;
+import com.cesar.bd_project.model.ClientModel;
 
 @SpringBootApplication
 public class BdProjectApplication implements CommandLineRunner{

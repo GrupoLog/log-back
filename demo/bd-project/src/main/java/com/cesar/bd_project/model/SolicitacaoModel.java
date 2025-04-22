@@ -1,0 +1,36 @@
+package com.cesar.bd_project.model;
+
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
+import java.time.LocalDate;
+
+import com.fasterxml.jackson.annotation.JsonProperty; 
+
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+public class SolicitacaoModel {
+
+    @JsonProperty("id_solicitacao")
+    private int idSolicitacao;
+
+    @JsonProperty("data_solicitacao")
+    private LocalDate dataSolicitacao;
+
+    @JsonProperty("formna_pagamento")
+    private String formaPagamento;
+
+    @JsonProperty("valor_pagamento")
+    private Double valorPagamento;
+
+    @JsonProperty("id_produto")
+    private int idProduto;
+
+    @JsonProperty("clientes_cpf")
+    private String clientesCpf;
+
+    @JsonProperty("id_servico")
+    private int idServico;
+    
+}

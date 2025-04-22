@@ -1,4 +1,4 @@
-package com.cesar.bd_project.client;
+package com.cesar.bd_project.model;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

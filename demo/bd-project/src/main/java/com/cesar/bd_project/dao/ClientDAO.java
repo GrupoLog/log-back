@@ -1,4 +1,4 @@
-package com.cesar.bd_project.client;
+package com.cesar.bd_project.dao;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.cesar.bd_project.model.ClientModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
 @Repository

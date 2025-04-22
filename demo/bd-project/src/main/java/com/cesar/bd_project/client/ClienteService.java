@@ -2,6 +2,9 @@ package com.cesar.bd_project.client;
 
 import org.springframework.stereotype.Service;
 
+import com.cesar.bd_project.dao.ClientDAO;
+import com.cesar.bd_project.model.ClientModel;
+
 import java.sql.SQLException;
 import java.util.List;
 
