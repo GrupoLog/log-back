@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.model.PhoneModel;
+import com.cesar.bd_project.model.PhoneModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -38,14 +39,30 @@ public class PhoneDAO implements GenericDao<PhoneModel, String>{
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setString(1, phoneModel.getTelefone());
             stmt.setString(2, phoneModel.getClientesCpf());
+            stmt.executeUpdate();
 
         }
-        return null;
+        return phoneModel;
     }
 
     @Override
-    public PhoneModel findById(String s) throws SQLException {
-        return null;
+    public PhoneModel findById(String cpf) throws SQLException {
+        String SQL = "SELECT * FROM Telefone WHERE clientes_cpf = ?";
+        PhoneModel phone = null;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, cpf);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()) {
+                phone = new PhoneModel();
+                phone.setTelefone(rs.getString("telefone"));
+                phone.setClientesCpf(rs.getString("clientes_cpf"));
+            }
+
+        }
+        return phone;
     }
 
     @Override

@@ -1,10 +1,11 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.client.MessageResponse;
 import com.cesar.bd_project.model.PhoneModel;
 import com.cesar.bd_project.service.PhoneService;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -26,4 +27,17 @@ public class PhoneController {
             throw new RuntimeException("Erro ao listar telefones: " + e.getMessage());
         }
     }
+
+    @PostMapping
+    public ResponseEntity<?> insertPhone(@RequestBody PhoneModel phone) {
+        try {
+            PhoneModel savedPhone = phoneService.insertPhone(phone);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedPhone);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
+        } catch (SQLException e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar telefone no banco de dados: " + e.getMessage());
+        }
+    }
+
 }

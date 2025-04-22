@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 public class PhoneService {
@@ -20,22 +21,22 @@ public class PhoneService {
         return phoneDao.list();
     }
 
+    public PhoneModel findById(String cpf) throws SQLException{
+        return phoneDao.findById(cpf);
+    }
+
     public PhoneModel insertPhone(PhoneModel phone) throws SQLException {
-        // Verifica se o id_produto não é nulo
-        if(phone.getClientesCpf() == null){
-            throw new IllegalArgumentException("id_produto é obrigatório");
+        // Verifica se o telefone não é nulo
+        if(phone.getTelefone() == null){
+            throw new IllegalArgumentException("telefone é obrigatório");
         }
 
         // Verica se já existe no banco de dados
-        if (phoneDao.findById(phone.getClientesCpf()) != null) {
-            throw new IllegalArgumentException("Produto já cadastrado!");
+        if (phone.getTelefone().equals(phoneDao.findById(phone.getClientesCpf()).getTelefone())) {
+            throw new IllegalArgumentException("Telefone já cadastrado!");
         }
 
         return phoneDao.save(phone);
-    }
-
-    public PhoneModel findById(String cpf) throws SQLException{
-        return phoneDao.findById(cpf);
     }
 
     public void updatePhone(PhoneModel phone) throws SQLException {
