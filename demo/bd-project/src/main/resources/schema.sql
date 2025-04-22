@@ -1,4 +1,4 @@
-USE GrupoLog_DB;
+USE GrupoLog;
 
 -- Tabela Produtos
 CREATE TABLE Produtos (

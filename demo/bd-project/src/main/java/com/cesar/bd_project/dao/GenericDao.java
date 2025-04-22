@@ -10,9 +10,9 @@ public interface GenericDao<T, ID> {
 
     List<T> list() throws SQLException;
 
-    T save(T t) throws SQLException;
-
     T findById(ID id) throws SQLException;
+
+    T save(T t) throws SQLException;
 
     void update(T t) throws SQLException;
 
