@@ -31,37 +31,38 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public PhoneModel save(PhoneModel phoneModel) throws SQLException {
+    public PhoneModel save(PhoneModel phone) throws SQLException {
         String SQL = "INSERT INTO Telefone (telefone, clientes_cpf) VALUES (?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
-            stmt.setString(1, phoneModel.getTelefone());
-            stmt.setString(2, phoneModel.getClientesCpf());
+            stmt.setString(1, phone.getTelefone());
+            stmt.setString(2, phone.getClientesCpf());
             stmt.executeUpdate();
 
         }
-        return phoneModel;
+        return phone;
     }
 
     @Override
-    public PhoneModel findById(String cpf) throws SQLException {
+    public List<PhoneModel> findById(String cpf) throws SQLException {
         String SQL = "SELECT * FROM Telefone WHERE clientes_cpf = ?";
-        PhoneModel phone = null;
+        List<PhoneModel> phoneList = new ArrayList<>();
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
 
-            if(rs.next()) {
-                phone = new PhoneModel();
+            while(rs.next()) {
+                PhoneModel phone = new PhoneModel();
                 phone.setTelefone(rs.getString("telefone"));
                 phone.setClientesCpf(rs.getString("clientes_cpf"));
+                phoneList.add(phone);
             }
 
         }
-        return phone;
+        return phoneList;
     }
 
     @Override

@@ -1,5 +1,6 @@
 package com.cesar.bd_project.service;
 
+import com.cesar.bd_project.dao.ClientDao;
 import com.cesar.bd_project.dao.PhoneDao;
 import com.cesar.bd_project.model.PhoneModel;
 import org.springframework.stereotype.Service;
@@ -11,29 +12,36 @@ import java.util.List;
 public class PhoneService {
 
     private final PhoneDao phoneDao;
+    private final ClientDao clientDao;
 
-    public PhoneService(PhoneDao phoneDao){
+    public PhoneService(PhoneDao phoneDao, ClientDao clientDao){
         this.phoneDao = phoneDao;
+        this.clientDao = clientDao;
     }
 
     public List<PhoneModel> listPhones() throws SQLException {
         return phoneDao.list();
     }
 
-    public PhoneModel findById(String cpf) throws SQLException{
-        return phoneDao.findById(cpf);
-    }
+//    public PhoneModel findById(String cpf) throws SQLException{
+//        return phoneDao.findById(cpf);
+//    }
 
     public PhoneModel insertPhone(PhoneModel phone) throws SQLException {
         // Verifica se o telefone não é nulo
-        if(phone.getTelefone() == null){
-            throw new IllegalArgumentException("telefone é obrigatório");
+        if(phone.getTelefone() == null || phone.getClientesCpf() == null){
+            throw new IllegalArgumentException("telefone e cpf é obrigatório");
         }
-        // Falta validar o caso de o cpf não estiver no banco
-
-        // Verica se já existe no banco de dados
-        if (phone.getTelefone().equals(phoneDao.findById(phone.getClientesCpf()).getTelefone())) {
-            throw new IllegalArgumentException("Telefone já cadastrado!");
+        // Verifica se o cpf está no banco
+        if(clientDao.findById(phone.getClientesCpf()) == null){
+            throw new IllegalArgumentException("CPF não está cadastrado.");
+        }
+        // Verica se já existe o telefone
+        List<PhoneModel> phoneList = phoneDao.findById(phone.getClientesCpf());
+        for(PhoneModel savedPhone : phoneList){
+            if(savedPhone.getTelefone().equals(phone.getTelefone())){
+                throw new IllegalArgumentException("Telefone já cadastrado para esse CPF.");
+            }
         }
 
         return phoneDao.save(phone);
