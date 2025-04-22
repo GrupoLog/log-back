@@ -14,7 +14,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     @Override
     public List<ProductModel> list() throws SQLException {
 
-        List<ProductModel> listProduct = new ArrayList<>();
+        List<ProductModel> productList = new ArrayList<>();
         String sql = "SELECT * FROM Produtos";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -27,10 +27,10 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
                 product.setPeso(rs.getInt("peso"));
                 product.setDataValidade(rs.getDate("data_validade").toLocalDate());
                 product.setDescricao(rs.getString("descricao"));
-                listProduct.add(product);
+                productList.add(product);
             }
         }
-        return listProduct;
+        return productList;
     }
 
     @Override

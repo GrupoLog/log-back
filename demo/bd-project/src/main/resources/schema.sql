@@ -10,20 +10,20 @@ CREATE TABLE Produtos (
 
 -- Tabela Clientes
    CREATE TABLE Clientes (
-    CPF VARCHAR(11) PRIMARY KEY,
+    cpf VARCHAR(11) PRIMARY KEY,
     nome VARCHAR(30) NOT NULL,
     sobrenome VARCHAR(30),
     rua VARCHAR(30)NOT NULL,
     bairro VARCHAR(30) NOT NULL,
-    numero INT CHECK (NUMERO > 0),
+    numero INT CHECK (numero > 0),
     cidade VARCHAR(30) DEFAULT 'Recife'
 );
 
 -- Tabela Telefone
     CREATE TABLE Telefone (
     telefone VARCHAR(11) PRIMARY KEY,
-    Clientes_CPF VARCHAR(11),
-    FOREIGN KEY (Clientes_CPF) REFERENCES Clientes (CPF)
+    clientes_cpf VARCHAR(11),
+    FOREIGN KEY (clientes_cpf) REFERENCES Clientes (cpf)
 );
 
 -- Tabela Veiculo
@@ -49,23 +49,23 @@ CREATE TABLE Veiculo (
 
 -- Tabela Motoristas
     CREATE TABLE Motoristas (
-    CNH VARCHAR(11) PRIMARY KEY,
+    cnh VARCHAR(11) PRIMARY KEY,
     tipo_cnh VARCHAR(3) CHECK (tipo_cnh IN ('A', 'B', 'AB', 'C', 'D', 'E')),
-    CPF VARCHAR(11),
+    cpf VARCHAR(11),
     nome VARCHAR(30),
     tipo VARCHAR(20) CHECK (tipo IN ('Fixo', 'Terceirizado')),
     telefone_um VARCHAR(11) NOT NULL, -- Tem que ter pelo menos 1 telefone cadastrado
     telefone_dois VARCHAR(11),
     cnh_supervisionado VARCHAR(11),
-    FOREIGN KEY (cnh_supervisionado) REFERENCES Motoristas (CNH)
+    FOREIGN KEY (cnh_supervisionado) REFERENCES Motoristas (cnh)
 );
 
 -- Tabela pode_Conduzir
 CREATE TABLE pode_Conduzir (
-    fk_Motoristas_CNH VARCHAR(11),
+    fk_Motoristas_cnh VARCHAR(11),
     fk_veiculo_chassi VARCHAR(17),
-    PRIMARY KEY (fk_Motoristas_CNH, fk_veiculo_chassi),
-    FOREIGN KEY (fk_Motoristas_CNH) REFERENCES Motoristas (CNH),
+    PRIMARY KEY (fk_Motoristas_cnh, fk_veiculo_chassi),
+    FOREIGN KEY (fk_Motoristas_cnh) REFERENCES Motoristas (cnh),
     FOREIGN KEY (fk_veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
@@ -75,10 +75,10 @@ CREATE TABLE viagem (
     data_viagem DATE,
     hora_viagem TIME,
     origem VARCHAR(30) NOT NULL,
-    Destino VARCHAR(30) NOT NULL,
+    destino VARCHAR(30) NOT NULL,
     fk_veiculo_chassi VARCHAR(17),
-    fk_Motoristas_CNH VARCHAR(11),
-    FOREIGN KEY (fk_Motoristas_CNH) REFERENCES Motoristas (CNH),
+    fk_Motoristas_cnh VARCHAR(11),
+    FOREIGN KEY (fk_Motoristas_cnh) REFERENCES Motoristas (cnh),
     FOREIGN KEY (fk_veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
@@ -115,9 +115,9 @@ CREATE TABLE viagem (
     valor_pagamento DOUBLE CHECK (valor_pagamento >= 0),
     status_pagamento VARCHAR(20) DEFAULT 'Pendente',
     id_produto INT,
-    Clientes_CPF VARCHAR(11),
+    clientes_cpf VARCHAR(11),
     id_servico INT,
     FOREIGN KEY (id_produto) REFERENCES Produtos (id_produto),
-    FOREIGN KEY (Clientes_CPF) REFERENCES Clientes (CPF),
+    FOREIGN KEY (clientes_cpf) REFERENCES Clientes (cpf),
     FOREIGN KEY (id_servico) REFERENCES Servicos (id_servico)
 );
