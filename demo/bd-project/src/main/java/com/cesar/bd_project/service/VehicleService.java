@@ -25,10 +25,15 @@ public class VehicleService {
     }
 
 
-    public void insertVehicle(String chassi) throws SQLException{
-        if(chassi == null || chassi.isEmpty()){
+    public VehicleModel insertVehicle(VehicleModel vehicle) throws SQLException{
+        if(vehicle.getChassi() == null || vehicle.getChassi().isEmpty()){
             throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
         }
+        if(vehicleDao.findById(vehicle.getChassi()) != null){
+            throw new IllegalArgumentException("Veiculo ja cadastrado.");
+        }
+
+        return vehicleDao.save(vehicle);
 
     }
 

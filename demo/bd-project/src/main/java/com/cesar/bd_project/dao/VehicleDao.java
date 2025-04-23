@@ -32,8 +32,16 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     }
 
     @Override
-    public VehicleModel save(VehicleModel vehicleModel) throws SQLException {
-        return null;
+    public VehicleModel save(VehicleModel vehicle) throws SQLException {
+        String SQL = "INSERT INTO veiculo(chassi, proprietario, placa) VALUES (?, ?, ?)";
+        try(Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, vehicle.getChassi());
+            stmt.setString(2, vehicle.getProprietario());
+            stmt.setString(3, vehicle.getPlaca());
+            stmt.executeUpdate();
+        }
+        return vehicle;
     }
 
     @Override
