@@ -10,7 +10,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class SolicitacaoModel {
+public class RequestModel {
 
     @JsonProperty("id_solicitacao")
     private int idSolicitacao;

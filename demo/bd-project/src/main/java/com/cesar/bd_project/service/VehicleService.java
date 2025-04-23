@@ -37,6 +37,8 @@ public class VehicleService {
 
     }
 
+
+
     public void deleteVehicle(String chassi) throws SQLException {
         if(chassi == null || chassi.isEmpty()){
             throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");

@@ -1,6 +1,6 @@
 package com.cesar.bd_project.dao;
 
-import com.cesar.bd_project.model.SolicitacaoModel;
+import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
 
@@ -9,9 +9,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class SolicitacaoDao {
+public class RequestDao implements GenericDao<RequestModel, Integer>{
 
-    public SolicitacaoModel salvar(SolicitacaoModel solicitacao) {
+    public RequestModel save(RequestModel solicitacao) throws SQLException{
         String sql = "INSERT INTO Solicitacoes (id_solicitacao, data_solicitacao, forma_pagamento, valor_pagamento, id_produto, clientes_cpf, id_servico) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -41,16 +41,16 @@ public class SolicitacaoDao {
         }
     }
 
-    public List<SolicitacaoModel> listarTodos() {
+    public List<RequestModel> list() throws SQLException{
         String sql = "SELECT * FROM Solicitacoes";
-        List<SolicitacaoModel> solicitacoes = new ArrayList<>();
+        List<RequestModel> solicitacoes = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(sql)) {
 
             while (rs.next()) {
-                SolicitacaoModel solicitacao = new SolicitacaoModel();
+                RequestModel solicitacao = new RequestModel();
                 solicitacao.setIdSolicitacao(rs.getInt("id_solicitacao"));
                 solicitacao.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
                 solicitacao.setFormaPagamento(rs.getString("forma_pagamento"));
@@ -69,7 +69,7 @@ public class SolicitacaoDao {
         return solicitacoes;
     }
 
-    public SolicitacaoModel buscarPorId(int id) {
+    public RequestModel buscarPorId(int id) {
         String sql = "SELECT * FROM Solicitacoes WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -79,7 +79,7 @@ public class SolicitacaoDao {
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                SolicitacaoModel solicitacao = new SolicitacaoModel();
+                RequestModel solicitacao = new RequestModel();
                 solicitacao.setIdSolicitacao(rs.getInt("id_solicitacao"));
                 solicitacao.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
                 solicitacao.setFormaPagamento(rs.getString("forma_pagamento"));
@@ -98,7 +98,7 @@ public class SolicitacaoDao {
         return null;
     }
 
-    public boolean atualizar(int id, SolicitacaoModel solicitacaoAtualizada) {
+    public boolean atualizar(int id, RequestModel solicitacaoAtualizada) {
         String sql = "UPDATE Solicitacoes SET data_solicitacao = ?, forma_pagamento = ?, valor_pagamento = ?, id_produto = ?, clientes_cpf = ?, id_servico = ? " +
                      "WHERE id_solicitacao = ?";
 
@@ -134,5 +134,22 @@ public class SolicitacaoDao {
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar solicitação: " + e.getMessage(), e);
         }
+    }
+
+
+    @Override
+    public RequestModel findById(Integer integer) throws SQLException {
+        return null;
+    }
+
+
+    @Override
+    public void update(RequestModel requestModel) throws SQLException {
+
+    }
+
+    @Override
+    public void delete(Integer integer) throws SQLException {
+
     }
 }

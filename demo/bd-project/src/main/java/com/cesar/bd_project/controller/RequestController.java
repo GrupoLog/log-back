@@ -1,33 +1,31 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.model.SolicitacaoModel;
-import com.cesar.bd_project.model.VehicleModel;
-import com.cesar.bd_project.service.SolicitacaoService;
-import com.cesar.bd_project.service.VehicleService;
+import com.cesar.bd_project.model.RequestModel;
+import com.cesar.bd_project.service.RequestService;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 @RequestMapping("/solicitacoes")
-public class SolicitacaoController {
+public class RequestController {
 
-    private final SolicitacaoService solicitacaoService;
+    private final RequestService requestService;
 
-    public SolicitacaoController(SolicitacaoService solicitacaoService){
-        this.solicitacaoService = solicitacaoService;
+    public RequestController(RequestService requestService){
+        this.requestService = requestService;
     }
 
 
     @GetMapping
-    public List<SolicitacaoModel> listarSolicitacoes() {
-        return solicitacaoService.listarSolicitacoes();
+    public List<RequestModel> listRequests() {
+        try {
+            return requestService.listRequests();
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar produtoss: " + e.getMessage());
+        }
     }
 
     // @PostMapping
