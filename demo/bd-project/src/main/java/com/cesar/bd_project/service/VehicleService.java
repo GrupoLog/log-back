@@ -2,14 +2,9 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.model.VehicleModel;
-import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Service;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.sql.Statement;
-import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -22,23 +17,29 @@ public class VehicleService {
     }
 
     public List<VehicleModel> listVehicles() throws SQLException {
+        return vehicleDao.list();
+    }
 
-        List<VehicleModel> vehicleList = new ArrayList<>();
-        String SQL = "SELECT * FROM Veiculo";
+    public VehicleModel findById(String chassi) throws SQLException {
+        return null;
+    }
 
-        try (Connection conn = ConnectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(SQL)) {
 
-            while (rs.next()) {
-                VehicleModel vehicle = new VehicleModel();
-                vehicle.setChassi(rs.getString("chassi"));
-                vehicle.setProprietario(rs.getString("proprietario"));
-                vehicle.setPlaca(rs.getString("placa"));
-                vehicleList.add(vehicle);
-            }
+    public void insertVehicle(String chassi) throws SQLException{
+        if(chassi == null || chassi.isEmpty()){
+            throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
         }
-        return vehicleList;
+
+    }
+
+    public void deleteVehicle(String chassi) throws SQLException {
+        if(chassi == null || chassi.isEmpty()){
+            throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
+        }
+        if(vehicleDao.findById(chassi) == null){
+            throw new IllegalArgumentException("Veiculo não encontrado!");
+        }
+        vehicleDao.delete(chassi);
     }
 
 }
