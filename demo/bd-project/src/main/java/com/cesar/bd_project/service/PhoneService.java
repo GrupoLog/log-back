@@ -23,9 +23,9 @@ public class PhoneService {
         return phoneDao.list();
     }
 
-//    public PhoneModel findById(String cpf) throws SQLException{
-//        return phoneDao.findById(cpf);
-//    }
+    public PhoneModel findById(String cpf) throws SQLException{
+        return phoneDao.findById(cpf);
+    }
 
     public PhoneModel insertPhone(PhoneModel phone) throws SQLException {
         // Verifica se o telefone não é nulo
@@ -37,7 +37,7 @@ public class PhoneService {
             throw new IllegalArgumentException("CPF não está cadastrado.");
         }
         // Verica se já existe o telefone
-        List<PhoneModel> phoneList = phoneDao.findById(phone.getClientesCpf());
+        List<PhoneModel> phoneList = phoneDao.findByCpf(phone.getClientesCpf());
         for(PhoneModel savedPhone : phoneList){
             if(savedPhone.getTelefone().equals(phone.getTelefone())){
                 throw new IllegalArgumentException("Telefone já cadastrado para esse CPF.");
@@ -62,10 +62,10 @@ public class PhoneService {
     }
 
 
-    public void deletePhone(String cpf) throws SQLException{
-        if (phoneDao.findById(cpf) == null) {
-            throw new IllegalArgumentException("PTelefone não encontrado!");
+    public void deletePhone(String phone) throws SQLException{
+        if (phoneDao.findById(phone) == null) {
+            throw new IllegalArgumentException("Telefone não encontrado!");
         }
-        phoneDao.delete(cpf);
+        phoneDao.delete(phone);
     }
 }

@@ -56,10 +56,10 @@ public class PhoneController {
         }
     }
 
-    @DeleteMapping("/{clientes_cpf}")
-    public String deletePhone(@PathVariable("clientes_cpf") String clientesCpf) {
+    @DeleteMapping("/{telefone}")
+    public String deletePhone(@PathVariable String telefone) {
         try {
-            phoneService.deletePhone(clientesCpf);
+            phoneService.deletePhone(telefone);
             return "Telefone deletado com sucesso!";
         } catch (IllegalArgumentException e) {
             return "Erro de validação: " + e.getMessage();

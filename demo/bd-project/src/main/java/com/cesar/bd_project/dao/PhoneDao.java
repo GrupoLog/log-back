@@ -45,7 +45,24 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public List<PhoneModel> findById(String cpf) throws SQLException {
+    public PhoneModel findById(String cellphone) throws SQLException {
+        String SQL = "SELECT * FROM Telefone WHERE telefone = ?";
+        PhoneModel phone = null;
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, cellphone);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                phone = new PhoneModel();
+                phone.setTelefone(rs.getString("telefone"));
+                phone.setClientesCpf(rs.getString("clientes_cpf"));
+            }
+        }
+        return phone;
+    }
+
+
+    public List<PhoneModel> findByCpf(String cpf) throws SQLException {
         String SQL = "SELECT * FROM Telefone WHERE clientes_cpf = ?";
         List<PhoneModel> phoneList = new ArrayList<>();
 
@@ -81,13 +98,13 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public void delete(String cpf) throws SQLException {
-        String SQL = "DELETE FROM Telefone WHERE clientes_cpf = ?";
+    public void delete(String cellphone) throws SQLException {
+        String SQL = "DELETE FROM Telefone WHERE telefone = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
-            stmt.setString(1, cpf);
+            stmt.setString(1, cellphone);
             stmt.executeUpdate();
         }
     }
