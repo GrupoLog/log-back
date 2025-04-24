@@ -4,10 +4,7 @@ import com.cesar.bd_project.model.MotoModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -40,7 +37,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     }
 
     @Override
-    public MotoModel findById(String s) throws SQLException {
+    public MotoModel findById(String chassi) throws SQLException {
         return null;
     }
 
@@ -55,7 +52,13 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     }
 
     @Override
-    public void delete(String s) throws SQLException {
+    public void delete(String chassi) throws SQLException {
+        String SQL = "DELETE FROM moto WHERE veiculo_chassi = ?";
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, chassi);
+            stmt.executeUpdate();
+        }
 
     }
 }

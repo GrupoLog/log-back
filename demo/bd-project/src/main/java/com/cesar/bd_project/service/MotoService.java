@@ -19,4 +19,8 @@ public class MotoService {
     public List<MotoModel> listMotos() throws SQLException {
         return motoDao.list();
     }
+
+    public void deleteMoto(String chassi) throws SQLException {
+        motoDao.delete(chassi);
+    }
 }
