@@ -16,9 +16,11 @@ public class VehicleService {
         this.vehicleDao = vehicleDao;
     }
 
+
     public List<VehicleModel> listVehicles() throws SQLException {
         return vehicleDao.list();
     }
+
 
     public VehicleModel findById(String chassi) throws SQLException {
         return null;
@@ -36,7 +38,6 @@ public class VehicleService {
         return vehicleDao.save(vehicle);
 
     }
-
 
 
     public void deleteVehicle(String chassi) throws SQLException {
