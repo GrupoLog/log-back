@@ -1,6 +1,5 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.model.ClientModel;
 import com.cesar.bd_project.model.MotoModel;
 import com.cesar.bd_project.service.MotoService;
 import org.springframework.web.bind.annotation.*;
@@ -27,6 +26,15 @@ public class MotoController {
         }
     }
 
+    @GetMapping("/{chassi}")
+    public MotoModel findById(@PathVariable String chassi) {
+        try {
+            return motoService.findById(chassi);
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar moto: " + e.getMessage());
+        }
+    }
+
     @DeleteMapping("/{chassi}")
     public String deleteMoto(@PathVariable String chassi) {
         try {
@@ -34,8 +42,6 @@ public class MotoController {
             return "Moto deletada com sucesso!";
         } catch (IllegalArgumentException e) {
             return "Erro de validação: " + e.getMessage();
-        } catch (SQLException e) {
-            return "Erro ao deletar moto no banco de dados: " + e.getMessage();
-        }
+        } 
     }
 }

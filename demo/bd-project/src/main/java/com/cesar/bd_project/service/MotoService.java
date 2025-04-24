@@ -20,6 +20,13 @@ public class MotoService {
         return motoDao.list();
     }
 
+    public MotoModel findById(String chassi) throws SQLException {
+        if(chassi == null || chassi.isEmpty()){
+            throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
+        }
+        return motoDao.findById(chassi);
+    }
+
     public void deleteMoto(String chassi) throws SQLException {
         motoDao.delete(chassi);
     }

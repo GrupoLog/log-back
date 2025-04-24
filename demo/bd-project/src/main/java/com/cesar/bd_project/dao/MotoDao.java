@@ -38,7 +38,27 @@ public class MotoDao implements GenericDao<MotoModel, String>{
 
     @Override
     public MotoModel findById(String chassi) throws SQLException {
-        return null;
+        String SQL = """
+                SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
+                FROM veiculo v
+                JOIN moto m ON v.chassi = m.veiculo_chassi
+                WHERE v.chassi = ?
+                """;
+        MotoModel moto = null;
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)){
+
+            stmt.setString(1, chassi);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                moto = new MotoModel();
+                moto.setChassi(rs.getString("chassi"));
+                moto.setProprietario(rs.getString("proprietario"));
+                moto.setPlaca(rs.getNString("placa"));
+                moto.setCapacidadeCarga(rs.getInt("cap_carga"));
+            }
+        }
+        return moto;
     }
 
     @Override
