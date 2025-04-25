@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class PhoneDao implements GenericDao<PhoneModel, String>{
     @Override
-    public List<PhoneModel> list() throws SQLException {
+    public List<PhoneModel> list() {
 
         List<PhoneModel> phoneList = new ArrayList<>();
         String SQL = "SELECT * FROM Telefone";
@@ -31,7 +31,7 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public PhoneModel save(PhoneModel phone) throws SQLException {
+    public PhoneModel save(PhoneModel phone) {
         String SQL = "INSERT INTO Telefone (telefone, clientes_cpf) VALUES (?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -45,7 +45,7 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public PhoneModel findById(String cellphone) throws SQLException {
+    public PhoneModel findById(String cellphone) {
         String SQL = "SELECT * FROM Telefone WHERE telefone = ?";
         PhoneModel phone = null;
         try(Connection conn = ConnectionFactory.getConnection();
@@ -83,7 +83,7 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public void update(PhoneModel phoneModel) throws SQLException {
+    public void update(PhoneModel phoneModel) {
         String SQL = "UPDATE Telefone SET telefone = ? WHERE clientes_cpf = ?";
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -98,7 +98,7 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
     }
 
     @Override
-    public void delete(String cellphone) throws SQLException {
+    public void delete(String cellphone) {
         String SQL = "DELETE FROM Telefone WHERE telefone = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();

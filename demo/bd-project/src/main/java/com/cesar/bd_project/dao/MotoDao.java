@@ -12,7 +12,7 @@ import java.util.List;
 public class MotoDao implements GenericDao<MotoModel, String>{
 
     @Override
-    public List<MotoModel> list() throws SQLException {
+    public List<MotoModel> list() {
         List<MotoModel> motoList = new ArrayList<>();
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
@@ -37,7 +37,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     }
 
     @Override
-    public MotoModel findById(String chassi) throws SQLException {
+    public MotoModel findById(String chassi) {
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
                 FROM veiculo v
@@ -62,23 +62,25 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     }
 
     @Override
-    public MotoModel save(MotoModel motoModel) throws SQLException {
+    public MotoModel save(MotoModel motoModel) {
         return null;
     }
 
     @Override
-    public void update(MotoModel motoModel) throws SQLException {
+    public void update(MotoModel motoModel) {
 
     }
 
     @Override
-    public void delete(String chassi) throws SQLException {
+    public void delete(String chassi) {
         String SQL = "DELETE FROM moto WHERE veiculo_chassi = ?";
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setString(1, chassi);
             stmt.executeUpdate();
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar moto com chassi " + chassi + ": " + e.getMessage(), e);
         }
-
     }
+
 }

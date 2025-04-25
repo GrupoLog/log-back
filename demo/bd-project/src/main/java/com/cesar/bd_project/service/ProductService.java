@@ -16,11 +16,18 @@ public class ProductService {
         this.productDao = productDao;
     }
 
-    public List<ProductModel> listProducts() throws SQLException {
+    public List<ProductModel> listProducts() {
         return productDao.list();
     }
 
-    public ProductModel insertProduct(ProductModel product) throws SQLException {
+    public ProductModel findById(Integer id) {
+        if(id == null){
+            throw new IllegalArgumentException("id_produto não pode ser nulo ou vazio");
+        }
+        return productDao.findById(id);
+    }
+
+    public void insertProduct(ProductModel product) {
         // Verifica se o id_produto não é nulo
         if(product.getIdProduto() == null){
             throw new IllegalArgumentException("id_produto é obrigatório");
@@ -31,14 +38,10 @@ public class ProductService {
             throw new IllegalArgumentException("Produto já cadastrado!");
         }
 
-        return productDao.save(product);
+        productDao.save(product);
     }
 
-    public ProductModel findById(Integer id) throws SQLException{
-        return productDao.findById(id);
-    }
-
-    public void updateProduct(ProductModel product) throws SQLException {
+    public void updateProduct(ProductModel product) {
         if(product.getIdProduto() == null){
             throw new IllegalArgumentException("O campo id_produto é obrigatório!");
         }
@@ -51,10 +54,16 @@ public class ProductService {
         productDao.update(product);
     }
 
-    public void deleteProduct(Integer id) throws SQLException{
+    public void deleteProduct(Integer id) {
         if (productDao.findById(id) == null) {
             throw new IllegalArgumentException("Produto não encontrado!");
         }
+
+        ProductModel existingClient = productDao.findById(id);
+        if (existingClient == null) {
+            throw new IllegalArgumentException("Produto não encontrado.");
+        }
+
         productDao.delete(id);
     }
 }

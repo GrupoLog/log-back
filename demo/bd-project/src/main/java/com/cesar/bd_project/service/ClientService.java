@@ -17,31 +17,29 @@ public class ClientService {
         this.clientDao = clientDao;
     }
 
-    public List<ClientModel> listClients() throws SQLException {
+    public List<ClientModel> listClients() {
         return clientDao.list();
     }
 
-    public ClientModel insertClient(ClientModel client) throws SQLException {
+    public ClientModel findById(String cpf) {
+        // Verifica se o CPF é nulo ou vazio
+        if (cpf == null || cpf.isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+        }
+        return clientDao.findById(cpf);
+    }
+
+    public void insertClient(ClientModel client) {
         // Validação
         if (client.getNome() == null || client.getNome().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
 
         // Salvar e retornar
-        return clientDao.save(client);
+        clientDao.save(client);
     }
 
-
-    public ClientModel findById(String cpf) throws SQLException {
-        // Verifica se o CPF é nulo ou vazio
-        if (cpf == null || cpf.isEmpty()) {
-            System.err.println("CPF não pode ser nulo ou vazio");
-            return null;
-        }
-        return clientDao.findById(cpf);
-    }
-
-    public void updateClient(ClientModel client) throws SQLException {
+    public void updateClient(ClientModel client) {
         // Verifica se o CPF é nulo ou vazio
         if (client.getCpf() == null || client.getCpf().isEmpty()) {
             throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
@@ -55,7 +53,7 @@ public class ClientService {
         clientDao.update(client);
     }
 
-    public void deleteClient(String cpf) throws SQLException {
+    public void deleteClient(String cpf) {
         // Verifica se o CPF é nulo ou vazio
         if (cpf == null || cpf.isEmpty()) {
             throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");

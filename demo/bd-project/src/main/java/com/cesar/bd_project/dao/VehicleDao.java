@@ -12,7 +12,7 @@ import java.util.List;
 public class VehicleDao implements GenericDao<VehicleModel, String> {
 
     @Override
-    public List<VehicleModel> list() throws SQLException {
+    public List<VehicleModel> list() {
         List<VehicleModel> vehicleList = new ArrayList<>();
         String SQL = "SELECT * FROM Veiculo";
 
@@ -32,7 +32,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     }
 
     @Override
-    public VehicleModel save(VehicleModel vehicle) throws SQLException {
+    public VehicleModel save(VehicleModel vehicle) {
         String SQL = "INSERT INTO veiculo(chassi, proprietario, placa) VALUES (?, ?, ?)";
         try(Connection conn = ConnectionFactory.getConnection();
         PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -45,7 +45,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     }
 
     @Override
-    public VehicleModel findById(String chassi) throws SQLException {
+    public VehicleModel findById(String chassi) {
         String SQL = "SELECT * FROM veiculo WHERE chassi = ?";
         VehicleModel vehicle = null;
         try(Connection conn = ConnectionFactory.getConnection();
@@ -63,12 +63,12 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     }
 
     @Override
-    public void update(VehicleModel vehicleModel) throws SQLException {
+    public void update(VehicleModel vehicleModel) {
 
     }
 
     @Override
-    public void delete(String chassi) throws SQLException {
+    public void delete(String chassi) {
         String SQL = "DELETE FROM veiculo WHERE chassi = ?";
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {

@@ -11,7 +11,7 @@ import java.util.List;
 @Repository
 public class RequestDao implements GenericDao<RequestModel, Integer>{
 
-    public RequestModel save(RequestModel solicitacao) throws SQLException{
+    public RequestModel save(RequestModel solicitacao) {
         String sql = "INSERT INTO Solicitacoes (id_solicitacao, data_solicitacao, forma_pagamento, valor_pagamento, id_produto, clientes_cpf, id_servico) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -41,7 +41,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         }
     }
 
-    public List<RequestModel> list() throws SQLException{
+    public List<RequestModel> list() {
         String sql = "SELECT * FROM Solicitacoes";
         List<RequestModel> solicitacoes = new ArrayList<>();
 
@@ -112,7 +112,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
             stmt.setString(5, solicitacaoAtualizada.getClientesCpf());
             stmt.setInt(6, solicitacaoAtualizada.getIdServico());
             stmt.setInt(7, id);
-                
+
             int rowsAffected = stmt.executeUpdate();
             return rowsAffected > 0;
 
@@ -138,18 +138,18 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
 
 
     @Override
-    public RequestModel findById(Integer integer) throws SQLException {
+    public RequestModel findById(Integer integer) {
         return null;
     }
 
 
     @Override
-    public void update(RequestModel requestModel) throws SQLException {
+    public void update(RequestModel requestModel) {
 
     }
 
     @Override
-    public void delete(Integer integer) throws SQLException {
+    public void delete(Integer integer) {
 
     }
 }

@@ -27,7 +27,7 @@ public class MotoService {
         return motoDao.findById(chassi);
     }
 
-    public void deleteMoto(String chassi) throws SQLException {
+    public void deleteMoto(String chassi){
         motoDao.delete(chassi);
     }
 }

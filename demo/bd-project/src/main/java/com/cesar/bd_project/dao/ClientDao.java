@@ -8,8 +8,8 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.springframework.stereotype.Repository;
 
+import org.springframework.stereotype.Repository;
 import com.cesar.bd_project.model.ClientModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
@@ -17,7 +17,7 @@ import com.cesar.bd_project.utils.ConnectionFactory;
 public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
-    public List<ClientModel> list() throws SQLException {
+    public List<ClientModel> list() {
         List<ClientModel> clientList = new ArrayList<>();
         String SQL = "SELECT * FROM Clientes";
 
@@ -36,12 +36,17 @@ public class ClientDao implements GenericDao<ClientModel, String> {
                 client.setCidade(rs.getString("cidade"));
                 clientList.add(client);
             }
+
+            System.out.println("Clientes listados com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar clientes: " + e.getMessage(), e);
         }
         return clientList;
     }
 
     @Override
-    public ClientModel findById(String cpf) throws SQLException {
+    public ClientModel findById(String cpf) {
         String SQL = "SELECT * FROM Clientes WHERE CPF = ?";
         ClientModel client = null;
 
@@ -59,17 +64,18 @@ public class ClientDao implements GenericDao<ClientModel, String> {
                 client.setBairro(rs.getString("bairro"));
                 client.setNumero(rs.getInt("numero"));
                 client.setCidade(rs.getString("cidade"));
-            }else {
-                System.err.println("Cliente com o CPF " + cpf + " não encontrado.");
+                System.out.println("Cliente encontrado!");
+            } else {
+                System.out.println("Cliente não encontrado!");
             }
         } catch (SQLException e) {
-            System.err.println("Erro ao buscar cliente por CPF: " + e.getMessage());
+            throw new RuntimeException("Erro ao buscar cliente por CPF: " + e.getMessage(), e);
         }
         return client;
     }
 
     @Override
-    public ClientModel save(ClientModel client) throws SQLException {
+    public void save(ClientModel client) {
         String SQL = "INSERT INTO Clientes (CPF, nome, sobrenome, rua, bairro, numero, cidade) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -83,14 +89,15 @@ public class ClientDao implements GenericDao<ClientModel, String> {
             stmt.setInt(6, client.getNumero());
             stmt.setString(7, client.getCidade());
             stmt.executeUpdate();
-
-            return client;
+            System.out.println("Cliente inserido com sucesso!");
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar cliente no banco de dados: " + e.getMessage(), e);
         }
     }
 
 
     @Override
-    public void update(ClientModel client) throws SQLException {
+    public void update(ClientModel client) {
         String SQL = "UPDATE Clientes SET nome = ?, sobrenome = ?, rua = ?, bairro = ?, numero = ?, cidade = ? WHERE CPF = ?";
 
         // Atualiza os dados do cliente
@@ -105,7 +112,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
             stmt.setString(6, client.getCidade());
             stmt.setString(7, client.getCpf());
             stmt.executeUpdate();
-
+            System.out.println("Cliente atualizado com sucesso!");
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar cliente: " + e.getMessage(), e);
@@ -114,7 +121,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
 
     @Override
-    public void delete(String cpf) throws SQLException {
+    public void delete(String cpf) {
 
         String SQL = "DELETE FROM Clientes WHERE CPF = ?";
         try (Connection conn = ConnectionFactory.getConnection();
@@ -122,10 +129,9 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
             stmt.setString(1, cpf);
             stmt.executeUpdate();
-
+            System.out.println("Cliente deletado com sucesso!");
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar cliente: " + e.getMessage(), e);
         }
     }
-
 }

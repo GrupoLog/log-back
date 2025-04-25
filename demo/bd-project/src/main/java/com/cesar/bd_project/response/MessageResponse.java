@@ -1,4 +1,4 @@
-package com.cesar.bd_project.client;
+package com.cesar.bd_project.response;
 
 public class MessageResponse {
     private String message;

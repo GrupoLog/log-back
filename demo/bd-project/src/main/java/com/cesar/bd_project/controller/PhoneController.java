@@ -1,6 +1,6 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.client.MessageResponse;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.model.PhoneModel;
 import com.cesar.bd_project.service.PhoneService;
 import org.springframework.http.HttpStatus;

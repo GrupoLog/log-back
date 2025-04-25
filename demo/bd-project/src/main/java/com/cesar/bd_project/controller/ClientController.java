@@ -3,12 +3,10 @@ package com.cesar.bd_project.controller;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import com.cesar.bd_project.service.ClientService;
-import com.cesar.bd_project.client.MessageResponse;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.model.ClientModel;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -22,36 +20,40 @@ public class ClientController {
     }
 
     @GetMapping
-    public List<ClientModel> listClients() {
+    public ResponseEntity<?> listClients() {
         try {
-            return clientService.listClients();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar clientes: " + e.getMessage());
+            List<ClientModel> clientList = clientService.listClients();
+            return ResponseEntity.ok(clientList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar clientes: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{cpf}")
+    public ResponseEntity<?> findById(@PathVariable String cpf) {
+        try {
+            ClientModel client = clientService.findById(cpf);
+            if (client != null) {
+                return ResponseEntity.ok(client);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar cliente: " + e.getMessage());
         }
     }
 
     @PostMapping
     public ResponseEntity<?> insertClient(@RequestBody ClientModel client) {
         try {
-            ClientModel savedClient = clientService.insertClient(client);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedClient);
+            clientService.insertClient(client);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Cliente inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
-        } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar cliente no banco de dados: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir cliente: " + e.getMessage()));
         }
     }
-
-
-    @GetMapping("/{cpf}")
-    public ClientModel findById(@PathVariable String cpf) {
-        try {
-            return clientService.findById(cpf);
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar cliente: " + e.getMessage());
-        }
-    }
-
 
     @PutMapping("/{cpf}")
     public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @RequestBody ClientModel client) {
@@ -59,25 +61,21 @@ public class ClientController {
             clientService.updateClient(client);
             return ResponseEntity.ok(new MessageResponse("Cliente atualizado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            //return "Erro de validação: " + e.getMessage();
-            return ResponseEntity.ok(new MessageResponse("Erro de validação!"));
-        } catch (SQLException e) {
-            //return "Erro ao atualizar cliente no banco de dados: " + e.getMessage();
-            return ResponseEntity.ok(new MessageResponse("Erro ao atualizar cliente no banco de dados"));
-
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar cliente: " + e.getMessage()));
         }
     }
 
-    
     @DeleteMapping("/{cpf}")
-    public String deleteClient(@PathVariable String cpf) {
+    public ResponseEntity<MessageResponse> deleteClient(@PathVariable String cpf) {
         try {
             clientService.deleteClient(cpf);
-            return "Cliente deletado com sucesso!";
+            return ResponseEntity.ok(new MessageResponse("Cliente deletado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
-        } catch (SQLException e) {
-            return "Erro ao deletar cliente no banco de dados: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao deletar cliente: " + e.getMessage()));
         }
     }
 }

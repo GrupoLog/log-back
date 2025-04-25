@@ -42,6 +42,6 @@ public class MotoController {
             return "Moto deletada com sucesso!";
         } catch (IllegalArgumentException e) {
             return "Erro de validação: " + e.getMessage();
-        } 
+        }
     }
 }
