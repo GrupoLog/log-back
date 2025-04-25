@@ -13,6 +13,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
 
     @Override
     public List<MotoModel> list() {
+
         List<MotoModel> motoList = new ArrayList<>();
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
@@ -30,14 +31,21 @@ public class MotoDao implements GenericDao<MotoModel, String>{
                 moto.setPlaca(rs.getNString("placa"));
                 moto.setCapacidadeCarga(rs.getInt("cap_carga"));
                 motoList.add(moto);
+                System.out.println("Moto inserida com sucesso!");
+
             }
 
+            System.out.println("Motos listadas com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar Motos: " + e.getMessage(), e);
         }
         return motoList;
     }
 
     @Override
     public MotoModel findById(String chassi) {
+
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
                 FROM veiculo v
@@ -45,6 +53,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
                 WHERE v.chassi = ?
                 """;
         MotoModel moto = null;
+
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)){
 
@@ -56,14 +65,18 @@ public class MotoDao implements GenericDao<MotoModel, String>{
                 moto.setProprietario(rs.getString("proprietario"));
                 moto.setPlaca(rs.getNString("placa"));
                 moto.setCapacidadeCarga(rs.getInt("cap_carga"));
+                System.out.println("Moto encontrada!");
+            } else {
+                System.out.println("Moto não encontrada!");
             }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar moto: " + e.getMessage(), e);
         }
         return moto;
     }
 
     @Override
-    public MotoModel save(MotoModel motoModel) {
-        return null;
+    public void save(MotoModel motoModel) {
     }
 
     @Override
@@ -73,13 +86,17 @@ public class MotoDao implements GenericDao<MotoModel, String>{
 
     @Override
     public void delete(String chassi) {
+
         String SQL = "DELETE FROM moto WHERE veiculo_chassi = ?";
+
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
             stmt.setString(1, chassi);
             stmt.executeUpdate();
+            System.out.println("Moto deletada com sucesso!");
+
         }catch (SQLException e) {
-            throw new RuntimeException("Erro ao deletar moto com chassi " + chassi + ": " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao deletar moto: " + e.getMessage(), e);
         }
     }
 

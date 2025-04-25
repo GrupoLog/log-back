@@ -1,10 +1,12 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.model.MotoModel;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.MotoService;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -18,30 +20,42 @@ public class MotoController {
     }
 
     @GetMapping
-    public List<MotoModel> listMotos() {
+    public ResponseEntity<?> listMotos() {
         try {
-            return motoService.listMotos();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar motos: " + e.getMessage());
+            List<MotoModel> motoList = motoService.listMotos();
+            return ResponseEntity.ok(motoList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar motos: " + e.getMessage());
         }
     }
+
+
 
     @GetMapping("/{chassi}")
-    public MotoModel findById(@PathVariable String chassi) {
+    public ResponseEntity<?> findById(@PathVariable String chassi) {
         try {
-            return motoService.findById(chassi);
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar moto: " + e.getMessage());
+            MotoModel moto = motoService.findById(chassi);
+            if (moto != null) {
+                return ResponseEntity.ok(moto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CMoto não encontrada!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar moto: " + e.getMessage());
         }
     }
 
+
+
     @DeleteMapping("/{chassi}")
-    public String deleteMoto(@PathVariable String chassi) {
+    public ResponseEntity<MessageResponse> deleteMoto(@PathVariable String chassi) {
         try {
             motoService.deleteMoto(chassi);
-            return "Moto deletada com sucesso!";
+            return ResponseEntity.ok(new MessageResponse("Moto deletada com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao deletar moto: " + e.getMessage()));
         }
     }
 }
