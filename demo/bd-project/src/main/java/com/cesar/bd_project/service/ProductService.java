@@ -4,7 +4,6 @@ import com.cesar.bd_project.dao.ProductDao;
 import com.cesar.bd_project.model.ProductModel;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -17,7 +16,17 @@ public class ProductService {
     }
 
     public List<ProductModel> listProducts() {
-        return productDao.list();
+        try {
+            List<ProductModel> product =productDao.list();
+            if (product.isEmpty()) {
+                throw new IllegalStateException("Nenhum cliente encontrado.");
+            }
+
+            return product;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao listar produtos: " + e.getMessage(), e);
+        }
     }
 
     public ProductModel findById(Integer id) {

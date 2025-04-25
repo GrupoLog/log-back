@@ -18,6 +18,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
     public List<ClientModel> list() {
+
         List<ClientModel> clientList = new ArrayList<>();
         String SQL = "SELECT * FROM Clientes";
 
@@ -47,6 +48,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
     public ClientModel findById(String cpf) {
+
         String SQL = "SELECT * FROM Clientes WHERE CPF = ?";
         ClientModel client = null;
 
@@ -76,6 +78,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
     public void save(ClientModel client) {
+
         String SQL = "INSERT INTO Clientes (CPF, nome, sobrenome, rua, bairro, numero, cidade) VALUES (?, ?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -90,6 +93,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
             stmt.setString(7, client.getCidade());
             stmt.executeUpdate();
             System.out.println("Cliente inserido com sucesso!");
+
         }catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar cliente no banco de dados: " + e.getMessage(), e);
         }
@@ -98,6 +102,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
 
     @Override
     public void update(ClientModel client) {
+
         String SQL = "UPDATE Clientes SET nome = ?, sobrenome = ?, rua = ?, bairro = ?, numero = ?, cidade = ? WHERE CPF = ?";
 
         // Atualiza os dados do cliente
@@ -124,12 +129,14 @@ public class ClientDao implements GenericDao<ClientModel, String> {
     public void delete(String cpf) {
 
         String SQL = "DELETE FROM Clientes WHERE CPF = ?";
+
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setString(1, cpf);
             stmt.executeUpdate();
             System.out.println("Cliente deletado com sucesso!");
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar cliente: " + e.getMessage(), e);
         }

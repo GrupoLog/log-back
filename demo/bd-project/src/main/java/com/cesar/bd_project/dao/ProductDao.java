@@ -13,6 +13,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public List<ProductModel> list() {
+
         List<ProductModel> productList = new ArrayList<>();
         String SQL = "SELECT * FROM Produtos";
 
@@ -39,6 +40,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public ProductModel findById(Integer id) {
+
         String SQL = "SELECT * FROM Produtos WHERE id_produto = ?";
         ProductModel product = null;
 
@@ -65,6 +67,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public void save(ProductModel product) {
+
         String SQL = "INSERT INTO Produtos(id_produto, peso, data_validade, descricao) VALUES(?, ?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -76,6 +79,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
             stmt.setString(4, product.getDescricao());
             stmt.executeUpdate();
             System.out.println("Produto inserido com sucesso!");
+
         }catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar produto no banco de dados: " + e.getMessage(), e);
         }
@@ -85,7 +89,9 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public void update(ProductModel product) {
+
         String SQL = "UPDATE Produtos SET peso = ?, data_validade = ?, descricao = ? WHERE id_produto = ?";
+
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
@@ -103,12 +109,16 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
     @Override
     public void delete(Integer id) {
+
         String SQL = "DELETE FROM Produtos WHERE id_produto = ?";
+
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, id);
             stmt.executeUpdate();
+            System.out.println("Produto deletado com sucesso!");
+
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao deletar produto: " + e.getMessage(), e);
         }

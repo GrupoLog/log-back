@@ -57,6 +57,7 @@ public class ClientController {
 
     @PutMapping("/{cpf}")
     public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @RequestBody ClientModel client) {
+        client.setCpf(cpf);
         try {
             clientService.updateClient(client);
             return ResponseEntity.ok(new MessageResponse("Cliente atualizado com sucesso!"));

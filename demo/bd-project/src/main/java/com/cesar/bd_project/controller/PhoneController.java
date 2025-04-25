@@ -7,7 +7,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -20,23 +19,24 @@ public class PhoneController {
     }
 
     @GetMapping
-    public List<PhoneModel> listPhones() {
+    public ResponseEntity<?> listPhones() {
         try {
-            return phoneService.listPhones();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar telefones: " + e.getMessage());
+            List<PhoneModel> phoneList = phoneService.listPhones();
+            return ResponseEntity.ok(phoneList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar telefones: " + e.getMessage());
         }
     }
 
     @PostMapping
     public ResponseEntity<?> insertPhone(@RequestBody PhoneModel phone) {
         try {
-            PhoneModel savedPhone = phoneService.insertPhone(phone);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedPhone);
+            phoneService.insertPhone(phone);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Telefone inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
-        } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar telefone no banco de dados: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir telefone: " + e.getMessage()));
         }
     }
 
@@ -47,24 +47,21 @@ public class PhoneController {
             phoneService.updatePhone(phone);
             return ResponseEntity.ok(new MessageResponse("Telefone atualizado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            //return "Erro de validação: " + e.getMessage();
-            return ResponseEntity.ok(new MessageResponse("Erro de validação!"));
-        } catch (SQLException e) {
-            //return "Erro ao atualizar produto no banco de dados: " + e.getMessage();
-            return ResponseEntity.ok(new MessageResponse("Erro ao atualizar telefone no banco de dados"));
-
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar telefone: " + e.getMessage()));
         }
     }
 
     @DeleteMapping("/{telefone}")
-    public String deletePhone(@PathVariable String telefone) {
+    public ResponseEntity<MessageResponse> deletePhone(@PathVariable String telefone) {
         try {
             phoneService.deletePhone(telefone);
-            return "Telefone deletado com sucesso!";
+            return ResponseEntity.ok(new MessageResponse("Telefone deletado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
-        } catch (SQLException e) {
-            return "Erro ao deletar deletar no banco de dados: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao deletar telefone: " + e.getMessage()));
         }
     }
 

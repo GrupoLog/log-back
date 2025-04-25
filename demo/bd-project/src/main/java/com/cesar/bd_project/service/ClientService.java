@@ -4,7 +4,6 @@ import com.cesar.bd_project.dao.ClientDao;
 import org.springframework.stereotype.Service;
 import com.cesar.bd_project.model.ClientModel;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -18,7 +17,17 @@ public class ClientService {
     }
 
     public List<ClientModel> listClients() {
-        return clientDao.list();
+        try {
+            List<ClientModel> clients = clientDao.list();
+            if (clients.isEmpty()) {
+                throw new IllegalStateException("Nenhum cliente encontrado.");
+            }
+
+            return clients;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao listar clientes: " + e.getMessage(), e);
+        }
     }
 
     public ClientModel findById(String cpf) {
@@ -35,7 +44,6 @@ public class ClientService {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
 
-        // Salvar e retornar
         clientDao.save(client);
     }
 

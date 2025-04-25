@@ -5,7 +5,6 @@ import com.cesar.bd_project.dao.PhoneDao;
 import com.cesar.bd_project.model.PhoneModel;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -14,20 +13,30 @@ public class PhoneService {
     private final PhoneDao phoneDao;
     private final ClientDao clientDao;
 
-    public PhoneService(PhoneDao phoneDao, ClientDao clientDao){
+    public PhoneService(PhoneDao phoneDao, ClientDao clientDao) {
         this.phoneDao = phoneDao;
         this.clientDao = clientDao;
     }
 
-    public List<PhoneModel> listPhones() throws SQLException {
-        return phoneDao.list();
+    public List<PhoneModel> listPhones() {
+        try {
+            List<PhoneModel> phones = phoneDao.list();
+            if (phones.isEmpty()) {
+                throw new IllegalStateException("Nenhum telefone encontrado.");
+            }
+
+            return phones;
+
+        } catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao listar telefones: " + e.getMessage(), e);
+        }
     }
 
-    public PhoneModel findById(String cpf) throws SQLException{
+    public PhoneModel findById(String cpf) {
         return phoneDao.findById(cpf);
     }
 
-    public PhoneModel insertPhone(PhoneModel phone) throws SQLException {
+    public void insertPhone(PhoneModel phone) {
         // Verifica se o telefone não é nulo
         if(phone.getTelefone() == null || phone.getClientesCpf() == null){
             throw new IllegalArgumentException("telefone e cpf é obrigatório");
@@ -44,10 +53,10 @@ public class PhoneService {
             }
         }
 
-        return phoneDao.save(phone);
+        phoneDao.save(phone);
     }
 
-    public void updatePhone(PhoneModel phone) throws SQLException {
+    public void updatePhone(PhoneModel phone) {
         if(phone.getTelefone() == null){
             throw new IllegalArgumentException("O campo telefone é obrigatório!");
         }
@@ -61,11 +70,11 @@ public class PhoneService {
         phoneDao.update(phone);
     }
 
-
-    public void deletePhone(String phone) throws SQLException{
+    public void deletePhone(String phone) {
         if (phoneDao.findById(phone) == null) {
             throw new IllegalArgumentException("Telefone não encontrado!");
         }
         phoneDao.delete(phone);
     }
+
 }
