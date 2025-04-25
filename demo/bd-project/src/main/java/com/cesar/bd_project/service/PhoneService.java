@@ -20,12 +20,12 @@ public class PhoneService {
 
     public List<PhoneModel> listPhones() {
         try {
-            List<PhoneModel> phones = phoneDao.list();
-            if (phones.isEmpty()) {
+            List<PhoneModel> phoneList = phoneDao.list();
+            if (phoneList.isEmpty()) {
                 throw new IllegalStateException("Nenhum telefone encontrado.");
             }
 
-            return phones;
+            return phoneList;
 
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao listar telefones: " + e.getMessage(), e);
@@ -75,6 +75,6 @@ public class PhoneService {
             throw new IllegalArgumentException("Telefone não encontrado!");
         }
         phoneDao.delete(phone);
-    }
 
+    }
 }

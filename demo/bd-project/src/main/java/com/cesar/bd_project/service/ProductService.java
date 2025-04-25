@@ -17,12 +17,12 @@ public class ProductService {
 
     public List<ProductModel> listProducts() {
         try {
-            List<ProductModel> product =productDao.list();
-            if (product.isEmpty()) {
+            List<ProductModel> productList =productDao.list();
+            if (productList.isEmpty()) {
                 throw new IllegalStateException("Nenhum cliente encontrado.");
             }
 
-            return product;
+            return productList;
 
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao listar produtos: " + e.getMessage(), e);

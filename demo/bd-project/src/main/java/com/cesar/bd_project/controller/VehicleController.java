@@ -1,13 +1,12 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.model.ProductModel;
 import com.cesar.bd_project.model.VehicleModel;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VehicleService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @RestController
@@ -21,36 +20,36 @@ public class VehicleController {
     }
 
     @GetMapping
-    public List<VehicleModel> listVehicles() {
+    public ResponseEntity<?> listVehicles() {
         try {
-            return vehicleService.listVehicles();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtoss: " + e.getMessage());
+            List<VehicleModel> vehicleList = vehicleService.listVehicles();
+            return ResponseEntity.ok(vehicleList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar veiculos: " + e.getMessage());
         }
     }
-
 
     @PostMapping
     public ResponseEntity<?> insertVehicle(@RequestBody VehicleModel vehicle) {
         try {
-            VehicleModel savedVehicle = vehicleService.insertVehicle(vehicle);
-            return ResponseEntity.status(HttpStatus.CREATED).body(savedVehicle);
+            vehicleService.insertVehicle(vehicle);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Veiculo inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Erro de validação: " + e.getMessage());
-        } catch (SQLException e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao salvar veiculo no banco de dados: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir veiculo: " + e.getMessage()));
         }
     }
 
     @DeleteMapping("/{chassi}")
-    public String deleteVehicle(@PathVariable String chassi){
+    public ResponseEntity<MessageResponse> deleteVehicle(@PathVariable String chassi){
         try {
             vehicleService.deleteVehicle(chassi);
-            return "Veiculo deletado com sucesso!";
+            return ResponseEntity.ok(new MessageResponse("Veiculo deletado com sucesso!"));
         } catch (IllegalArgumentException e) {
-            return "Erro de validação: " + e.getMessage();
-        } catch (SQLException e) {
-            return "Erro ao deletar veiculo no banco de dados: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao deletar veiculo: " + e.getMessage()));
         }
     }
 }

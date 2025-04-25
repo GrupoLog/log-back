@@ -11,19 +11,18 @@ public class ClientService {
 
     private final ClientDao clientDao;
 
-    // Injeção de dependência via construtor
     public ClientService(ClientDao clientDao) {
         this.clientDao = clientDao;
     }
 
     public List<ClientModel> listClients() {
         try {
-            List<ClientModel> clients = clientDao.list();
-            if (clients.isEmpty()) {
+            List<ClientModel> clientList = clientDao.list();
+            if (clientList.isEmpty()) {
                 throw new IllegalStateException("Nenhum cliente encontrado.");
             }
 
-            return clients;
+            return clientList;
 
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao listar clientes: " + e.getMessage(), e);
@@ -43,7 +42,6 @@ public class ClientService {
         if (client.getNome() == null || client.getNome().isEmpty()) {
             throw new IllegalArgumentException("Nome é obrigatório");
         }
-
         clientDao.save(client);
     }
 
