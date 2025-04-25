@@ -11,7 +11,37 @@ import java.util.List;
 @Repository
 public class RequestDao implements GenericDao<RequestModel, Integer>{
 
-    public RequestModel save(RequestModel solicitacao) {
+    public List<RequestModel> list() {
+        String sql = "SELECT * FROM Solicitacoes";
+        List<RequestModel> requestList = new ArrayList<>();
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(sql)) {
+
+            while (rs.next()) {
+                RequestModel request = new RequestModel();
+                request.setIdSolicitacao(rs.getInt("id_solicitacao"));
+                request.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
+                request.setFormaPagamento(rs.getString("forma_pagamento"));
+                request.setValorPagamento(rs.getDouble("valor_pagamento"));
+                request.setIdProduto(rs.getInt("id_produto"));
+                request.setClientesCpf(rs.getString("clientes_cpf"));
+                request.setIdServico(rs.getInt("id_servico"));
+
+                requestList.add(request);
+            }
+
+            System.out.println("Solicitacoes listadas com sucesso!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar solicitações: " + e.getMessage(), e);
+        }
+
+        return requestList;
+    }
+
+    public void save(RequestModel solicitacao) {
         String sql = "INSERT INTO Solicitacoes (id_solicitacao, data_solicitacao, forma_pagamento, valor_pagamento, id_produto, clientes_cpf, id_servico) " +
                      "VALUES (?, ?, ?, ?, ?, ?, ?)";
 
@@ -34,39 +64,9 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
                 solicitacao.setIdSolicitacao(generatedKeys.getInt(1));
             }
 
-            return solicitacao;
-
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar solicitação: " + e.getMessage(), e);
         }
-    }
-
-    public List<RequestModel> list() {
-        String sql = "SELECT * FROM Solicitacoes";
-        List<RequestModel> solicitacoes = new ArrayList<>();
-
-        try (Connection conn = ConnectionFactory.getConnection();
-             Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
-
-            while (rs.next()) {
-                RequestModel solicitacao = new RequestModel();
-                solicitacao.setIdSolicitacao(rs.getInt("id_solicitacao"));
-                solicitacao.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
-                solicitacao.setFormaPagamento(rs.getString("forma_pagamento"));
-                solicitacao.setValorPagamento(rs.getDouble("valor_pagamento"));
-                solicitacao.setIdProduto(rs.getInt("id_produto"));
-                solicitacao.setClientesCpf(rs.getString("clientes_cpf"));
-                solicitacao.setIdServico(rs.getInt("id_servico"));
-
-                solicitacoes.add(solicitacao);
-            }
-
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar solicitações: " + e.getMessage(), e);
-        }
-
-        return solicitacoes;
     }
 
     public RequestModel buscarPorId(int id) {

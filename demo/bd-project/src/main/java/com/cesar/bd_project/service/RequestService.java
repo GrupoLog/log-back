@@ -4,7 +4,6 @@ import com.cesar.bd_project.dao.RequestDao;
 import com.cesar.bd_project.model.RequestModel;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
@@ -16,8 +15,16 @@ public class RequestService {
         this.requestDao = requestDao;
     }
 
-    public List<RequestModel> listRequests() throws SQLException {
-        return requestDao.list();
+    public List<RequestModel> listRequests() {
+        try {
+            List<RequestModel> requestList = requestDao.list();
+            if (requestList.isEmpty()) {
+                throw new IllegalStateException("Nenhuma solicitacao encontrada.");
+            }
+            return requestList;
+        }catch (RuntimeException e) {
+            throw new RuntimeException("Erro ao listar solicitacoes: " + e.getMessage(), e);
+        }
     }
 
 //    public RequestModel criarSolicitacao(RequestModel solicitacao) {

@@ -3,6 +3,8 @@ package com.cesar.bd_project.controller;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.service.RequestService;
 
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.SQLException;
@@ -18,13 +20,13 @@ public class RequestController {
         this.requestService = requestService;
     }
 
-
     @GetMapping
-    public List<RequestModel> listRequests() {
+    public ResponseEntity<?> listRequests() {
         try {
-            return requestService.listRequests();
-        } catch (SQLException e) {
-            throw new RuntimeException("Erro ao listar produtoss: " + e.getMessage());
+            List<RequestModel> requestList = requestService.listRequests();
+            return ResponseEntity.ok(requestList);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar colicitacoes: " + e.getMessage());
         }
     }
 
