@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.model.MotoModel;
+import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.MotoService;
 import org.springframework.http.HttpStatus;
@@ -52,6 +53,19 @@ public class MotoController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir moto: " + e.getMessage()));
+        }
+    }
+
+    @PutMapping("/{chassi}")
+    public ResponseEntity<MessageResponse> updateMoto(@PathVariable String chassi, @RequestBody MotoModel moto) {
+        moto.setChassi(chassi);
+        try {
+            motoService.updateMoto(moto);
+            return ResponseEntity.ok(new MessageResponse("Motoo atualizada com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar moto: " + e.getMessage()));
         }
     }
 

@@ -51,6 +51,21 @@ public class MotoService {
         motoDao.save(moto);
     }
 
+    public void updateMoto(MotoModel moto) {
+
+        if (moto.getChassi() == null || moto.getChassi().isEmpty()) {
+            throw new IllegalArgumentException("Chassi é obrigatório.");
+        }
+        if(vehicleDao.findById(moto.getChassi()) == null) {
+            throw new IllegalArgumentException("Moto não cadastrada.");
+        }
+        if (moto.getCapacidadeCarga() < 0) {
+            throw new IllegalArgumentException("Capacidade de carga não pode ser negativa.");
+        }
+        vehicleDao.update(moto);
+        motoDao.update(moto);
+    }
+
     public void deleteMoto(String chassi){
         // Verifica se o CPF é nulo ou vazio
         if (chassi == null || chassi.isEmpty()) {

@@ -95,6 +95,18 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     @Override
     public void update(MotoModel moto) {
 
+        String SQL = "UPDATE moto SET cap_carga = ? WHERE veiculo_chassi = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setInt(1, moto.getCapacidadeCarga());
+            stmt.setString(2, moto.getChassi());
+            stmt.executeUpdate();
+            System.out.println("Moto atualizada com sucesso!");
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar moto: " + e.getMessage(), e);
+        }
     }
 
     @Override
