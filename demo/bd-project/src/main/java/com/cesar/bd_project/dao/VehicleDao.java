@@ -62,6 +62,30 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
         return vehicle;
     }
 
+    public VehicleModel findByPlate(String plate) {
+
+        String SQL = "SELECT * FROM veiculo WHERE placa = ?";
+        VehicleModel vehicle = null;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, plate);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()){
+                vehicle = new VehicleModel();
+                vehicle.setChassi(rs.getString("chassi"));
+                vehicle.setProprietario(rs.getString("proprietario"));
+                vehicle.setPlaca(rs.getString("placa"));
+                System.out.println("Veiculo encontrado!");
+            } else {
+                System.out.println("Veiculo não encontrado!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar veiculo: " + e.getMessage(), e);
+        }
+        return vehicle;
+    }
+
     @Override
     public void save(VehicleModel vehicle) {
 

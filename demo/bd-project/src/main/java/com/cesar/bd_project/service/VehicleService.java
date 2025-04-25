@@ -37,15 +37,18 @@ public class VehicleService {
     }
 
     public void insertVehicle(VehicleModel vehicle) {
-        if(vehicle.getChassi() == null || vehicle.getChassi().isEmpty()){
+        if(vehicle.getChassi() == null || vehicle.getChassi().isEmpty()) {
             throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
         }
-        if(vehicleDao.findById(vehicle.getChassi()) != null){
-            throw new IllegalArgumentException("Veiculo ja cadastrado.");
+        if(vehicle.getPlaca() == null || vehicle.getPlaca().isEmpty()) {
+            throw new IllegalArgumentException("Placa não pode ser nula ou vazia");
         }
-
-        // Falta Verificar se existe a placa ja
-
+        if(vehicleDao.findById(vehicle.getChassi()) != null) {
+            throw new IllegalArgumentException("Veiculo ja cadastrado com este chassi.");
+        }
+        if(vehicleDao.findByPlate(vehicle.getPlaca()) != null) {
+            throw new IllegalArgumentException("Placa ja cadastrada.");
+        }
         vehicleDao.save(vehicle);
     }
 
