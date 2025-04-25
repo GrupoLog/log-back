@@ -43,6 +43,9 @@ public class VehicleService {
         if(vehicleDao.findById(vehicle.getChassi()) != null){
             throw new IllegalArgumentException("Veiculo ja cadastrado.");
         }
+
+        // Falta Verificar se existe a placa ja
+
         vehicleDao.save(vehicle);
     }
 

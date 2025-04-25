@@ -76,11 +76,24 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     }
 
     @Override
-    public void save(MotoModel motoModel) {
+    public void save(MotoModel moto) {
+
+        String SQL = "INSERT INTO moto(veiculo_chassi, cap_carga) VALUES (?, ?)";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+        PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, moto.getChassi());
+            stmt.setInt(2, moto.getCapacidadeCarga());
+            stmt.executeUpdate();
+            System.out.println("Moto inserida com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar moto no banco de dados: " + e.getMessage(), e);
+        }
     }
 
     @Override
-    public void update(MotoModel motoModel) {
+    public void update(MotoModel moto) {
 
     }
 

@@ -1,20 +1,21 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.MotoDao;
-import com.cesar.bd_project.model.ClientModel;
+import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.model.MotoModel;
 import org.springframework.stereotype.Service;
 
-import java.sql.SQLException;
 import java.util.List;
 
 @Service
 public class MotoService {
 
     private final MotoDao motoDao;
+    private final VehicleDao vehicleDao;
 
-    public MotoService(MotoDao motoDao){
+    public MotoService(MotoDao motoDao, VehicleDao vehicleDao){
         this.motoDao = motoDao;
+        this.vehicleDao = vehicleDao;
     }
 
     public List<MotoModel> listMotos() {
@@ -31,13 +32,23 @@ public class MotoService {
         }
     }
 
-
-
     public MotoModel findById(String chassi) {
         if(chassi == null || chassi.isEmpty()){
             throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
         }
         return motoDao.findById(chassi);
+    }
+
+    public void insertMoto(MotoModel moto) {
+        // Validação
+        if (moto.getChassi() == null || moto.getChassi().isEmpty()) {
+            throw new IllegalArgumentException("Chassi é obrigatório.");
+        }
+        if(vehicleDao.findById(moto.getChassi()) != null) {
+            throw new IllegalArgumentException("Moto já cadastrada.");
+        }
+        vehicleDao.save(moto);
+        motoDao.save(moto);
     }
 
     public void deleteMoto(String chassi){

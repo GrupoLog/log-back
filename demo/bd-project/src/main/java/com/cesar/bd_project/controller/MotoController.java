@@ -29,8 +29,6 @@ public class MotoController {
         }
     }
 
-
-
     @GetMapping("/{chassi}")
     public ResponseEntity<?> findById(@PathVariable String chassi) {
         try {
@@ -38,14 +36,24 @@ public class MotoController {
             if (moto != null) {
                 return ResponseEntity.ok(moto);
             } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("CMoto não encontrada!");
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Moto não encontrada!");
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar moto: " + e.getMessage());
         }
     }
 
-
+    @PostMapping
+    public ResponseEntity<?> insertMoto(@RequestBody MotoModel moto) {
+        try {
+            motoService.insertMoto(moto);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Moto inserida com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir moto: " + e.getMessage()));
+        }
+    }
 
     @DeleteMapping("/{chassi}")
     public ResponseEntity<MessageResponse> deleteMoto(@PathVariable String chassi) {
