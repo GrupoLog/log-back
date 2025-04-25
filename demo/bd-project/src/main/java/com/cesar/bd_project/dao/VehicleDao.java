@@ -106,7 +106,21 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
 
     @Override
     public void update(VehicleModel vehicleModel) {
+        // Chassi is not updatable
+        String SQL = "UPDATE Veiculo SET proprietario = ?, placa = ? WHERE chassi = ?";
 
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setString(1, vehicleModel.getProprietario());
+            stmt.setString(2, vehicleModel.getPlaca());
+            stmt.setString(3, vehicleModel.getChassi());
+            stmt.executeUpdate();
+            System.out.println("Veiculo atualizado com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar veiculo: " + e.getMessage(), e);
+        }
     }
 
     @Override

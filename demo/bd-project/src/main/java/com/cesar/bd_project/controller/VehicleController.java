@@ -41,6 +41,19 @@ public class VehicleController {
         }
     }
 
+    @PutMapping("/{chassi}")
+    public ResponseEntity<MessageResponse> updateVehicle(@PathVariable String chassi, @RequestBody VehicleModel vehicle) {
+        vehicle.setChassi(chassi);
+        try {
+            vehicleService.updateVehicle(vehicle);
+            return ResponseEntity.ok(new MessageResponse("Veiculo atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar vehiclee: " + e.getMessage()));
+        }
+    }
+
     @DeleteMapping("/{chassi}")
     public ResponseEntity<MessageResponse> deleteVehicle(@PathVariable String chassi){
         try {

@@ -52,6 +52,26 @@ public class VehicleService {
         vehicleDao.save(vehicle);
     }
 
+    public void updateVehicle(VehicleModel vehicle) {
+        if(vehicle.getChassi() == null || vehicle.getChassi().isEmpty()) {
+            throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
+        }
+        if(vehicle.getPlaca() == null || vehicle.getPlaca().isEmpty()) {
+            throw new IllegalArgumentException("Placa não pode ser nula ou vazia");
+        }
+
+        VehicleModel existingVehicle = vehicleDao.findById(vehicle.getChassi());
+        if (existingVehicle == null) {
+            throw new IllegalArgumentException("Veículo não encontrado para o chassi fornecido.");
+        }
+
+        VehicleModel vehicleWithSamePlate = vehicleDao.findByPlate(vehicle.getPlaca());
+        if (vehicleWithSamePlate != null && !vehicleWithSamePlate.getChassi().equals(vehicle.getChassi())) {
+            throw new IllegalArgumentException("Placa já está em uso por outro veículo.");
+        }
+        vehicleDao.update(vehicle);
+    }
+
     public void deleteVehicle(String chassi) {
         if(chassi == null || chassi.isEmpty()){
             throw new IllegalArgumentException("Chassi não pode ser nulo ou vazio");
