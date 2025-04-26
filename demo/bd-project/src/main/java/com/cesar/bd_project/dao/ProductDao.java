@@ -72,8 +72,7 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
-
-            stmt.setInt(1, product.getIdProduto());
+            
             stmt.setInt(2, product.getPeso());
             stmt.setDate(3, java.sql.Date.valueOf(product.getDataValidade()));
             stmt.setString(4, product.getDescricao());
