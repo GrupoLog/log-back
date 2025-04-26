@@ -21,6 +21,7 @@ public class PhoneController {
         this.phoneService = phoneService;
     }
 
+    // Não faz sentido ter, usaria o get de clientes
     @GetMapping
     public ResponseEntity<?> listPhones() {
         try {
@@ -28,6 +29,20 @@ public class PhoneController {
             return ResponseEntity.ok(phoneList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar telefones: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{clientes_cpf}")
+    public ResponseEntity<?> findById(@PathVariable ("clientes_cpf") String clientesCpf) {
+        try {
+            List<PhoneModel> clientPhoneList = phoneService.findByCpf(clientesCpf);
+            if (clientPhoneList != null) {
+                return ResponseEntity.ok(clientPhoneList);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente sem telefone registrado!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar telefones: " + e.getMessage());
         }
     }
 
@@ -43,9 +58,9 @@ public class PhoneController {
         }
     }
 
-    @PutMapping("/{clientes_cpf}")
-    public ResponseEntity<MessageResponse> updatePhone(@PathVariable ("clientes_cpf") String clientesCpf, @Valid @RequestBody PhoneModel phone) {
-        phone.setClientesCpf(clientesCpf);
+    @PutMapping("/{telefone}")
+    public ResponseEntity<MessageResponse> updatePhone(@PathVariable ("telefone") String telefone, @Valid @RequestBody PhoneModel phone) {
+        phone.setTelefone(telefone);
         try {
             phoneService.updatePhone(phone);
             return ResponseEntity.ok(new MessageResponse("Telefone atualizado com sucesso!"));

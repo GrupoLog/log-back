@@ -18,6 +18,7 @@ public class PhoneService {
         this.clientDao = clientDao;
     }
 
+    // Não faz sentido ter
     public List<PhoneModel> listPhones() {
         try {
             List<PhoneModel> phoneList = phoneDao.list();
@@ -32,8 +33,13 @@ public class PhoneService {
         }
     }
 
+    // Não faz sentido ter, tem que ter outro metodo que retorne uma lista de telefones
     public PhoneModel findById(String cpf) {
         return phoneDao.findById(cpf);
+    }
+
+    public List<PhoneModel> findByCpf(String cpf) {
+        return phoneDao.findByCpf(cpf);
     }
 
     public void insertPhone(PhoneModel phone) {
@@ -57,10 +63,9 @@ public class PhoneService {
     }
 
     public void updatePhone(PhoneModel phone) {
-        if(phone.getTelefone() == null){
-            throw new IllegalArgumentException("O campo telefone é obrigatório!");
+        if (phoneDao.findById(phone.getTelefone()) == null) {
+            throw new IllegalArgumentException("Telefone não encontrado!");
         }
-        // Falta validar caso o telefone não exista
         // Falta validar caso o cpf não exista
 //        PhoneModel existingPhone = phoneDao.findById(phone.getClientesCpf());
 //        if(existingPhone == null){

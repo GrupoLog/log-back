@@ -69,16 +69,12 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
             stmt.setString(1, cpf);
             ResultSet rs = stmt.executeQuery();
 
-            if(!rs.next()){
-                System.out.println("Telefone não encontrado!");
-            }else {
-                while (rs.next()) {
-                    PhoneModel phone = new PhoneModel();
-                    phone.setTelefone(rs.getString("telefone"));
-                    phone.setClientesCpf(rs.getString("clientes_cpf"));
-                    phoneList.add(phone);
-                    System.out.println("Telefone encontrado!");
-                }
+            while (rs.next()) {
+                PhoneModel phone = new PhoneModel();
+                phone.setTelefone(rs.getString("telefone"));
+                phone.setClientesCpf(rs.getString("clientes_cpf"));
+                phoneList.add(phone);
+                System.out.println("Telefone encontrado!");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar telefone: " + e.getMessage(), e);

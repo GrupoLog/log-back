@@ -15,6 +15,8 @@ import java.util.List;
 @RestController
 @RequestMapping("/clientes")
 @Validated
+
+// Depois ver para injetar telefone (Clientes e Telefone adam juntos)
 public class ClientController {
 
     private final ClientService clientService;
