@@ -1,8 +1,7 @@
 package com.cesar.bd_project.controller;
 
-import jakarta.validation.ConstraintViolationException;
 import jakarta.validation.Valid;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.Pattern;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -61,7 +60,7 @@ public class ClientController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<MessageResponse> updateClient(@Valid @PathVariable String cpf, @RequestBody ClientModel client) {
+    public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @Valid @RequestBody ClientModel client) {
         client.setCpf(cpf);
         try {
             clientService.updateClient(client);

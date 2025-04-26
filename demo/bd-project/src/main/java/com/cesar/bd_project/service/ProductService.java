@@ -30,31 +30,24 @@ public class ProductService {
     }
 
     public ProductModel findById(Integer id) {
-        if(id == null){
-            throw new IllegalArgumentException("id_produto não pode ser nulo ou vazio");
-        }
         return productDao.findById(id);
     }
 
     public void insertProduct(ProductModel product) {
-        // Verifica se o id_produto não é nulo
-        if(product.getIdProduto() == null){
-            throw new IllegalArgumentException("id_produto é obrigatório");
-        }
 
         // Verica se já existe no banco de dados
-        if (productDao.findById(product.getIdProduto()) != null) {
+        ProductModel existingproduct = productDao.findById(product.getIdProduto());
+        if (existingproduct != null) {
             throw new IllegalArgumentException("Produto já cadastrado!");
+        }
+        if (product.getPeso() <= 0) {
+            throw new IllegalArgumentException("Peso não pode ser negativo!");
         }
 
         productDao.save(product);
     }
 
     public void updateProduct(ProductModel product) {
-        if(product.getIdProduto() == null){
-            throw new IllegalArgumentException("O campo id_produto é obrigatório!");
-        }
-
         ProductModel existingProduct = productDao.findById(product.getIdProduto());
         if(existingProduct == null){
             System.err.println("Produto não encontrado!");
@@ -64,15 +57,10 @@ public class ProductService {
     }
 
     public void deleteProduct(Integer id) {
-        if (productDao.findById(id) == null) {
-            throw new IllegalArgumentException("Produto não encontrado!");
-        }
-
         ProductModel existingClient = productDao.findById(id);
         if (existingClient == null) {
             throw new IllegalArgumentException("Produto não encontrado.");
         }
-
         productDao.delete(id);
     }
 }

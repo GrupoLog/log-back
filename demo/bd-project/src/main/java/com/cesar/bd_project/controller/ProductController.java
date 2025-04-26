@@ -3,14 +3,17 @@ package com.cesar.bd_project.controller;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.model.ProductModel;
 import com.cesar.bd_project.service.ProductService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/produtos")
+@Validated
 class ProductController {
 
     private final ProductService productService;
@@ -30,7 +33,7 @@ class ProductController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertProduct( @RequestBody ProductModel product) {
+    public ResponseEntity<?> insertProduct(@Valid @RequestBody ProductModel product) {
         try {
             productService.insertProduct(product);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Cliente inserido com sucesso!"));
@@ -42,7 +45,7 @@ class ProductController {
     }
 
     @PutMapping("/{id-produto}")
-    public ResponseEntity<MessageResponse> updateProduct(@PathVariable ("id-produto") Integer idProduto, @RequestBody ProductModel product) {
+    public ResponseEntity<MessageResponse> updateProduct(@PathVariable ("id-produto") Integer idProduto, @Valid @RequestBody ProductModel product) {
         product.setIdProduto(idProduto);
         try {
             productService.updateProduct(product);
