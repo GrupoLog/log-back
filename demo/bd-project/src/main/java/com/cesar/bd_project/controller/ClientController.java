@@ -1,7 +1,11 @@
 package com.cesar.bd_project.controller;
 
+import jakarta.validation.ConstraintViolationException;
+import jakarta.validation.Valid;
+import jakarta.validation.constraints.Size;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cesar.bd_project.service.ClientService;
 import com.cesar.bd_project.response.MessageResponse;
@@ -11,6 +15,7 @@ import java.util.List;
 
 @RestController
 @RequestMapping("/clientes")
+@Validated
 public class ClientController {
 
     private final ClientService clientService;
@@ -44,7 +49,7 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertClient(@RequestBody ClientModel client) {
+    public ResponseEntity<?> insertClient(@Valid @RequestBody ClientModel client) {
         try {
             clientService.insertClient(client);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Cliente inserido com sucesso!"));
@@ -56,7 +61,7 @@ public class ClientController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @RequestBody ClientModel client) {
+    public ResponseEntity<MessageResponse> updateClient(@Valid @PathVariable String cpf, @RequestBody ClientModel client) {
         client.setCpf(cpf);
         try {
             clientService.updateClient(client);

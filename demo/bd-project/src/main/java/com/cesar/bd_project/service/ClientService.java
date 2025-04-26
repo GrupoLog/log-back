@@ -30,25 +30,24 @@ public class ClientService {
     }
 
     public ClientModel findById(String cpf) {
-        // Verifica se o CPF é nulo ou vazio
-        if (cpf == null || cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
         return clientDao.findById(cpf);
     }
 
     public void insertClient(ClientModel client) {
-        // Validação
-        if (client.getNome() == null || client.getNome().isEmpty()) {
-            throw new IllegalArgumentException("Nome é obrigatório");
+        // Verifica se o cliente existe
+        ClientModel existingClient = clientDao.findById(client.getCpf());
+        if (existingClient != null) {
+            throw new IllegalArgumentException("CPF já cadastrado!");
+        }
+        if (client.getNumero() <= 0) {
+            throw new IllegalArgumentException("Número não pode ser negativo!");
         }
         clientDao.save(client);
     }
 
     public void updateClient(ClientModel client) {
-        // Verifica se o CPF é nulo ou vazio
-        if (client.getCpf() == null || client.getCpf().isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+        if (client.getNumero() <= 0) {
+            throw new IllegalArgumentException("Número não pode ser negativo!");
         }
 
         // Verifica se o cliente existe
@@ -60,17 +59,11 @@ public class ClientService {
     }
 
     public void deleteClient(String cpf) {
-        // Verifica se o CPF é nulo ou vazio
-        if (cpf == null || cpf.isEmpty()) {
-            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
-        }
-
         // Verifica se o cliente existe
         ClientModel existingClient = clientDao.findById(cpf);
         if (existingClient == null) {
             throw new IllegalArgumentException("Cliente com o CPF " + cpf + " não encontrado.");
         }
-
         clientDao.delete(cpf);
     }
 
