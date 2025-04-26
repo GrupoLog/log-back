@@ -27,4 +27,11 @@ public class DriverService {
             throw new RuntimeException("Erro ao listar morotistas: " + e.getMessage(), e);
         }
     }
+
+    public DriverModel findById(String cnh) {
+        if (cnh == null || cnh.isEmpty()) {
+            throw new IllegalArgumentException("CNH não pode ser nulo ou vazio");
+        }
+        return driverDao.findById(cnh);
+    }
 }

@@ -4,10 +4,7 @@ import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -43,8 +40,31 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     }
 
     @Override
-    public DriverModel findById(String s) {
-        return null;
+    public DriverModel findById(String cnh) {
+
+        String SQL = "SELECT * FROM motoristas WHERE cnh = ?";
+        DriverModel driver = null;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, cnh);
+            ResultSet rs = stmt.executeQuery();
+            if(rs.next()) {
+                driver = new DriverModel();
+                driver.setCnh(rs.getString("cnh"));
+                driver.setTipoCnh(rs.getString("tipo_cnh"));
+                driver.setNome(rs.getString("cpf"));
+                driver.setTipo(rs.getString("tipo"));
+                driver.setTelefoneUm(rs.getString("telefone_um"));
+                driver.setTelefoneDois(rs.getString("telefone_dois"));
+                driver.setCnhSupervisionado(rs.getString("cnh_supervisionado"));
+            }else {
+                System.out.println("Motorista não encontrado!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar motorista: " + e.getMessage(), e);
+        }
+        return driver;
     }
 
     @Override
