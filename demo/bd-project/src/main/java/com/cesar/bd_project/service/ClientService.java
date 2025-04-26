@@ -39,17 +39,10 @@ public class ClientService {
         if (existingClient != null) {
             throw new IllegalArgumentException("CPF já cadastrado!");
         }
-        if (client.getNumero() <= 0) {
-            throw new IllegalArgumentException("Número não pode ser negativo!");
-        }
         clientDao.save(client);
     }
 
     public void updateClient(ClientModel client) {
-        if (client.getNumero() <= 0) {
-            throw new IllegalArgumentException("Número não pode ser negativo!");
-        }
-
         // Verifica se o cliente existe
         ClientModel existingClient = clientDao.findById(client.getCpf());
         if (existingClient == null) {

@@ -3,14 +3,17 @@ package com.cesar.bd_project.controller;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.model.PhoneModel;
 import com.cesar.bd_project.service.PhoneService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
 @RequestMapping("/telefones")
+@Validated
 public class PhoneController {
     private final PhoneService phoneService;
 
@@ -29,7 +32,7 @@ public class PhoneController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertPhone(@RequestBody PhoneModel phone) {
+    public ResponseEntity<?> insertPhone(@Valid @RequestBody PhoneModel phone) {
         try {
             phoneService.insertPhone(phone);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Telefone inserido com sucesso!"));
@@ -41,7 +44,7 @@ public class PhoneController {
     }
 
     @PutMapping("/{clientes_cpf}")
-    public ResponseEntity<MessageResponse> updatePhone(@PathVariable ("clientes_cpf") String clientesCpf, @RequestBody PhoneModel phone) {
+    public ResponseEntity<MessageResponse> updatePhone(@PathVariable ("clientes_cpf") String clientesCpf, @Valid @RequestBody PhoneModel phone) {
         phone.setClientesCpf(clientesCpf);
         try {
             phoneService.updatePhone(phone);
