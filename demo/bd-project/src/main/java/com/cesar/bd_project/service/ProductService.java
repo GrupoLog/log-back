@@ -45,7 +45,7 @@ public class ProductService {
         }
         ProductModel existingProduct = productDao.findById(product.getIdProduto());
         if(existingProduct == null){
-            System.err.println("Produto não encontrado!");
+            throw new IllegalArgumentException("Produto não encontrado para atualização.");
         }
         productDao.update(product);
     }
