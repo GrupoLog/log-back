@@ -68,14 +68,14 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     @Override
     public void save(ProductModel product) {
 
-        String SQL = "INSERT INTO Produtos(id_produto, peso, data_validade, descricao) VALUES(?, ?, ?, ?)";
+        String SQL = "INSERT INTO Produtos(peso, data_validade, descricao) VALUES( ?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
-            
-            stmt.setInt(2, product.getPeso());
-            stmt.setDate(3, java.sql.Date.valueOf(product.getDataValidade()));
-            stmt.setString(4, product.getDescricao());
+
+            stmt.setInt(1, product.getPeso());
+            stmt.setDate(2, java.sql.Date.valueOf(product.getDataValidade()));
+            stmt.setString(3, product.getDescricao());
             stmt.executeUpdate();
             System.out.println("Produto inserido com sucesso!");
 

@@ -36,11 +36,11 @@ class ProductController {
     public ResponseEntity<?> insertProduct(@Valid @RequestBody ProductModel product) {
         try {
             productService.insertProduct(product);
-            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Cliente inserido com sucesso!"));
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Produto inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir cliente: " + e.getMessage()));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir produto: " + e.getMessage()));
         }
     }
 

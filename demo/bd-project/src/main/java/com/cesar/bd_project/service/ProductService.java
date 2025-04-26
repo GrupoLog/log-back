@@ -36,12 +36,6 @@ public class ProductService {
     }
 
     public void insertProduct(ProductModel product) {
-
-        // Verica se já existe no banco de dados
-        ProductModel existingproduct = productDao.findById(product.getIdProduto());
-        if (existingproduct != null) {
-            throw new IllegalArgumentException("Produto já cadastrado!");
-        }
         productDao.save(product);
     }
 
