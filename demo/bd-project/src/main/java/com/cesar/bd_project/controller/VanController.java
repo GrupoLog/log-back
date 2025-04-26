@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.model.VanModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VanService;
 import org.springframework.http.HttpStatus;
