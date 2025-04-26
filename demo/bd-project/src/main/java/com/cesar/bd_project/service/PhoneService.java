@@ -43,13 +43,9 @@ public class PhoneService {
     }
 
     public void insertPhone(PhoneModel phone) {
-        // Verifica se o telefone não é nulo
-        if(phone.getTelefone() == null || phone.getClientesCpf() == null){
-            throw new IllegalArgumentException("telefone e cpf é obrigatório");
-        }
         // Verifica se o cpf está no banco
         if(clientDao.findById(phone.getClientesCpf()) == null){
-            throw new IllegalArgumentException("CPF não está cadastrado.");
+            throw new IllegalArgumentException("Cliente não está cadastrado.");
         }
         // Verica se já existe o telefone
         List<PhoneModel> phoneList = phoneDao.findByCpf(phone.getClientesCpf());
@@ -58,20 +54,27 @@ public class PhoneService {
                 throw new IllegalArgumentException("Telefone já cadastrado para esse CPF.");
             }
         }
-
         phoneDao.save(phone);
     }
 
-    public void updatePhone(PhoneModel phone) {
-        if (phoneDao.findById(phone.getTelefone()) == null) {
-            throw new IllegalArgumentException("Telefone não encontrado!");
-        }
-        // Falta validar caso o cpf não exista
-//        PhoneModel existingPhone = phoneDao.findById(phone.getClientesCpf());
-//        if(existingPhone == null){
-//            System.err.println("Telefone não encontrado!");
-//        }
 
+    public void updatePhone(PhoneModel phone) {
+        // Verifica se o cliente existe
+        if (clientDao.findById(phone.getClientesCpf()) == null) {
+            throw new IllegalArgumentException("Cliente não está cadastrado.");
+        }
+
+        // Verifica se o telefone antigo existe
+        PhoneModel existingPhone = phoneDao.findById(phone.getTelefone());
+        if (existingPhone == null) {
+            throw new IllegalArgumentException("Telefone antigo não encontrado.");
+        }
+
+        // Verifica se o telefone novo já está cadastrado, mas para outro cliente
+        PhoneModel phoneWithSameNumber = phoneDao.findById(phone.getTelefone());
+        if (phoneWithSameNumber != null && !phoneWithSameNumber.getClientesCpf().equals(phone.getClientesCpf())) {
+            throw new IllegalArgumentException("Telefone já está cadastrado para outro cliente.");
+        }
         phoneDao.update(phone);
     }
 
