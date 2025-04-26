@@ -11,8 +11,8 @@ import lombok.NoArgsConstructor;
 @EqualsAndHashCode(callSuper = true)
 @NoArgsConstructor
 @AllArgsConstructor
-public class MotoModel extends VehicleModel{
+public class VanModel extends VehicleModel{
 
-    @JsonProperty("cap_carga")
-    private Integer capacidadeCarga;
+    @JsonProperty("cap_passageiros")
+    private Integer capacidadePassageiros;
 }

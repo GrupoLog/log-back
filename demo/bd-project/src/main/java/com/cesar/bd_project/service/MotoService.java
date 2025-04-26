@@ -28,7 +28,7 @@ public class MotoService {
             return motoList;
 
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erro ao listar cmotos: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao listar motos: " + e.getMessage(), e);
         }
     }
 

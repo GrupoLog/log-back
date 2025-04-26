@@ -1,7 +1,6 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.model.MotoModel;
-import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.MotoService;
 import org.springframework.http.HttpStatus;
@@ -61,7 +60,7 @@ public class MotoController {
         moto.setChassi(chassi);
         try {
             motoService.updateMoto(moto);
-            return ResponseEntity.ok(new MessageResponse("Motoo atualizada com sucesso!"));
+            return ResponseEntity.ok(new MessageResponse("Moto atualizada com sucesso!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
         } catch (Exception e) {
