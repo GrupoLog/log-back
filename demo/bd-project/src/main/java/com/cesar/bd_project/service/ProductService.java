@@ -21,7 +21,6 @@ public class ProductService {
             if (productList.isEmpty()) {
                 throw new IllegalStateException("Nenhum cliente encontrado.");
             }
-
             return productList;
 
         } catch (RuntimeException e) {
@@ -30,6 +29,9 @@ public class ProductService {
     }
 
     public ProductModel findById(Integer id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do produto inválido!");
+        }
         return productDao.findById(id);
     }
 
@@ -40,23 +42,25 @@ public class ProductService {
         if (existingproduct != null) {
             throw new IllegalArgumentException("Produto já cadastrado!");
         }
-        if (product.getPeso() <= 0) {
-            throw new IllegalArgumentException("Peso não pode ser negativo!");
-        }
-
         productDao.save(product);
     }
 
     public void updateProduct(ProductModel product) {
+        if (product.getIdProduto() == null || product.getIdProduto() <= 0) {
+            throw new IllegalArgumentException("ID do produto inválido para atualização.");
+        }
         ProductModel existingProduct = productDao.findById(product.getIdProduto());
         if(existingProduct == null){
             System.err.println("Produto não encontrado!");
         }
-
         productDao.update(product);
     }
 
+    // Não faz sentido ter delete
     public void deleteProduct(Integer id) {
+        if (id == null || id <= 0) {
+            throw new IllegalArgumentException("ID do produto inválido!");
+        }
         ProductModel existingClient = productDao.findById(id);
         if (existingClient == null) {
             throw new IllegalArgumentException("Produto não encontrado.");
