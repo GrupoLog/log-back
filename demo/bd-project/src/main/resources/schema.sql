@@ -61,24 +61,24 @@ CREATE TABLE Veiculo (
 );
 
 -- Tabela pode_Conduzir
-CREATE TABLE pode_Conduzir (
-    Motoristas_cnh VARCHAR(11) NOT NULL,
+CREATE TABLE Pode_Conduzir (
+    motoristas_cnh VARCHAR(11) NOT NULL,
     veiculo_chassi VARCHAR(17) NOT NULL,
-    PRIMARY KEY (Motoristas_cnh, veiculo_chassi),
-    FOREIGN KEY (Motoristas_cnh) REFERENCES Motoristas (cnh),
+    PRIMARY KEY (motoristas_cnh, veiculo_chassi),
+    FOREIGN KEY (motoristas_cnh) REFERENCES Motoristas (cnh),
     FOREIGN KEY (veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
 -- Tabela viagem
-CREATE TABLE viagem (
+CREATE TABLE Viagem (
     id_viagem INT PRIMARY KEY AUTO_INCREMENT,
     data_viagem DATE NOT NULL,
     hora_viagem TIME NOT NULL,
     origem VARCHAR(30) NOT NULL,
     destino VARCHAR(30) NOT NULL,
     veiculo_chassi VARCHAR(17) NOT NULL,
-    Motoristas_cnh VARCHAR(11) NOT NULL,
-    FOREIGN KEY (Motoristas_cnh) REFERENCES Motoristas (cnh),
+    motoristas_cnh VARCHAR(11) NOT NULL,
+    FOREIGN KEY (motoristas_cnh) REFERENCES Motoristas (cnh),
     FOREIGN KEY (veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
@@ -91,7 +91,7 @@ CREATE TABLE viagem (
 );
 
 -- Subclasse Servico_entrega (herda de Servicos)
-    CREATE TABLE Servico_entrega (
+    CREATE TABLE Servico_Entrega (
     id_servico INT PRIMARY KEY,
     destinatario VARCHAR(60) NOT NULL,
     peso_total DOUBLE CHECK (peso_total > 0) NOT NULL,
@@ -100,7 +100,7 @@ CREATE TABLE viagem (
 );
 
 -- Subclasse Servico_transporte (herda de Servicos)
-    CREATE TABLE Servico_transporte (
+    CREATE TABLE Servico_Transporte (
     id_servico INT PRIMARY KEY,
     qtd_passageiros INT CHECK (qtd_passageiros BETWEEN 1 AND 20) NOT NULL,
     descricao_transporte VARCHAR(255),

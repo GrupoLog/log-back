@@ -33,12 +33,12 @@ public class TripModel {
     @NotBlank(message = "O destino não pode ser vazio.")
     private String destino;
 
-    @JsonProperty("fk_veiculo_chassi")
+    @JsonProperty("veiculo_chassi")
     @NotBlank
     @Pattern(regexp = "\\d{17}", message = "Chassi deve ter 17 dígitos.")
     private String veiculoChassi;
 
-    @JsonProperty("fk_Motoristas_cnh")
+    @JsonProperty("Motoristas_cnh")
     @NotBlank
     @Pattern(regexp = "\\d{11}", message = "CNH deve ter 11 dígitos.")
     private String motoristasCnh;

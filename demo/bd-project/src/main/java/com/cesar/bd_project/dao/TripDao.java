@@ -29,8 +29,8 @@ public class TripDao implements GenericDao<TripModel, String>{
                 trip.setHoraViagem(rs.getTime("hora_viagem").toLocalTime());
                 trip.setOrigem(rs.getString("origem"));
                 trip.setDestino(rs.getString("destino"));
-                trip.setVeiculoChassi(rs.getString("fk_veiculo_chassi"));
-                trip.setMotoristasCnh(rs.getString("fk_Motoristas_cnh"));
+                trip.setVeiculoChassi(rs.getString("veiculo_chassi"));
+                trip.setMotoristasCnh(rs.getString("Motoristas_cnh"));
                 tripList.add(trip);
             }
 

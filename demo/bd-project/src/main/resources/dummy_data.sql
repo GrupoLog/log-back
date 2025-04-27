@@ -69,7 +69,7 @@ INSERT INTO Motoristas (CNH, tipo_cnh, CPF, nome, tipo, telefone_um, telefone_do
 
 
 -- Tabela pode_Conduzir
-INSERT INTO pode_Conduzir (fk_Motoristas_CNH, fk_veiculo_chassi) VALUES
+INSERT INTO pode_Conduzir (Motoristas_CNH, veiculo_chassi) VALUES
 ('12345678900', '9BWZZZ377VT004251'),
 ('12345678900', '9BWZZZ377VT004253'),
 ('12312312300', '9BWZZZ377VT004252'),
@@ -80,7 +80,7 @@ INSERT INTO pode_Conduzir (fk_Motoristas_CNH, fk_veiculo_chassi) VALUES
 -- Fazer a partir daqui
 
 -- Tabela viagem
-INSERT INTO viagem (data_viagem, hora_viagem, origem, destino, fk_veiculo_chassi, fk_Motoristas_CNH) VALUES
+INSERT INTO viagem (data_viagem, hora_viagem, origem, destino, veiculo_chassi, Motoristas_CNH) VALUES
 ('2025-04-20', '08:00:00', 'Recife', 'Olinda', '9BWZZZ377VT004251', '12345678900'),
 ('2025-04-21', '09:30:00', 'Recife', 'Jaboatão', '9BWZZZ377VT004253', '12345678900'),
 ('2025-04-21', '10:15:00', 'Olinda', 'Paulista', '9BWZZZ377VT004255', '98765432100'),
@@ -92,7 +92,7 @@ INSERT INTO viagem (data_viagem, hora_viagem, origem, destino, fk_veiculo_chassi
 
 
 -- Tabela Servicos (superclasse para entrega e transporte)
-INSERT INTO Servicos (fk_viagem_id_viagem) VALUES
+INSERT INTO Servicos (id_viagem) VALUES
 (1),
 (2),
 (3),
