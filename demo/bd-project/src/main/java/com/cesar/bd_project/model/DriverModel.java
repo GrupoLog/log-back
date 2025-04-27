@@ -38,10 +38,16 @@ public class DriverModel {
     private String telefoneUm;
 
     @JsonProperty("telefone_dois")
-    @Size(min = 11, max = 11, message = "Telefone dois deve ter 11 dígitos.")
+    @Pattern(
+            regexp = "^$|\\d{11}$",
+            message = "Telefone dois deve ter 11 dígitos ou ser vazia."
+    )
     private String telefoneDois;
 
     @JsonProperty("cnh_supervisionado")
-    @Size(min = 11, max = 11, message = "CNH do supervisionado deve ter 11 dígitos.")
+    @Pattern(
+            regexp = "^$|\\d{11}$",
+            message = "CNH do supervisionado deve ter exatamente 11 dígitos ou ser vazia."
+    )
     private String cnhSupervisionado;
 }

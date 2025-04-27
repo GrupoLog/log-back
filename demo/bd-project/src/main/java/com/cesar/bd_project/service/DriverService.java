@@ -51,6 +51,27 @@ public class DriverService {
         if(existingDriverByCpf != null) {
             throw new IllegalArgumentException("Já existe um motorista cadastrado com esse CPF!");
         }
+        if(driver.getTelefoneDois() == null || driver.getTelefoneDois().isEmpty()){
+            driver.setTelefoneDois(null);
+        }
+        if(driver.getCnhSupervisionado() == null || driver.getCnhSupervisionado().isEmpty()){
+            driver.setCnhSupervisionado(null);
+        }
         driverDao.save(driver);
+    }
+
+    public void updateDriver(DriverModel driver) {
+        // Só verifica se o motorista existe: não é possível atualizar CNH e CPF
+        DriverModel existingDriverByCnh = driverDao.findById(driver.getCnh());
+        if(existingDriverByCnh == null) {
+            throw new IllegalArgumentException("Motorista não encontrado!");
+        }
+        if(driver.getTelefoneDois() == null || driver.getTelefoneDois().isEmpty()){
+            driver.setTelefoneDois(null);
+        }
+        if(driver.getCnhSupervisionado() == null || driver.getCnhSupervisionado().isEmpty()){
+            driver.setCnhSupervisionado(null);
+        }
+        driverDao.update(driver);
     }
 }

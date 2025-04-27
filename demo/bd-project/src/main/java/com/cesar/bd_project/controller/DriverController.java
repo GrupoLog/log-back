@@ -39,6 +39,7 @@ public class DriverController {
     @PostMapping
     public ResponseEntity<?> insertDriver(@Valid @RequestBody DriverModel driver) {
         try {
+            System.out.println("cnh supervisionado: " + driver.getCnhSupervisionado());
             driverService.insertDriver(driver);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Motorista inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
@@ -48,4 +49,17 @@ public class DriverController {
         }
     }
 
+    @PutMapping("/{cnh}")
+    public ResponseEntity<MessageResponse> updateDriver(@PathVariable String cnh, @Valid @RequestBody DriverModel driver) {
+        driver.setCnh(cnh);
+        System.out.println(driver.getCnhSupervisionado());
+        try {
+            driverService.updateDriver(driver);
+            return ResponseEntity.ok(new MessageResponse("Motorista atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar motorista: " + e.getMessage()));
+        }
+    }
 }

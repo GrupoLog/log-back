@@ -60,7 +60,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
                 driver.setTelefoneDois(rs.getString("telefone_dois"));
                 driver.setCnhSupervisionado(rs.getString("cnh_supervisionado"));
             }else {
-                System.out.println("Motorista não encontrado!");
+                System.out.println("Motorista não encontrado por CNH!");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar motorista: " + e.getMessage(), e);
@@ -87,7 +87,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
                 driver.setTelefoneDois(rs.getString("telefone_dois"));
                 driver.setCnhSupervisionado(rs.getString("cnh_supervisionado"));
             }else {
-                System.out.println("Motorista não encontrado!");
+                System.out.println("Motorista não encontrado por CPF!");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar motorista: " + e.getMessage(), e);
@@ -122,11 +122,30 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     }
 
     @Override
-    public void update(DriverModel driverModel) {
+    public void update(DriverModel driver) {
+        String SQL = """
+                UPDATE motoristas SET tipo_cnh = ?, nome = ?, tipo = ?, telefone_um = ?, telefone_dois = ?, cnh_supervisionado = ? 
+                WHERE cnh = ?
+                """;
 
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setString(1, driver.getTipoCnh());
+            stmt.setString(2, driver.getNome());
+            stmt.setString(3, driver.getTipo());
+            stmt.setString(4, driver.getTelefoneUm());
+            stmt.setString(5, driver.getTelefoneDois());
+            stmt.setString(6, driver.getCnhSupervisionado());
+            stmt.setString(7, driver.getCnh());
+            stmt.executeUpdate();
+            System.out.println("Motorista atualizado com sucesso!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar motorista no banco de dados: " + e.getMessage(), e);
+        }
     }
-    // Não faz sentido ter
 
+    // Não faz sentido ter
     @Override
     public void delete(String s) {
 
