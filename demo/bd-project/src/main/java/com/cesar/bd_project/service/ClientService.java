@@ -37,7 +37,7 @@ public class ClientService {
         // Verifica se o cliente existe
         ClientModel existingClient = clientDao.findById(client.getCpf());
         if (existingClient != null) {
-            throw new IllegalArgumentException("CPF já cadastrado!");
+            throw new IllegalArgumentException("Cliente já cadastrado com esse CPF!");
         }
         clientDao.save(client);
     }

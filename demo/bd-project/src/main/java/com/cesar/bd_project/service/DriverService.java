@@ -34,4 +34,23 @@ public class DriverService {
         }
         return driverDao.findById(cnh);
     }
+
+    public DriverModel findByCpf(String cpf) {
+        if (cpf == null || cpf.isEmpty()) {
+            throw new IllegalArgumentException("CPF não pode ser nulo ou vazio");
+        }
+        return driverDao.findByCpf(cpf);
+    }
+
+    public void insertDriver(DriverModel driver) {
+        DriverModel existingDriverByCnh = driverDao.findById(driver.getCnh());
+        if(existingDriverByCnh != null) {
+            throw new IllegalArgumentException("Motorista já cadastrado com essa CNH!");
+        }
+        DriverModel existingDriverByCpf = driverDao.findByCpf(driver.getCpf());
+        if(existingDriverByCpf != null) {
+            throw new IllegalArgumentException("Já existe um motorista cadastrado com esse CPF!");
+        }
+        driverDao.save(driver);
+    }
 }
