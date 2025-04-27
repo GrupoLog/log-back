@@ -62,11 +62,11 @@ CREATE TABLE Veiculo (
 
 -- Tabela pode_Conduzir
 CREATE TABLE pode_Conduzir (
-    fk_Motoristas_cnh VARCHAR(11) NOT NULL,
-    fk_veiculo_chassi VARCHAR(17) NOT NULL,
-    PRIMARY KEY (fk_Motoristas_cnh, fk_veiculo_chassi),
-    FOREIGN KEY (fk_Motoristas_cnh) REFERENCES Motoristas (cnh),
-    FOREIGN KEY (fk_veiculo_chassi) REFERENCES Veiculo (chassi)
+    Motoristas_cnh VARCHAR(11) NOT NULL,
+    veiculo_chassi VARCHAR(17) NOT NULL,
+    PRIMARY KEY (Motoristas_cnh, veiculo_chassi),
+    FOREIGN KEY (Motoristas_cnh) REFERENCES Motoristas (cnh),
+    FOREIGN KEY (veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
 -- Tabela viagem
@@ -76,17 +76,17 @@ CREATE TABLE viagem (
     hora_viagem TIME NOT NULL,
     origem VARCHAR(30) NOT NULL,
     destino VARCHAR(30) NOT NULL,
-    fk_veiculo_chassi VARCHAR(17) NOT NULL,
-    fk_Motoristas_cnh VARCHAR(11) NOT NULL,
-    FOREIGN KEY (fk_Motoristas_cnh) REFERENCES Motoristas (cnh),
-    FOREIGN KEY (fk_veiculo_chassi) REFERENCES Veiculo (chassi)
+    veiculo_chassi VARCHAR(17) NOT NULL,
+    Motoristas_cnh VARCHAR(11) NOT NULL,
+    FOREIGN KEY (Motoristas_cnh) REFERENCES Motoristas (cnh),
+    FOREIGN KEY (veiculo_chassi) REFERENCES Veiculo (chassi)
 );
 
 -- Tabela Servicos (superclasse para entrega e transporte)
     CREATE TABLE Servicos (
     id_servico INT PRIMARY KEY AUTO_INCREMENT,
-    fk_viagem_id_viagem INT NOT NULL,
-    FOREIGN KEY (fk_viagem_id_viagem) REFERENCES viagem (id_viagem)
+    id_viagem INT NOT NULL,
+    FOREIGN KEY (id_viagem) REFERENCES viagem (id_viagem)
 
 );
 
