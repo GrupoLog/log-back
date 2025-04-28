@@ -82,7 +82,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         }
     }
 
-    // Metodo necessario para salvar servico transporte
+    // Metodo necessario para salvar servicos de transporte e entrega
     public int saveAndGetKey(ServiceModel service) {
 
         String SQL = "INSERT INTO Servicos (id_viagem) VALUES (?)";
