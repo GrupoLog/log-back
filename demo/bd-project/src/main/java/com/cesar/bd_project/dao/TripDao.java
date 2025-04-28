@@ -2,15 +2,9 @@ package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
-import com.fasterxml.jackson.annotation.JsonProperty;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import org.springframework.stereotype.Repository;
 
 import java.sql.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 

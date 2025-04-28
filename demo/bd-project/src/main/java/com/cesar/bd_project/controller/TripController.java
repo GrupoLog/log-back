@@ -1,6 +1,5 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.model.ProductModel;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;

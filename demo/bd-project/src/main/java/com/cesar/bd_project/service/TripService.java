@@ -1,7 +1,11 @@
 package com.cesar.bd_project.service;
 
+import com.cesar.bd_project.dao.DriverDao;
 import com.cesar.bd_project.dao.TripDao;
+import com.cesar.bd_project.dao.VehicleDao;
+import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.model.TripModel;
+import com.cesar.bd_project.model.VehicleModel;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -10,9 +14,13 @@ import java.util.List;
 public class TripService {
 
     private final TripDao tripDao;
+    private final VehicleDao vehicleDao;
+    private final DriverDao driverDao;
 
-    public TripService(TripDao tripDao) {
+    public TripService(TripDao tripDao, VehicleDao vehicleDao, DriverDao driverDao) {
         this.tripDao = tripDao;
+        this.vehicleDao = vehicleDao;
+        this.driverDao = driverDao;
     }
 
     public List<TripModel> listTrips() {
@@ -37,6 +45,15 @@ public class TripService {
     }
 
     public void insertTrip(TripModel trip) {
+        VehicleModel existingVehicle = vehicleDao.findById(trip.getVeiculoChassi());
+        if(existingVehicle == null) {
+            throw new IllegalArgumentException("Veículo não encontrado para o chassi fornecido.");
+        }
+
+        DriverModel existingDriver = driverDao.findById(trip.getMotoristasCnh());
+        if(existingDriver == null) {
+            throw new IllegalArgumentException("Motorista não encontrado com essa CNH!");
+        }
         tripDao.save(trip);
     }
 }
