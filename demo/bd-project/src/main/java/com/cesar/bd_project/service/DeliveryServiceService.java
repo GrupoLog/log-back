@@ -4,7 +4,6 @@ import com.cesar.bd_project.dao.DeliveryServiceDao;
 import com.cesar.bd_project.dao.ServiceDao;
 import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.model.DeliveryServiceModel;
-import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.model.TripModel;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +48,9 @@ public class DeliveryServiceService {
         }
         deliveryService.setIdServico(serviceDao.saveAndGetKey(deliveryService));
         deliveryServiceDao.save(deliveryService);
+    }
+
+    public void updateDeliveryService(DeliveryServiceModel deliveryService) {
+        deliveryServiceDao.update(deliveryService);
     }
 }

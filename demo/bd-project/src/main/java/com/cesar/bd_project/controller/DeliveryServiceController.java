@@ -54,4 +54,17 @@ public class DeliveryServiceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir serviço de entrega: " + e.getMessage()));
         }
     }
+
+    @PutMapping("/{id-servico}")
+    public ResponseEntity<MessageResponse> updateDeliveryService(@PathVariable ("id-servico") Integer id, @Valid @RequestBody DeliveryServiceModel deliveryService) {
+        deliveryService.setIdServico(id);
+        try {
+            deliveryServiceService.updateDeliveryService(deliveryService);
+            return ResponseEntity.ok(new MessageResponse("Serviço de entrega atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar serviço de entrega: " + e.getMessage()));
+        }
+    }
 }

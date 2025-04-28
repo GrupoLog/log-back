@@ -95,11 +95,24 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
         }
     }
 
-    // Não faz sentido ter
+    // Só pode atualizar destinatario e descricao do produto
     @Override
-    public void update(DeliveryServiceModel t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    public void update(DeliveryServiceModel deliveryService) {
+
+        String SQL = "UPDATE servico_entrega SET destinatario = ?, descricao_produto = ? WHERE id_servico = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setString(1, deliveryService.getDestinatario());
+            stmt.setString(2, deliveryService.getDescricaoProduto());
+            stmt.setInt(3, deliveryService.getIdServico());
+            stmt.executeUpdate();
+            System.out.println("Servico de entrega atualizado com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar servico de entrega: " + e.getMessage(), e);
+        }
     }
 
     // Não faz sentido ter
