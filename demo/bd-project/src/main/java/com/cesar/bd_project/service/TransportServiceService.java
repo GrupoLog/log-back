@@ -28,4 +28,8 @@ public class TransportServiceService {
             throw new RuntimeException("Erro ao listar serviços de transporte: " + e.getMessage(), e);
         }
     }
+
+    public TransportServiceModel findById(Integer id) {
+        return transportServiceDao.findById(id);
+    }
 }
