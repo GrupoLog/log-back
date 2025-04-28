@@ -48,4 +48,9 @@ public class TransportServiceService {
         transportService.setIdServico(serviceDao.saveAndGetKey(transportService));
         transportServiceDao.save(transportService);
     }
+
+    public void updateTransportService(TransportServiceModel transportService) {
+        transportServiceDao.update(transportService);
+    }
 }
+

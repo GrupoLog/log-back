@@ -90,10 +90,25 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
     }
 
     @Override
-    public void update(TransportServiceModel transportServiceModel) {
+    public void update(TransportServiceModel transportService) {
 
+        String SQL = "UPDATE servico_transporte SET qtd_passageiros = ?, descricao_transporte = ? WHERE id_servico = ?";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setInt(1, transportService.getQtdPassageiros());
+            stmt.setString(2, transportService.getDescricaoTransporte());
+            stmt.setInt(3, transportService.getIdServico());
+            stmt.executeUpdate();
+            System.out.println("Servico de transporte atualizado com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar servico de transporte: " + e.getMessage(), e);
+        }
     }
 
+    // Nao faz sentido ter
     @Override
     public void delete(Integer integer) {
 

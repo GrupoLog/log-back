@@ -54,4 +54,17 @@ public class TransportServiceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir serviço de transporte: " + e.getMessage()));
         }
     }
+
+    @PutMapping("/{id-servico}")
+    public ResponseEntity<MessageResponse> updateTransportService(@PathVariable ("id-servico") Integer id, @Valid @RequestBody TransportServiceModel transportService) {
+        transportService.setIdServico(id);
+        try {
+            transportServiceService.updateTransportService(transportService);
+            return ResponseEntity.ok(new MessageResponse("Serviço de transporte atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar serviço de transporte: " + e.getMessage()));
+        }
+    }
 }
