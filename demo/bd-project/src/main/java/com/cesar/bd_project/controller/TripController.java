@@ -57,4 +57,19 @@ public class TripController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir viagem: " + e.getMessage()));
         }
     }
+
+    @PutMapping("/{id_viagem}")
+    public ResponseEntity<MessageResponse> updatetrip(@PathVariable ("id_viagem") Integer idViagem, @Valid @RequestBody TripModel trip) {
+        trip.setIdViagem(idViagem);
+        try {
+            tripService.updateTrip(trip);
+            return ResponseEntity.ok(new MessageResponse("Viagem atualizado com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            //return "Erro de validação: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            //return "Erro ao atualizar produto no banco de dados: " + e.getMessage();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao atualizar viagem: " + e.getMessage()));
+        }
+    }
 }

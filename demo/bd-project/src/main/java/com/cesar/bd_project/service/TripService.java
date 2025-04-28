@@ -56,4 +56,17 @@ public class TripService {
         }
         tripDao.save(trip);
     }
+
+    public void updateTrip(TripModel trip) {
+        VehicleModel existingVehicle = vehicleDao.findById(trip.getVeiculoChassi());
+        if(existingVehicle == null) {
+            throw new IllegalArgumentException("Veículo não encontrado para o chassi fornecido.");
+        }
+
+        DriverModel existingDriver = driverDao.findById(trip.getMotoristasCnh());
+        if(existingDriver == null) {
+            throw new IllegalArgumentException("Motorista não encontrado com essa CNH!");
+        }
+        tripDao.update(trip);
+    }
 }

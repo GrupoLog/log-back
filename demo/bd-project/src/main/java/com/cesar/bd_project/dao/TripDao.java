@@ -95,8 +95,28 @@ public class TripDao implements GenericDao<TripModel, Integer>{
     }
 
     @Override
-    public void update(TripModel tripModel) {
+    public void update(TripModel trip) {
+        String SQL = """
+                UPDATE viagem SET data_viagem = ?, hora_viagem = ?, origem = ?, destino = ?, veiculo_chassi = ?, motoristas_cnh = ?
+                WHERE id_viagem = ?
+                """;
 
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setDate(1, java.sql.Date.valueOf(trip.getDataViagem()));
+            stmt.setTime(2, java.sql.Time.valueOf(trip.getHoraViagem()));
+            stmt.setString(3, trip.getOrigem());
+            stmt.setString(4, trip.getDestino());
+            stmt.setString(5, trip.getVeiculoChassi());
+            stmt.setString(6, trip.getMotoristasCnh());
+            stmt.setInt(7, trip.getIdViagem());
+            stmt.executeUpdate();
+            System.out.println("Viagem atualizada com sucesso!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao atualizar viagem no banco de dados: " + e.getMessage(), e);
+        }
     }
 
     //Não faz sentido ter
