@@ -1,0 +1,89 @@
+package com.cesar.bd_project.dao;
+
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.List;
+
+import org.springframework.stereotype.Repository;
+
+import com.cesar.bd_project.model.ServiceModel;
+import com.cesar.bd_project.utils.ConnectionFactory;
+
+@Repository
+public class ServiceDao implements GenericDao<ServiceModel, Integer> {
+
+    @Override
+    public List<ServiceModel> list() {
+        
+        List<ServiceModel> serviceList = new ArrayList<>();
+        String SQL = "SELECT * FROM servicos";
+        try (Connection conn = ConnectionFactory.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL)) {
+
+        while (rs.next()) {
+            ServiceModel service = new ServiceModel();
+            service.setIdServico(rs.getInt("id_servico"));
+            service.setIdViagem(rs.getInt("id_viagem"));
+            serviceList.add(service);
+        }
+
+        System.out.println("Servicos listados com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar servicos: " + e.getMessage(), e);
+        }
+        return serviceList;
+    }
+
+    @Override
+    public ServiceModel findById(Integer id) {
+        
+        String SQL = "SELECT * FROM servicos WHERE id_servico = ?";
+        ServiceModel service = null;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if(rs.next()){
+                service = new ServiceModel();
+                service.setIdServico(rs.getInt("id_servico"));
+                service.setIdViagem(rs.getInt("id_viagem"));
+                System.out.println("Serviço encontrado!");
+            } else {
+                System.out.println("Serviço não encontrado!");
+            }
+            
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar serviço por ID: " + e.getMessage(), e);
+        }
+        return service;
+    }
+
+    @Override
+    public void save(ServiceModel t) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    }
+
+    // Não faz sentido ter
+    @Override
+    public void update(ServiceModel t) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'update'");
+    }
+
+    // Não faz sentido ter
+    @Override
+    public void delete(Integer id) {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'delete'");
+    }
+    
+}
