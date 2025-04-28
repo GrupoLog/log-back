@@ -42,7 +42,7 @@ public class ServiceService {
     public void insertService(ServiceModel service) {
         TripModel existingTrip = tripDao.findById(service.getIdViagem());
         if(existingTrip == null) {
-            throw new IllegalArgumentException("Serviço não encontrado.");
+            throw new IllegalArgumentException("Viagem não encontrada.");
         }
         serviceDao.save(service);
     }

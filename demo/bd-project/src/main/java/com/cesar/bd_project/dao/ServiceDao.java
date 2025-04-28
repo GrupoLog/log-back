@@ -18,21 +18,21 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
 
     @Override
     public List<ServiceModel> list() {
-        
+
         List<ServiceModel> serviceList = new ArrayList<>();
         String SQL = "SELECT * FROM servicos";
         try (Connection conn = ConnectionFactory.getConnection();
-            Statement stmt = conn.createStatement();
-            ResultSet rs = stmt.executeQuery(SQL)) {
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
 
-        while (rs.next()) {
-            ServiceModel service = new ServiceModel();
-            service.setIdServico(rs.getInt("id_servico"));
-            service.setIdViagem(rs.getInt("id_viagem"));
-            serviceList.add(service);
-        }
+            while (rs.next()) {
+                ServiceModel service = new ServiceModel();
+                service.setIdServico(rs.getInt("id_servico"));
+                service.setIdViagem(rs.getInt("id_viagem"));
+                serviceList.add(service);
+            }
 
-        System.out.println("Servicos listados com sucesso!");
+            System.out.println("Servicos listados com sucesso!");
 
         }catch (SQLException e) {
             throw new RuntimeException("Erro ao listar servicos: " + e.getMessage(), e);
@@ -42,7 +42,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
 
     @Override
     public ServiceModel findById(Integer id) {
-        
+
         String SQL = "SELECT * FROM servicos WHERE id_servico = ?";
         ServiceModel service = null;
 
@@ -59,7 +59,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
             } else {
                 System.out.println("Serviço não encontrado!");
             }
-            
+
         }catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar serviço por ID: " + e.getMessage(), e);
         }
@@ -67,9 +67,19 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
     }
 
     @Override
-    public void save(ServiceModel t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    public void save(ServiceModel service) {
+
+        String SQL = "INSERT INTO servicos(id_viagem) VALUES (?)";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, service.getIdViagem());
+            stmt.executeUpdate();
+            System.out.println("Serviço inserida com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar serviço no banco de dados: " + e.getMessage(), e);
+        }
     }
 
     // Não faz sentido ter
@@ -85,5 +95,6 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'delete'");
     }
-    
+
 }
+
