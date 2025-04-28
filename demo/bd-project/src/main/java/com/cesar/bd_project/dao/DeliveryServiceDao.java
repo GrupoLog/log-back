@@ -77,9 +77,22 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
     }
 
     @Override
-    public void save(DeliveryServiceModel t) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'save'");
+    public void save(DeliveryServiceModel deliveryService) {
+
+        String SQL = "INSERT INTO servico_entrega(id_servico, destinatario, peso_total, descricao_produto) VALUES (?, ?, ?, ?)";
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, deliveryService.getIdServico());
+            stmt.setString(2, deliveryService.getDestinatario());
+            stmt.setInt(3, deliveryService.getPesoTotal());
+            stmt.setString(4, deliveryService.getDescricaoProduto());
+            stmt.executeUpdate();
+            System.out.println("Serviço de entrega inserido com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar serviço de entrega no banco de dados: " + e.getMessage(), e);
+        }
     }
 
     // Não faz sentido ter

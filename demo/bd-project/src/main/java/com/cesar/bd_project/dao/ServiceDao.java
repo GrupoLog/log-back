@@ -82,6 +82,29 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         }
     }
 
+    // Metodo necessario para salvar servico transporte
+    public int saveAndGetKey(ServiceModel service) {
+
+        String SQL = "INSERT INTO Servicos (id_viagem) VALUES (?)";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
+
+            stmt.setInt(1, service.getIdViagem());
+            stmt.executeUpdate();
+
+            ResultSet rs = stmt.getGeneratedKeys();
+            if (rs.next()) {
+                return rs.getInt(1);
+            } else {
+                throw new SQLException("Falha ao obter o id_servico gerado.");
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar serviço: " + e.getMessage(), e);
+        }
+    }
+
     // Não faz sentido ter
     @Override
     public void update(ServiceModel t) {
