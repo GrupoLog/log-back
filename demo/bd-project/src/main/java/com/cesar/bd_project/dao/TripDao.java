@@ -4,15 +4,12 @@ import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 @Repository
-public class TripDao implements GenericDao<TripModel, String>{
+public class TripDao implements GenericDao<TripModel, Integer>{
     @Override
     public List<TripModel> list() {
         List<TripModel> tripList = new ArrayList<>();
@@ -30,7 +27,7 @@ public class TripDao implements GenericDao<TripModel, String>{
                 trip.setOrigem(rs.getString("origem"));
                 trip.setDestino(rs.getString("destino"));
                 trip.setVeiculoChassi(rs.getString("veiculo_chassi"));
-                trip.setMotoristasCnh(rs.getString("Motoristas_cnh"));
+                trip.setMotoristasCnh(rs.getString("motoristas_cnh"));
                 tripList.add(trip);
             }
 
@@ -43,8 +40,33 @@ public class TripDao implements GenericDao<TripModel, String>{
     }
 
     @Override
-    public TripModel findById(String s) {
-        return null;
+    public TripModel findById(Integer id) {
+
+        String SQL = "SELECT * FROM viagem WHERE id_viagem = ?";
+        TripModel trip = null;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                trip = new TripModel();
+                trip.setIdViagem(rs.getInt("id_viagem"));
+                trip.setDataViagem(rs.getDate("data_viagem").toLocalDate());
+                trip.setHoraViagem(rs.getTime("hora_viagem").toLocalTime());
+                trip.setOrigem(rs.getString("origem"));
+                trip.setDestino(rs.getString("destino"));
+                trip.setVeiculoChassi(rs.getString("veiculo_chassi"));
+                trip.setMotoristasCnh(rs.getString("motoristas_cnh"));
+                System.out.println("Viagem encontrada!");
+            } else {
+                System.out.println("Viagem não encontrada!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar viagem pelo ID: " + e.getMessage(), e);
+        }
+        return trip;
     }
 
     @Override
@@ -59,7 +81,7 @@ public class TripDao implements GenericDao<TripModel, String>{
 
     //Não faz sentido ter
     @Override
-    public void delete(String s) {
+    public void delete(Integer id) {
 
     }
 }

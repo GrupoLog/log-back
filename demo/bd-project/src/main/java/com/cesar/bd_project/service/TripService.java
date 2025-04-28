@@ -28,4 +28,11 @@ public class TripService {
             throw new RuntimeException("Erro ao listar viagens: " + e.getMessage(), e);
         }
     }
+
+    public TripModel findById(Integer id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Id não pode ser nulo ou vazio");
+        }
+        return tripDao.findById(id);
+    }
 }
