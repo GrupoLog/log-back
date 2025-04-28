@@ -18,7 +18,7 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
         String SQL = """
                 SELECT s.id_servico, s.id_viagem, se.destinatario, se.peso_total, se.descricao_produto
                 FROM servicos s
-                JOIN servico_entrega se ON s.id_servico  = se.id_servico;
+                JOIN servico_entrega se ON s.id_servico  = se.id_servico
                 """;
         try (Connection conn = ConnectionFactory.getConnection();
             Statement stmt = conn.createStatement();
@@ -31,7 +31,6 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
             deliveryService.setDestinatario(rs.getString("destinatario"));
             deliveryService.setPesoTotal(rs.getInt("peso_total"));
             deliveryService.setDescricaoProduto(rs.getString("descricao_produto"));
-
             deliveryServiceList.add(deliveryService);
         }
 
@@ -45,9 +44,14 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
 
     @Override
     public DeliveryServiceModel findById(Integer id) {
-        
-        String SQL = "SELECT * FROM servicos WHERE id_servico = ?";
-        DeliveryServiceModel service = null;
+
+        String SQL = """
+                SELECT s.id_servico, s.id_viagem, se.destinatario, se.peso_total, se.descricao_produto
+                FROM servicos s
+                JOIN servico_entrega se ON s.id_servico  = se.id_servico
+                WHERE s.id_servico = ?
+                """;
+        DeliveryServiceModel deliveryService = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -55,18 +59,21 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
             ResultSet rs = stmt.executeQuery();
 
             if(rs.next()){
-                service = new DeliveryServiceModel();
-                service.setIdServico(rs.getInt("id_servico"));
-                service.setIdViagem(rs.getInt("id_viagem"));
-                System.out.println("Serviço encontrado!");
+                deliveryService = new DeliveryServiceModel();
+                deliveryService.setIdServico(rs.getInt("id_servico"));
+                deliveryService.setIdViagem(rs.getInt("id_viagem"));
+                deliveryService.setDestinatario(rs.getString("destinatario"));
+                deliveryService.setPesoTotal(rs.getInt("peso_total"));
+                deliveryService.setDescricaoProduto(rs.getString("descricao_produto"));
+                System.out.println("Serviço de entrega encontrado!");
             } else {
-                System.out.println("Serviço não encontrado!");
+                System.out.println("Serviço de entrega não encontrado!");
             }
             
         }catch (SQLException e) {
-            throw new RuntimeException("Erro ao buscar serviço por ID: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao buscar serviço de entrega por ID: " + e.getMessage(), e);
         }
-        return service;
+        return deliveryService;
     }
 
     @Override
