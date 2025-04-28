@@ -1,13 +1,12 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.model.TransportServiceModel;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TransportServiceService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -41,6 +40,18 @@ public class TransportServiceController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar serviço de transporte: " + e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> insertTransportService(@Valid @RequestBody TransportServiceModel transportService) {
+        try {
+            transportServiceService.insertTransportService(transportService);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Serviço de transporte inserido com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir serviço de transporte: " + e.getMessage()));
         }
     }
 }

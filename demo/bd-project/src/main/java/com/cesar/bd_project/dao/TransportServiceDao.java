@@ -73,8 +73,20 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
     }
 
     @Override
-    public void save(TransportServiceModel transportServiceModel) {
+    public void save(TransportServiceModel transportService) {
+        String SQL = "INSERT INTO servico_transporte(id_servico, qtd_passageiros, descricao_transporte) VALUES (?, ?, ?)";
 
+        try(Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, transportService.getIdServico());
+            stmt.setInt(2, transportService.getQtdPassageiros());
+            stmt.setString(3, transportService.getDescricaoTransporte());
+            stmt.executeUpdate();
+            System.out.println("Serviço de transporte inserido com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao salvar serviço de transporte no banco de dados: " + e.getMessage(), e);
+        }
     }
 
     @Override
