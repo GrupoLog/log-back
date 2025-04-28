@@ -32,12 +32,12 @@ public class ServiceController {
             List<ServiceModel> serviceList = serviceService.listService();
             return ResponseEntity.ok(serviceList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar motoristas: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar serviços: " + e.getMessage());
         }
     }
 
-    @GetMapping("/{id_servico}")
-    public ResponseEntity<?> findById(@PathVariable ("id_servico") Integer id) {
+    @GetMapping("/{id-servico}")
+    public ResponseEntity<?> findById(@PathVariable ("id-servico") Integer id) {
         try {
             ServiceModel Service = serviceService.findById(id);
             if (Service != null) {

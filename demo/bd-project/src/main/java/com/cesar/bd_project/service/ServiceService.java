@@ -25,13 +25,13 @@ public class ServiceService {
         try {
             List<ServiceModel> serviceList = serviceDao.list();
             if (serviceList.isEmpty()) {
-                throw new IllegalStateException("Nenhum cliente encontrado.");
+                throw new IllegalStateException("Nenhum serviço encontrado.");
             }
 
             return serviceList;
 
         } catch (RuntimeException e) {
-            throw new RuntimeException("Erro ao listar clientes: " + e.getMessage(), e);
+            throw new RuntimeException("Erro ao listar serviços: " + e.getMessage(), e);
         }
     }
 
@@ -42,7 +42,7 @@ public class ServiceService {
     public void insertService(ServiceModel service) {
         TripModel existingTrip = tripDao.findById(service.getIdViagem());
         if(existingTrip == null) {
-            throw new IllegalArgumentException("Viagem não encontrada.");
+            throw new IllegalArgumentException("Serviço não encontrado.");
         }
         serviceDao.save(service);
     }
