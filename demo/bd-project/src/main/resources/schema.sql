@@ -94,7 +94,7 @@ CREATE TABLE Viagem (
     CREATE TABLE Servico_Entrega (
     id_servico INT PRIMARY KEY,
     destinatario VARCHAR(60) NOT NULL,
-    peso_total DOUBLE CHECK (peso_total > 0) NOT NULL,
+    peso_total INT CHECK (peso_total > 0) NOT NULL,
     descricao_produto VARCHAR(255),
     FOREIGN KEY (id_servico) REFERENCES Servicos (id_servico)
 );
