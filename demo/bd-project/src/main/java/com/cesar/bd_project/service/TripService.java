@@ -35,4 +35,8 @@ public class TripService {
         }
         return tripDao.findById(id);
     }
+
+    public void insertTrip(TripModel trip) {
+        tripDao.save(trip);
+    }
 }

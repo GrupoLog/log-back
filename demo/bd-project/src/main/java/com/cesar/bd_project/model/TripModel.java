@@ -35,7 +35,7 @@ public class TripModel {
 
     @JsonProperty("veiculo_chassi")
     @NotBlank
-    @Pattern(regexp = "\\d{17}", message = "Chassi deve ter 17 dígitos.")
+    @Pattern(regexp = "^[A-HJ-NPR-Z0-9]{17}$", message = "Chassi deve ter 17 dígitos.")
     private String veiculoChassi;
 
     @JsonProperty("motoristas_cnh")

@@ -1,15 +1,14 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.model.ClientModel;
+import com.cesar.bd_project.model.ProductModel;
 import com.cesar.bd_project.model.TripModel;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -45,6 +44,18 @@ public class TripController {
             }
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar viagem: " + e.getMessage());
+        }
+    }
+
+    @PostMapping
+    public ResponseEntity<?> insertTrip(@Valid @RequestBody TripModel trip) {
+        try {
+            tripService.insertTrip(trip);
+            return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Viagem inserido com sucesso!"));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir viagem: " + e.getMessage()));
         }
     }
 }
