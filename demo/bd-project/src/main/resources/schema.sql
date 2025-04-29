@@ -114,10 +114,17 @@ CREATE TABLE Viagem (
     forma_pagamento VARCHAR(20) CHECK (forma_pagamento IN ('Pix', 'Cartao', 'Dinheiro')) NOT NULL,
     valor_pagamento DOUBLE CHECK (valor_pagamento >= 0) NOT NULL,
     status_pagamento VARCHAR(20) DEFAULT 'Pendente' NOT NULL,
-    id_produto INT,
     clientes_cpf VARCHAR(11) NOT NULL,
     id_servico INT NOT NULL,
-    FOREIGN KEY (id_produto) REFERENCES Produtos (id_produto),
     FOREIGN KEY (clientes_cpf) REFERENCES Clientes (cpf),
     FOREIGN KEY (id_servico) REFERENCES Servicos (id_servico)
+);
+
+-- Tabela Contem
+    CREATE TABLE Contem (
+    id_produto INT,
+    id_solicitacao INT,
+    PRIMARY KEY (id_produto, id_solicitacao),
+    FOREIGN KEY (id_solicitacao) REFERENCES Solicitacoes (id_solicitacao),
+    FOREIGN KEY (id_produto) REFERENCES Produtos (id_produto)
 );

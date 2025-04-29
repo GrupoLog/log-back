@@ -111,8 +111,19 @@ INSERT INTO Servico_transporte (id_servico, qtd_passageiros, descricao_transport
 (4, 2, 'Transporte de executivos para reunião');
 
 -- Tabela Solicitacoes
-INSERT INTO Solicitacoes (forma_pagamento, valor_pagamento, id_produto, Clientes_CPF, id_servico) VALUES
-('Pix', 30.00, NULL, '12345678901', 1),
-('Cartao', 12.50, 1, '23456789012', 4),
-('Pix', 5.00, 5, '45678901234', 2),
-('Cartao', 3.50, NULL, '56789012345', 5);
+INSERT INTO Solicitacoes (forma_pagamento, valor_pagamento, Clientes_CPF, id_servico) VALUES
+('Pix', 30.00, '12345678901', 1),
+('Cartao', 12.50, '23456789012', 4),
+('Pix', 5.00, '45678901234', 2),
+('Cartao', 3.50, '56789012345', 5);
+
+-- Tabela Contem
+INSERT INTO Contem (id_produto, id_solicitacao) VALUES
+(1, 1),
+(3, 1),
+(5, 2),
+(6, 2),
+(2, 3),
+(4, 3),
+(7, 4),
+(8, 4);
