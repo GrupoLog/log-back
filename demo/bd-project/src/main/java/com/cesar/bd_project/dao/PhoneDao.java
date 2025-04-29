@@ -61,7 +61,7 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
 
     public List<PhoneModel> findByCpf(String cpf) {
 
-        String SQL = "SELECT * FROM Telefone WHERE clientes_cpf = ?";
+        String SQL = "SELECT telefone FROM Telefone WHERE clientes_cpf = ?";
         List<PhoneModel> phoneList = new ArrayList<>();
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -72,7 +72,6 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
             while (rs.next()) {
                 PhoneModel phone = new PhoneModel();
                 phone.setTelefone(rs.getString("telefone"));
-                phone.setClientesCpf(rs.getString("clientes_cpf"));
                 phoneList.add(phone);
                 System.out.println("Telefone encontrado!");
             }
