@@ -80,3 +80,4 @@ build/
 ### VS Code ###
 /.vscode/
 demo/bd-project/src/main/resources/application.properties
+/demo/bd-project/src/main/resources/application.properties
