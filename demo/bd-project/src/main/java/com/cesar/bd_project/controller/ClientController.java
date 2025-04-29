@@ -49,9 +49,9 @@ public class ClientController {
     }
 
     @PostMapping
-    public ResponseEntity<?> insertClient(@Valid @RequestBody ClientModel client) {
+    public ResponseEntity<?> insertClientWithPhone(@Valid @RequestBody ClientWithPhoneDto clientWithPhone) {
         try {
-            clientService.insertClient(client);
+            clientService.insertClientWithPhone(clientWithPhone);
             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Cliente inserido com sucesso!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));

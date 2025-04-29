@@ -3,6 +3,7 @@ package com.cesar.bd_project.service;
 import com.cesar.bd_project.dao.ClientDao;
 import com.cesar.bd_project.dao.PhoneDao;
 import com.cesar.bd_project.dto.ClientWithPhoneDto;
+import com.cesar.bd_project.mapper.ClassMapper;
 import com.cesar.bd_project.model.PhoneModel;
 import org.springframework.stereotype.Service;
 import com.cesar.bd_project.model.ClientModel;
@@ -42,14 +43,7 @@ public class ClientService {
 
         for (ClientModel client : clientsList) {
             List<PhoneModel> phoneList = phoneDao.findByCpf(client.getCpf());
-
-            List<String> cleanPhoneList = new ArrayList<>();
-
-            for(PhoneModel phone : phoneList) {
-                cleanPhoneList.add(phone.getTelefone());
-            }
-
-            ClientWithPhoneDto clientWithPhone = new ClientWithPhoneDto(client, cleanPhoneList);
+            ClientWithPhoneDto clientWithPhone = ClassMapper.toClientWithPhoneDto(client, phoneList);
 
             clientsWithPhoneList.add(clientWithPhone);
         }
@@ -64,23 +58,20 @@ public class ClientService {
         }
 
         List<PhoneModel> phoneList = phoneDao.findByCpf(client.getCpf());
-        List<String> cleanPhoneList = new ArrayList<>();
-        if(phoneList != null){
-            for(PhoneModel phone : phoneList) {
-                cleanPhoneList.add(phone.getTelefone());
-            }
-        }
 
-        return new ClientWithPhoneDto(client, cleanPhoneList);
+        return ClassMapper.toClientWithPhoneDto(client, phoneList);
     }
 
-    public void insertClient(ClientModel client) {
+    public void insertClientWithPhone(ClientWithPhoneDto clientWithPhone) {
         // Verifica se o cliente existe
-        ClientModel existingClient = clientDao.findById(client.getCpf());
+        ClientModel existingClient = clientDao.findById(clientWithPhone.getCpf());
         if (existingClient != null) {
             throw new IllegalArgumentException("Cliente já cadastrado com esse CPF!");
         }
-        clientDao.save(client);
+        clientDao.save(ClassMapper.toClientModel(clientWithPhone));
+        for (PhoneModel phone : ClassMapper.toPhoneModel(clientWithPhone)){
+            phoneDao.save(phone);
+        }
     }
 
     public void updateClient(ClientModel client) {
