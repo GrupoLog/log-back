@@ -2,7 +2,7 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.ClientDao;
 import com.cesar.bd_project.dao.PhoneDao;
-import com.cesar.bd_project.dto.ClientsWithPhoneDto;
+import com.cesar.bd_project.dto.ClientWithPhoneDto;
 import com.cesar.bd_project.model.PhoneModel;
 import org.springframework.stereotype.Service;
 import com.cesar.bd_project.model.ClientModel;
@@ -36,9 +36,9 @@ public class ClientService {
         }
     }
 
-    public List<ClientsWithPhoneDto> listClientsWithPhone() {
+    public List<ClientWithPhoneDto> listClientsWithPhone() {
         List<ClientModel> clientsList = clientDao.list();
-        List<ClientsWithPhoneDto> clientsWithPhoneList = new ArrayList<>();
+        List<ClientWithPhoneDto> clientsWithPhoneList = new ArrayList<>();
 
         for (ClientModel client : clientsList) {
             List<PhoneModel> phoneList = phoneDao.findByCpf(client.getCpf());
@@ -49,7 +49,7 @@ public class ClientService {
                 cleanPhoneList.add(phone.getTelefone());
             }
 
-            ClientsWithPhoneDto clientWithPhone = new ClientsWithPhoneDto(client, cleanPhoneList);
+            ClientWithPhoneDto clientWithPhone = new ClientWithPhoneDto(client, cleanPhoneList);
 
             clientsWithPhoneList.add(clientWithPhone);
         }
@@ -57,8 +57,21 @@ public class ClientService {
         return clientsWithPhoneList;
     }
 
-    public ClientModel findById(String cpf) {
-        return clientDao.findById(cpf);
+    public ClientWithPhoneDto findById(String cpf) {
+        ClientModel client = clientDao.findById(cpf);
+        if(client == null){
+            throw new IllegalArgumentException("Cliente não cadastrado com esse CPF!");
+        }
+
+        List<PhoneModel> phoneList = phoneDao.findByCpf(client.getCpf());
+        List<String> cleanPhoneList = new ArrayList<>();
+        if(phoneList != null){
+            for(PhoneModel phone : phoneList) {
+                cleanPhoneList.add(phone.getTelefone());
+            }
+        }
+
+        return new ClientWithPhoneDto(client, cleanPhoneList);
     }
 
     public void insertClient(ClientModel client) {

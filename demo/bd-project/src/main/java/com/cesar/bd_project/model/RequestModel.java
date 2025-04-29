@@ -18,14 +18,11 @@ public class RequestModel {
     @JsonProperty("data_solicitacao")
     private LocalDate dataSolicitacao;
 
-    @JsonProperty("formna_pagamento")
+    @JsonProperty("forma_pagamento")
     private String formaPagamento;
 
     @JsonProperty("valor_pagamento")
     private Double valorPagamento;
-
-    @JsonProperty("id_produto")
-    private int idProduto;
 
     @JsonProperty("clientes_cpf")
     private String clientesCpf;

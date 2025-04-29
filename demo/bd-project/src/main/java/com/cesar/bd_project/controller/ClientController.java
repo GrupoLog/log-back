@@ -1,6 +1,6 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.dto.ClientsWithPhoneDto;
+import com.cesar.bd_project.dto.ClientWithPhoneDto;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +27,7 @@ public class ClientController {
     @GetMapping
     public ResponseEntity<?> listClientsWithPhone() {
         try {
-            List<ClientsWithPhoneDto> clientListWithPhone = clientService.listClientsWithPhone();
+            List<ClientWithPhoneDto> clientListWithPhone = clientService.listClientsWithPhone();
             return ResponseEntity.ok(clientListWithPhone);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar clientes: " + e.getMessage());
@@ -37,9 +37,9 @@ public class ClientController {
     @GetMapping("/{cpf}")
     public ResponseEntity<?> findById(@PathVariable String cpf) {
         try {
-            ClientModel client = clientService.findById(cpf);
-            if (client != null) {
-                return ResponseEntity.ok(client);
+            ClientWithPhoneDto clientWithPhone = clientService.findById(cpf);
+            if (clientWithPhone != null) {
+                return ResponseEntity.ok(clientWithPhone);
             } else {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Cliente não encontrado!");
             }
