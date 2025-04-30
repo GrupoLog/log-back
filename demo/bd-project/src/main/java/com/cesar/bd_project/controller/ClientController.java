@@ -61,10 +61,10 @@ public class ClientController {
     }
 
     @PutMapping("/{cpf}")
-    public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @Valid @RequestBody ClientModel client) {
-        client.setCpf(cpf);
+    public ResponseEntity<MessageResponse> updateClient(@PathVariable String cpf, @Valid @RequestBody ClientWithPhoneDto clientWithPhone) {
+        clientWithPhone.setCpf(cpf);
         try {
-            clientService.updateClient(client);
+            clientService.updateClient(clientWithPhone);
             return ResponseEntity.ok(new MessageResponse("Cliente atualizado com sucesso!"));
         } catch (IllegalArgumentException e) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
