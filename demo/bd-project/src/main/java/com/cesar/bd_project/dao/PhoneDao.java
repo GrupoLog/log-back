@@ -132,4 +132,20 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
             throw new RuntimeException("Erro ao deletar telefone: " + e.getMessage(), e);
         }
     }
+
+    public void deleteByCpf(String cpf) {
+
+        String SQL = "DELETE FROM Telefone WHERE clientes_cpf = ?";
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
+
+            stmt.setString(1, cpf);
+            stmt.executeUpdate();
+            System.out.println("Telefone deletado com sucesso!");
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao deletar telefone: " + e.getMessage(), e);
+        }
+    }
 }

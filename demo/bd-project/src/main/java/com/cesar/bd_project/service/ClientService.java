@@ -75,25 +75,25 @@ public class ClientService {
     }
 
     public void updateClient(ClientWithPhoneDto clientWithPhone) {
-        // Verifica se o cliente existe
+
         ClientModel existingClient = clientDao.findById(clientWithPhone.getCpf());
         if (existingClient == null) {
             throw new IllegalArgumentException("Cliente não encontrado com o CPF fornecido.");
         }
         clientDao.update(ClassMapper.toClientModel(clientWithPhone));
 
-        List<PhoneModel> existingPhones = phoneDao.findByCpf(clientWithPhone.getCpf());
-
         List<PhoneModel> newPhones = ClassMapper.toPhoneModel(clientWithPhone);
+        for (PhoneModel phone : newPhones) {
+            String telefone = phone.getTelefone();
+            PhoneModel existingCpf = phoneDao.findById(telefone);
+            if (existingCpf != null && !existingCpf.getClientesCpf().equals(clientWithPhone.getCpf())) {
+                throw new IllegalArgumentException("Telefone já cadastrado para outro CPF.");
+            }
+        }
 
-        if (existingPhones.isEmpty()) {
-            for (PhoneModel phone : newPhones) {
-                phoneDao.save(phone);
-            }
-        } else {
-            for (PhoneModel phone : newPhones) {
-                phoneDao.update(phone);
-            }
+        phoneDao.deleteByCpf(clientWithPhone.getCpf());
+        for (PhoneModel phone : newPhones) {
+            phoneDao.save(phone);
         }
     }
 

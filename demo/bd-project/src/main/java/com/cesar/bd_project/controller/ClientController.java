@@ -8,7 +8,6 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import com.cesar.bd_project.service.ClientService;
 import com.cesar.bd_project.response.MessageResponse;
-import com.cesar.bd_project.model.ClientModel;
 
 import java.util.List;
 
