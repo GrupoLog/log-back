@@ -1,3 +1,4 @@
+application.properties
 # Ignorar arquivos do Maven
 target/
 !target/*.jar
@@ -78,3 +79,5 @@ build/
 
 ### VS Code ###
 /.vscode/
+demo/bd-project/src/main/resources/application.properties
+/demo/bd-project/src/main/resources/application.properties
