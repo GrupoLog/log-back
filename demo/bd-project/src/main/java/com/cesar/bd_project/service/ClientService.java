@@ -97,6 +97,7 @@ public class ClientService {
         }
     }
 
+    //Não faz sentido ter
     public void deleteClient(String cpf) {
         // Verifica se o cliente existe
         ClientModel existingClient = clientDao.findById(cpf);
@@ -105,6 +106,4 @@ public class ClientService {
         }
         clientDao.delete(cpf);
     }
-
-
 }

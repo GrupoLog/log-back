@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -28,6 +29,40 @@ public class TripDao implements GenericDao<TripModel, Integer>{
                 trip.setDestino(rs.getString("destino"));
                 trip.setVeiculoChassi(rs.getString("veiculo_chassi"));
                 trip.setMotoristasCnh(rs.getString("motoristas_cnh"));
+                tripList.add(trip);
+            }
+
+            System.out.println("Viagens listadas com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar viagens: " + e.getMessage(), e);
+        }
+        return tripList;
+    }
+
+    public List<TripDto> listWithDetail() {
+        List<TripDto> tripList = new ArrayList<>();
+        String SQL = """
+                SELECT v.id_viagem, v.data_viagem, v.hora_viagem, v.origem, v.destino,
+                ve.placa, m.nome  
+                FROM viagem v
+                JOIN veiculo ve ON ve.chassi = v.veiculo_chassi
+                JOIN motoristas m ON m.cnh = v.motoristas_cnh
+                """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                TripDto trip = new TripDto();
+                trip.setIdViagem(rs.getInt("id_viagem"));
+                trip.setDataViagem(rs.getDate("data_viagem").toLocalDate());
+                trip.setHoraViagem(rs.getTime("hora_viagem").toLocalTime());
+                trip.setOrigem(rs.getString("origem"));
+                trip.setDestino(rs.getString("destino"));
+                trip.setPlacaVeiculo(rs.getString("placa"));
+                trip.setNomeMotorista(rs.getString("nome"));
                 tripList.add(trip);
             }
 

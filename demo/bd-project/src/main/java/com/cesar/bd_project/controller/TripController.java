@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;
@@ -25,7 +26,7 @@ public class TripController {
     @GetMapping
     public ResponseEntity<?> listTrips() {
         try {
-            List<TripModel> tripList = tripService.listTrips();
+            List<TripDto> tripList = tripService.listTripWithDetails();
             return ResponseEntity.ok(tripList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar viagens: " + e.getMessage());
