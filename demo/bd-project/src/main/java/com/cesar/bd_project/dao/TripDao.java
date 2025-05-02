@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -94,6 +95,48 @@ public class TripDao implements GenericDao<TripModel, Integer>{
                 trip.setDestino(rs.getString("destino"));
                 trip.setVeiculoChassi(rs.getString("veiculo_chassi"));
                 trip.setMotoristasCnh(rs.getString("motoristas_cnh"));
+                System.out.println("Viagem encontrada!");
+            } else {
+                System.out.println("Viagem não encontrada!");
+            }
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar viagem pelo ID: " + e.getMessage(), e);
+        }
+        return trip;
+    }
+
+    public TripWithDetailDto findByIdWithDetail(Integer id) {
+
+        TripWithDetailDto trip = null;
+        String SQL = """
+                SELECT v.id_viagem, v.data_viagem, v.hora_viagem, v.origem, v.destino,
+                m.nome, m.tipo, m.tipo_cnh, m.telefone_um,  
+                ve.placa, ve.chassi, ve.proprietario
+                FROM viagem v
+                JOIN motoristas m ON m.cnh = v.motoristas_cnh
+                JOIN veiculo ve ON ve.chassi = v.veiculo_chassi
+                WHERE id_viagem = ?
+                """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
+            stmt.setInt(1, id);
+            ResultSet rs = stmt.executeQuery();
+
+            if (rs.next()) {
+                trip = new TripWithDetailDto();
+                trip.setIdViagem(rs.getInt("id_viagem"));
+                trip.setDataViagem(rs.getDate("data_viagem").toLocalDate());
+                trip.setHoraViagem(rs.getTime("hora_viagem").toLocalTime());
+                trip.setOrigem(rs.getString("origem"));
+                trip.setDestino(rs.getString("destino"));
+                trip.setNome(rs.getString("nome"));
+                trip.setTipo(rs.getString("tipo"));
+                trip.setTipoCnh(rs.getString("tipo_cnh"));
+                trip.setTelefoneUm(rs.getString("telefone_um"));
+                trip.setPlaca(rs.getString("placa"));
+                trip.setChassi(rs.getString("chassi"));
+                trip.setProprietario(rs.getString("proprietario"));
                 System.out.println("Viagem encontrada!");
             } else {
                 System.out.println("Viagem não encontrada!");

@@ -4,6 +4,7 @@ import com.cesar.bd_project.dao.DriverDao;
 import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.model.VehicleModel;
@@ -57,6 +58,13 @@ public class TripService {
             throw new IllegalArgumentException("Id não pode ser nulo ou vazio");
         }
         return tripDao.findById(id);
+    }
+
+    public TripWithDetailDto findByIdWithDetails(Integer id) {
+        if(id == null) {
+            throw new IllegalArgumentException("Id não pode ser nulo ou vazio");
+        }
+        return tripDao.findByIdWithDetail(id);
     }
 
     public void insertTrip(TripModel trip) {

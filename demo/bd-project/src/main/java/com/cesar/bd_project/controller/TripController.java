@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;
@@ -36,7 +37,7 @@ public class TripController {
     @GetMapping("/{id_viagem}")
     public ResponseEntity<?> findById(@PathVariable ("id_viagem") Integer idViagem) {
         try {
-            TripModel trip = tripService.findById(idViagem);
+            TripWithDetailDto trip = tripService.findByIdWithDetails(idViagem);
             if (trip != null) {
                 return ResponseEntity.ok(trip);
             } else {
