@@ -110,7 +110,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
         TripWithDetailDto trip = null;
         String SQL = """
                 SELECT v.id_viagem, v.data_viagem, v.hora_viagem, v.origem, v.destino,
-                m.nome, m.tipo, m.tipo_cnh, m.telefone_um,  
+                m.cnh, m.nome, m.tipo, m.tipo_cnh, m.telefone_um,  
                 ve.placa, ve.chassi, ve.proprietario
                 FROM viagem v
                 JOIN motoristas m ON m.cnh = v.motoristas_cnh
@@ -130,6 +130,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
                 trip.setHoraViagem(rs.getTime("hora_viagem").toLocalTime());
                 trip.setOrigem(rs.getString("origem"));
                 trip.setDestino(rs.getString("destino"));
+                trip.setCnh(rs.getString("cnh"));
                 trip.setNome(rs.getString("nome"));
                 trip.setTipo(rs.getString("tipo"));
                 trip.setTipoCnh(rs.getString("tipo_cnh"));

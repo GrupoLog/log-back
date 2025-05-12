@@ -35,6 +35,10 @@ public class TripWithDetailDto {
     private String destino;
 
     // Motorista
+    @NotBlank(message = "CNH não pode ser vazia!")
+    @Size(min = 11, max = 11, message = "CNH deve ter 11 dígitos.")
+    private String cnh;
+
     @NotBlank(message = "Nome não pode ser vazio!")
     private String nome;
 
