@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.service.RequestService;
 
@@ -22,10 +23,10 @@ public class RequestController {
     @GetMapping
     public ResponseEntity<?> listRequests() {
         try {
-            List<RequestModel> requestList = requestService.listRequests();
+            List<RequestDto> requestList = requestService.listRequests();
             return ResponseEntity.ok(requestList);
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar colicitacoes: " + e.getMessage());
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar solicitacoes: " + e.getMessage());
         }
     }
 

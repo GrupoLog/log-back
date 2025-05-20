@@ -1,8 +1,10 @@
 package com.cesar.bd_project.mapper;
 
 import com.cesar.bd_project.dto.ClientWithPhoneDto;
+import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.model.ClientModel;
 import com.cesar.bd_project.model.PhoneModel;
+import com.cesar.bd_project.model.RequestModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -52,5 +54,16 @@ public class ClassMapper {
             phoneList.add(phone);
         }
         return phoneList;
+    }
+
+    public static RequestDto toRequestDto (RequestModel requestModel) {
+        RequestDto request = new RequestDto();
+        request.setIdSolicitacao(requestModel.getIdSolicitacao());
+        request.setDataSolicitacao(requestModel.getDataSolicitacao());
+        request.setFormaPagamento(requestModel.getFormaPagamento());
+        request.setValorPagamento(requestModel.getValorPagamento());
+        request.setClientesCpf(requestModel.getClientesCpf());
+
+        return request;
     }
 }
