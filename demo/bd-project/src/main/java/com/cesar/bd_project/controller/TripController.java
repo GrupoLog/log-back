@@ -1,6 +1,5 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
@@ -9,7 +8,6 @@ import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;
 import jakarta.validation.Valid;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;

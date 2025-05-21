@@ -215,7 +215,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
 
             SELECT tv.tipo, COUNT(*) AS total
             FROM viagem vi
-            JOIN tipo_veiculos tv ON vi.fk_veiculo_chassi = tv.chassi
+            JOIN tipo_veiculos tv ON vi.veiculo_chassi = tv.chassi
             WHERE YEAR(vi.data_viagem) = ?
             GROUP BY tv.tipo;
         """;

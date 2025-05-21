@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.MostUsedVehicleDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VehicleService;
@@ -27,6 +28,12 @@ public class VehicleController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar veiculos: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/veiculos_mais_utilizados")
+        public ResponseEntity<List<MostUsedVehicleDto>> listarVeiculosMaisUsados() {
+            List<MostUsedVehicleDto> resultado = vehicleService.listarVeiculosMaisUsados();
+        return ResponseEntity.ok(resultado);
     }
 
     @PostMapping
@@ -65,4 +72,5 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao deletar veiculo: " + e.getMessage()));
         }
     }
+
 }

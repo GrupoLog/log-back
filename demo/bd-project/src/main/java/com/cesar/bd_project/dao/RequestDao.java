@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -131,6 +132,32 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
             throw new RuntimeException("Erro ao deletar solicitação: " + e.getMessage(), e);
         }
     }
+
+    public List<RevenueByPaymentKind> calcularReceitaPorFormaPagamento() {
+    String sql = """
+        SELECT forma_pagamento, SUM(valor_pagamento) AS receita
+        FROM Solicitacoes
+        GROUP BY forma_pagamento
+    """;
+
+    List<RevenueByPaymentKind> resultado = new ArrayList<>();
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            String formaPagamento = rs.getString("forma_pagamento");
+            Double receita = rs.getDouble("receita");
+            resultado.add(new RevenueByPaymentKind(formaPagamento, receita));
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao calcular receita por forma de pagamento: " + e.getMessage(), e);
+    }
+
+        return resultado;
+    }   
 
 
     @Override
