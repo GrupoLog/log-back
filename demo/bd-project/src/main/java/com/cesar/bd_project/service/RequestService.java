@@ -69,4 +69,9 @@ public class RequestService {
             throw new RuntimeException("Erro ao calcular receita por forma de pagamento: " + e.getMessage(), e);
         }
     }
+
+    public Double getReceitaTotalPorAno(int ano) {
+        return requestDao.calcularReceitaTotalPorAno(ano);
+    }
+
 }

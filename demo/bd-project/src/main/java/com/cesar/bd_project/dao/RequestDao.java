@@ -159,6 +159,29 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         return resultado;
     }   
 
+    public Double calcularReceitaTotalPorAno(int ano) {
+        String sql = """
+            SELECT SUM(valor_pagamento) AS receita_total
+            FROM Solicitacoes
+            WHERE YEAR(data_solicitacao) = ?
+        """;
+    
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setInt(1, ano);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                return rs.getDouble("receita_total");
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular receita total por ano: " + e.getMessage(), e);
+        }
+    
+        return 0.0; 
+    }
 
     @Override
     public RequestModel findById(Integer integer) {
