@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
@@ -196,6 +197,49 @@ public class TripDao implements GenericDao<TripModel, Integer>{
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao atualizar viagem no banco de dados: " + e.getMessage(), e);
         }
+    }
+
+    public List<TripTypeCountDto> contarViagensPorTipo(int ano) {
+        String sql = """
+            WITH tipo_veiculos AS (
+                SELECT v.chassi, 'van' AS tipo
+                FROM Veiculo v
+                JOIN Van van ON v.chassi = van.veiculo_chassi
+
+                UNION ALL
+
+                SELECT v.chassi, 'moto' AS tipo
+                FROM Veiculo v
+                JOIN Moto moto ON v.chassi = moto.veiculo_chassi
+            )
+
+            SELECT tv.tipo, COUNT(*) AS total
+            FROM viagem vi
+            JOIN tipo_veiculos tv ON vi.fk_veiculo_chassi = tv.chassi
+            WHERE YEAR(vi.data_viagem) = ?
+            GROUP BY tv.tipo;
+        """;
+    
+        List<TripTypeCountDto> resultado = new ArrayList<>();
+    
+            try (Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+            stmt.setInt(1, ano);
+            ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                TripTypeCountDto dto = new TripTypeCountDto();
+                dto.setTipo(rs.getString("tipo"));
+                dto.setQuantidade(rs.getInt("total"));
+                resultado.add(dto);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao consultar viagens por tipo e ano: " + e.getMessage(), e);
+        }
+    
+        return resultado;
     }
 
     //Não faz sentido ter
