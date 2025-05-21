@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 
 import com.cesar.bd_project.dao.ServiceDao;
 import com.cesar.bd_project.dao.TripDao;
+import com.cesar.bd_project.dto.MonthlyServiceCountDto;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.model.TripModel;
 
@@ -46,4 +47,9 @@ public class ServiceService {
         }
         serviceDao.save(service);
     }
+
+    public List<MonthlyServiceCountDto> contarServicosPorMes(int ano) {
+        return serviceDao.contarServicosPorMes(ano);
+    }
+
 }

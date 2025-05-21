@@ -9,8 +9,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.cesar.bd_project.dto.MonthlyServiceCountDto;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.ServiceService;
@@ -49,6 +51,17 @@ public class ServiceController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar Serviço: " + e.getMessage());
         }
     }
+
+    @GetMapping("/contar_servicos_mensais")
+        public ResponseEntity<List<MonthlyServiceCountDto>> contarServicosMensais(@RequestParam(required = false) Integer ano) {
+            if (ano == null) {
+                ano = java.time.Year.now().getValue();
+            }
+
+            List<MonthlyServiceCountDto> resultado = serviceService.contarServicosPorMes(ano);
+            return ResponseEntity.ok(resultado);
+        }
+
 
      @PostMapping
     public ResponseEntity<?> insertService(@Valid @RequestBody ServiceModel service) {
