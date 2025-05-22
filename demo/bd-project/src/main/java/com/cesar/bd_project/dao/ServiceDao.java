@@ -9,9 +9,12 @@ import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.cesar.bd_project.dto.MonthlyServiceCountDto;
+import com.cesar.bd_project.dto.PaymentDistributionDto;
 import com.cesar.bd_project.dto.RevenueByServiceKind;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
@@ -195,9 +198,53 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
     
         return resultado;
     }
+
+    public List<PaymentDistributionDto> calcularDistribuicaoPorFormaPagamento() {
+        String sql = """
+            WITH receita_por_forma AS (
+                SELECT
+                    s.forma_pagamento,
+                    COUNT(*) AS total,
+                    SUM(s.valor_pagamento) AS receita_total
+                FROM Solicitacoes s
+                GROUP BY s.forma_pagamento
+            ),
+            total_geral AS (
+                SELECT SUM(receita_total) AS receita_total_geral
+                FROM receita_por_forma
+            )
+            SELECT
+                rpf.forma_pagamento,
+                rpf.total,
+                rpf.receita_total,
+                ROUND((rpf.receita_total / tg.receita_total_geral) * 100, 2) AS percentual
+            FROM receita_por_forma rpf
+            CROSS JOIN total_geral tg;
+        """;
     
-
-
+        List<PaymentDistributionDto> resultado = new ArrayList<>();
+    
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                resultado.add(new PaymentDistributionDto(
+                    rs.getString("forma_pagamento"),
+                    rs.getInt("total"),
+                    rs.getDouble("percentual"),
+                    rs.getDouble("receita_total")
+                ));
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular distribuição por forma de pagamento: " + e.getMessage(), e);
+        }
+    
+        return resultado;
+    }
+    
+    
     // Não faz sentido ter
     @Override
     public void update(ServiceModel t) {
