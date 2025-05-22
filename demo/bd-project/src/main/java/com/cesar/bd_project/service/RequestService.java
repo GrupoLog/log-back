@@ -20,14 +20,17 @@ public class RequestService {
     private final ClientDao clientDao;
     private final DeliveryServiceDao deliveryServiceDao;
     private final TransportServiceDao transportServiceDao;
+    private final ProductDao productDao;
 
-    public RequestService(RequestDao requestDao, TripDao tripDao, ServiceDao serviceDao, ClientDao clientDao, DeliveryServiceDao deliveryServiceDao, TransportServiceDao transportServiceDao) {
+
+    public RequestService(RequestDao requestDao, TripDao tripDao, ServiceDao serviceDao, ClientDao clientDao, DeliveryServiceDao deliveryServiceDao, TransportServiceDao transportServiceDao, ProductDao productDao) {
         this.requestDao = requestDao;
         this.tripDao = tripDao;
         this.serviceDao = serviceDao;
         this.clientDao = clientDao;
         this.deliveryServiceDao = deliveryServiceDao;
         this.transportServiceDao = transportServiceDao;
+        this.productDao = productDao;
     }
 
 
@@ -55,17 +58,14 @@ public class RequestService {
         TripModel tripModel = tripDao.findById(idTrip);
         ClientModel clientModel = clientDao.findById(requestModel.getClientesCpf());
 
-//        DeliveryServiceModel deliveryService = deliveryServiceDao.findById(idServico);
-//        if (deliveryService != null) {
-//            return ClassMapper.
-//        } else{
+        DeliveryServiceModel deliveryService = deliveryServiceDao.findById(idServico);
+        if (deliveryService != null) {
+            List<ProductModel> productList = productDao.findByService(idServico);
+            return ClassMapper.toRequestWithDeliveryDetailDto(requestModel, deliveryService, productList, tripModel, clientModel);
+        } else{
         TransportServiceModel transportServiceModel = transportServiceDao.findById(idServico);
         return ClassMapper.toRequestWithTransportDetailDto(requestModel, transportServiceModel, tripModel, clientModel);
-//        }
-
-        // Try to find it as a transport service
-
-//        return requestDao.findByIdWithDetail(id);
+        }
     }
 
 

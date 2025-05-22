@@ -80,7 +80,7 @@ public class ClassMapper {
         dto.setIdServico(requestModel.getIdServico());
 
 
-        dto.setPes(transportServiceModel.getQtdPassageiros());
+        dto.setQtdPassageiros(transportServiceModel.getQtdPassageiros());
         dto.setDescricaoTransporte(transportServiceModel.getDescricaoTransporte());
 
 
@@ -105,7 +105,7 @@ public class ClassMapper {
         return dto;
     }
 
-    public static RequestWithDeliveryDetailDto toRequestWithDeliveryDetailDto(RequestModel requestModel, DeliveryServiceModel deliveryServiceModel, TripModel tripModel, ClientModel clientModel) {
+    public static RequestWithDeliveryDetailDto toRequestWithDeliveryDetailDto(RequestModel requestModel, DeliveryServiceModel deliveryServiceModel, List<ProductModel> productList, TripModel tripModel, ClientModel clientModel) {
 
         RequestWithDeliveryDetailDto dto = new RequestWithDeliveryDetailDto();
 
@@ -137,6 +137,8 @@ public class ClassMapper {
         dto.setBairro(clientModel.getBairro());
         dto.setNumero(clientModel.getNumero());
         dto.setCidade(clientModel.getCidade());
+
+        dto.setProductList(productList);
 
         return dto;
     }

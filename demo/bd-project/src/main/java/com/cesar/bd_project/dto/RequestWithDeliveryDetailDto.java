@@ -1,10 +1,12 @@
 package com.cesar.bd_project.dto;
 
+import com.cesar.bd_project.model.ProductModel;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.time.LocalDate;
 import java.time.LocalTime;
+import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.validation.constraints.*;
@@ -97,5 +99,9 @@ public class RequestWithDeliveryDetailDto {
     @NotBlank(message = "Cidade é obrigatória")
     @Size(max = 30, message = "Cidade deve ter no máximo 30 caracteres")
     private String cidade;
+
+    // ProductModel Attributes
+
+    private List<ProductModel> productList;
 }
 
