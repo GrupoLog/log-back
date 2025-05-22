@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
@@ -182,6 +183,41 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     
         return 0.0; 
     }
+
+    public List<MonthlyRequestDto> contarSolicitacoesPorMes(int ano) {
+    String sql = """
+        SELECT 
+            DATE_FORMAT(v.data_viagem, '%Y-%m') AS mes,
+            COUNT(s.id_servico) AS total
+        FROM Servicos s
+        JOIN viagem v ON s.id_viagem = v.id_viagem
+        WHERE YEAR(v.data_viagem) = ?
+        GROUP BY mes
+        ORDER BY mes;
+    """;
+
+    List<MonthlyRequestDto> resultado = new ArrayList<>();
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, ano);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            resultado.add(new MonthlyRequestDto(
+                rs.getString("mes"),
+                rs.getInt("total")
+            ));
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao consultar solicitações por mês: " + e.getMessage(), e);
+    }
+
+        return resultado;
+    }
+
 
     @Override
     public RequestModel findById(Integer integer) {

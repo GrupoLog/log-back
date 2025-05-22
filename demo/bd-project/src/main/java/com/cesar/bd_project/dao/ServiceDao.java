@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import java.sql.CallableStatement;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -11,6 +12,7 @@ import java.util.List;
 import org.springframework.stereotype.Repository;
 
 import com.cesar.bd_project.dto.MonthlyServiceCountDto;
+import com.cesar.bd_project.dto.RevenueByServiceKind;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
@@ -125,7 +127,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
             st.tipo_servico,
             COUNT(*) AS total
         FROM viagem v
-        JOIN Servicos s ON v.id_viagem = s.fk_viagem_id_viagem
+        JOIN Servicos s ON v.id_viagem = s.id_viagem
         JOIN servicos_tipo st ON s.id_servico = st.id_servico
         WHERE YEAR(v.data_viagem) = ?
         GROUP BY MONTH(v.data_viagem), st.tipo_servico
@@ -155,11 +157,50 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         return resultado;
     }
 
+    public List<RevenueByServiceKind> calcularReceitaPorTipo() {
+        String sql = """
+            WITH servicos_tipo AS (
+                SELECT se.id_servico, 'entrega' AS tipo
+                FROM Servico_entrega se
+
+                UNION ALL
+
+                SELECT st.id_servico, 'transporte' AS tipo
+                FROM Servico_transporte st
+            )
+
+            SELECT st.tipo, SUM(soli.valor_pagamento) AS receita_total
+            FROM servicos_tipo st
+            JOIN Servicos s ON st.id_servico = s.id_servico
+            JOIN Solicitacoes soli ON soli.id_servico = s.id_servico
+            GROUP BY st.tipo;
+        """;
+    
+        List<RevenueByServiceKind> resultado = new ArrayList<>();
+    
+        try (Connection conn = ConnectionFactory.getConnection();
+            PreparedStatement stmt = conn.prepareStatement(sql);
+            ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                resultado.add(new RevenueByServiceKind(
+                    rs.getString("tipo"),
+                    rs.getDouble("receita_total")
+                ));
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular receita por tipo: " + e.getMessage(), e);
+        }
+    
+        return resultado;
+    }
+    
+
 
     // Não faz sentido ter
     @Override
     public void update(ServiceModel t) {
-        // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'update'");
     }
 
