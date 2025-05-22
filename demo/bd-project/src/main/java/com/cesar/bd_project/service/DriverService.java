@@ -2,6 +2,7 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.DriverDao;
 import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.DriverWithDestinationsDto;
 import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import org.springframework.stereotype.Service;
@@ -101,6 +102,15 @@ public class DriverService {
             throw new RuntimeException("Erro ao contar viagens por motorista: " + e.getMessage(), e);
         }
     }
+
+    public List<DriverWithDestinationsDto> getDriversWithDestinations() {
+        try {
+            return driverDao.getDriversWithDestinations();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao buscar motoristas com destinos: " + e.getMessage(), e);
+        }
+    }
+
 
 
 }

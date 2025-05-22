@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.DriverWithDestinationsDto;
 import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.response.MessageResponse;
@@ -52,6 +53,17 @@ public class DriverController {
     public ResponseEntity<List<DriverTripCountDto>> countTripsByDriver() {
         try {
             List<DriverTripCountDto> result = driverService.countTripsByDriver();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/destino-motorista")
+    public ResponseEntity<List<DriverWithDestinationsDto>> getDriversWithDestinations() {
+        try {
+            List<DriverWithDestinationsDto> result = driverService.getDriversWithDestinations();
             return ResponseEntity.ok(result);
         } catch (Exception e) {
             // Log the exception

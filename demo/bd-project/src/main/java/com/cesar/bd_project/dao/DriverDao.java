@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.DriverWithDestinationsDto;
 import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
@@ -8,7 +9,9 @@ import org.springframework.stereotype.Repository;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
 @Repository
 public class DriverDao implements GenericDao<DriverModel, String>  {
@@ -198,6 +201,42 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao contar viagens por motorista: " + e.getMessage(), e);
+        }
+    }
+
+    public List<DriverWithDestinationsDto> getDriversWithDestinations() {
+        Map<String, DriverWithDestinationsDto> driverMap = new LinkedHashMap<>();
+        String SQL = """
+                    SELECT m.nome, v.destino, COUNT(v.id_viagem) AS total_viagens 
+                    FROM Motoristas m
+                    JOIN Viagem v ON m.cnh = v.motoristas_cnh
+                    GROUP BY m.nome, v.destino
+                    ORDER BY m.nome, total_viagens DESC
+                    """;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                String nomeMotorista = rs.getString("nome");
+                String destino = rs.getString("destino");
+                Integer totalViagens = rs.getInt("total_viagens");
+
+                // Get or create the driver DTO
+                DriverWithDestinationsDto driverDto = driverMap.computeIfAbsent(
+                        nomeMotorista, name -> new DriverWithDestinationsDto(name, new ArrayList<>())
+                );
+
+                // Add the destination to this driver
+                driverDto.addDestino(destino, totalViagens);
+            }
+
+            // Convert the map values to a list
+            return new ArrayList<>(driverMap.values());
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar motoristas com destinos: " + e.getMessage(), e);
         }
     }
 
