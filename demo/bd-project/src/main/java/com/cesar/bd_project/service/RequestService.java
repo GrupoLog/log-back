@@ -4,6 +4,7 @@ import com.cesar.bd_project.dao.*;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
+import com.cesar.bd_project.dto.TopClientsByRequestsDto;
 import com.cesar.bd_project.mapper.ClassMapper;
 import com.cesar.bd_project.model.*;
 import org.springframework.stereotype.Service;
@@ -112,6 +113,10 @@ public class RequestService {
 
     public List<MonthlyRequestDto> contarSolicitacoesPorMes(int ano) {
         return requestDao.contarSolicitacoesPorMes(ano);
+    }
+
+    public List<TopClientsByRequestsDto> buscarClientesComMaisSolicitacoes() {
+        return requestDao.buscarClientesComMaisSolicitacoes();
     }
 
 }

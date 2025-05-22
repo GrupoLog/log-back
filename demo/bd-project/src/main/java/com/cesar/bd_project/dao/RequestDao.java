@@ -2,6 +2,7 @@ package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
+import com.cesar.bd_project.dto.TopClientsByRequestsDto;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -218,6 +219,35 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         return resultado;
     }
 
+    public List<TopClientsByRequestsDto> buscarClientesComMaisSolicitacoes() {
+        String sql = """
+            SELECT s.clientes_cpf, COUNT(*) AS total_solicitacoes
+            FROM Solicitacoes s
+            GROUP BY s.clientes_cpf
+            ORDER BY total_solicitacoes DESC
+            LIMIT 5;
+        """;
+    
+        List<TopClientsByRequestsDto> resultado = new ArrayList<>();
+    
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql);
+             ResultSet rs = stmt.executeQuery()) {
+    
+            while (rs.next()) {
+                resultado.add(new TopClientsByRequestsDto(
+                    rs.getString("clientes_cpf"),
+                    rs.getInt("total_solicitacoes")
+                ));
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao buscar clientes com mais solicitações: " + e.getMessage(), e);
+        }
+    
+        return resultado;
+    }
+    
 
     @Override
     public RequestModel findById(Integer integer) {

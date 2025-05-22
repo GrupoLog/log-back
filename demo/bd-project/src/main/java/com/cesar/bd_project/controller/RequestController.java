@@ -3,6 +3,7 @@ package com.cesar.bd_project.controller;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
+import com.cesar.bd_project.dto.TopClientsByRequestsDto;
 import com.cesar.bd_project.service.RequestService;
 
 import org.springframework.http.HttpStatus;
@@ -71,6 +72,12 @@ public class RequestController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Erro ao buscar solicitação: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/top_clientes")
+    public ResponseEntity<List<TopClientsByRequestsDto>> getClientesComMaisSolicitacoes() {
+        List<TopClientsByRequestsDto> resultado = requestService.buscarClientesComMaisSolicitacoes();
+        return ResponseEntity.ok(resultado);
     }
 
     // @PostMapping
