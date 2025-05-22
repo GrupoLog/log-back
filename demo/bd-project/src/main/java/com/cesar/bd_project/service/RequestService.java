@@ -71,9 +71,10 @@ public class RequestService {
     }
 
 
-    public RequestModel criarSolicitacao(RequestModel solicitacao) {
+    public void insertRequest(RequestDto request) {
         // Lógica de validação ou transformação antes de salvar
-        return requestDao.save(solicitacao);
+        RequestModel requestModel = ClassMapper.toRequestModel(request);
+        requestDao.save(requestModel);
 
     }
 

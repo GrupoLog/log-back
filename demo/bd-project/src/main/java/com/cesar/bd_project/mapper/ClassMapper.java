@@ -63,8 +63,25 @@ public class ClassMapper {
         request.setFormaPagamento(requestModel.getFormaPagamento());
         request.setValorPagamento(requestModel.getValorPagamento());
         request.setClientesCpf(requestModel.getClientesCpf());
+        request.setIdServico(requestModel.getIdServico());
 
         return request;
+    }
+
+    public static RequestModel toRequestModel(RequestDto dto) {
+        if (dto == null) {
+            return null;
+        }
+
+        RequestModel model = new RequestModel();
+        model.setIdSolicitacao(dto.getIdSolicitacao());
+        model.setDataSolicitacao(dto.getDataSolicitacao());
+        model.setFormaPagamento(dto.getFormaPagamento());
+        model.setValorPagamento(dto.getValorPagamento());
+        model.setClientesCpf(dto.getClientesCpf());
+        model.setIdServico(dto.getIdServico());
+
+        return model;
     }
 
     public static RequestWithTransportDetailDto toRequestWithTransportDetailDto(RequestModel requestModel, TransportServiceModel transportServiceModel, TripModel tripModel, ClientModel clientModel) {
