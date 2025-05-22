@@ -83,17 +83,17 @@ public class RequestController {
         return ResponseEntity.ok(resultado);
     }
 
-    //  @PostMapping
-    //  public ResponseEntity<?> insertRequest(@RequestBody RequestDto request) {
-    //      try {
-    //          requestService.insertRequest(request);
-    //          return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Solicitacao inserida com sucesso!"));
-    //      } catch (IllegalArgumentException e) {
-    //          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
-    //      } catch (Exception e) {
-    //          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir solicitacao: " + e.getMessage()));
-    //      }
-    //  }
+     @PostMapping
+     public ResponseEntity<?> insertRequest(@RequestBody RequestDto request) {
+         try {
+             requestService.insertRequest(request);
+             return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Solicitacao inserida com sucesso!"));
+         } catch (IllegalArgumentException e) {
+             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+         } catch (Exception e) {
+             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir solicitacao: " + e.getMessage()));
+         }
+     }
 
 
 
