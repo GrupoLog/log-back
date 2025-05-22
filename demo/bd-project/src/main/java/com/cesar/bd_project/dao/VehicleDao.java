@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -172,5 +173,28 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
 
         return resultado;
     }
+
+    public VehicleCountDto countVehicles() {
+        String SQL = """
+                        SELECT COUNT(*) AS total_veiculos
+                        FROM Veiculo
+                     """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                Integer totalVeiculos = rs.getInt("total_veiculos");
+                return new VehicleCountDto(totalVeiculos);
+            }
+
+            return new VehicleCountDto(0); // Return 0 if no vehicles found
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao contar veículos: " + e.getMessage(), e);
+        }
+    }
+
 
 }

@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VehicleService;
@@ -34,6 +35,17 @@ public class VehicleController {
         public ResponseEntity<List<MostUsedVehicleDto>> listarVeiculosMaisUsados() {
             List<MostUsedVehicleDto> resultado = vehicleService.listarVeiculosMaisUsados();
         return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/total-veiculos")
+    public ResponseEntity<VehicleCountDto> countVehicles() {
+        try {
+            VehicleCountDto result = vehicleService.countVehicles();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
     }
 
     @PostMapping
