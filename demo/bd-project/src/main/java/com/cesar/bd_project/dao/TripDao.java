@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.TotalTripDto;
 import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
@@ -147,6 +148,27 @@ public class TripDao implements GenericDao<TripModel, Integer>{
             throw new RuntimeException("Erro ao buscar viagem pelo ID: " + e.getMessage(), e);
         }
         return trip;
+    }
+
+    public TotalTripDto findTotalTrip() {
+        TotalTripDto totalTrip = new TotalTripDto();
+        String SQL = """
+                      SELECT COUNT(*) as total_viagens
+                      FROM viagem
+                      """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(SQL)) {
+
+            if (rs.next()) {
+                totalTrip.setTotalViagens(rs.getInt("total_viagens"));
+            }
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar viagens: " + e.getMessage(), e);
+        }
+        return totalTrip;
     }
 
     @Override

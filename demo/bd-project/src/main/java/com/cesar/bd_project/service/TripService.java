@@ -3,6 +3,7 @@ package com.cesar.bd_project.service;
 import com.cesar.bd_project.dao.DriverDao;
 import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.dao.VehicleDao;
+import com.cesar.bd_project.dto.TotalTripDto;
 import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
@@ -52,6 +53,10 @@ public class TripService {
         } catch (RuntimeException e) {
             throw new RuntimeException("Erro ao listar viagens: " + e.getMessage(), e);
         }
+    }
+
+    public TotalTripDto findTotalTrip(){
+        return tripDao.findTotalTrip();
     }
 
     public TripModel findById(Integer id) {

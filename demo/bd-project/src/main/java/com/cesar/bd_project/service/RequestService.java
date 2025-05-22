@@ -7,7 +7,6 @@ import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.mapper.ClassMapper;
 import com.cesar.bd_project.model.*;
 import org.springframework.stereotype.Service;
-import com.cesar.bd_project.dto.RequestWithTransportDetailDto;
 
 import java.util.ArrayList;
 import java.util.List;
