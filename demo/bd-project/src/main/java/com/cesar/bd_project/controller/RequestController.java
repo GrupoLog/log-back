@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.service.RequestService;
@@ -47,6 +48,17 @@ public class RequestController {
 
         Double receitaTotal = requestService.getReceitaTotalPorAno(ano);
         return ResponseEntity.ok(receitaTotal);
+    }
+
+    @GetMapping("/solicitacoes_por_mes")
+    public ResponseEntity<List<MonthlyRequestDto>> getSolicitacoesPorMes(@RequestParam(required = false) Integer ano) {
+        if (ano == null) {
+            ano = java.time.Year.now().getValue();
+        }
+        
+        List<MonthlyRequestDto> resultado = requestService.contarSolicitacoesPorMes(ano);
+        
+        return ResponseEntity.ok(resultado);
     }
 
     // @PostMapping

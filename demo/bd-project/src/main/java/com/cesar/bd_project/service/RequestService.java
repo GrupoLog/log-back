@@ -1,6 +1,7 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.RequestDao;
+import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.mapper.ClassMapper;
@@ -72,6 +73,10 @@ public class RequestService {
 
     public Double getReceitaTotalPorAno(int ano) {
         return requestDao.calcularReceitaTotalPorAno(ano);
+    }
+
+    public List<MonthlyRequestDto> contarSolicitacoesPorMes(int ano) {
+        return requestDao.contarSolicitacoesPorMes(ano);
     }
 
 }
