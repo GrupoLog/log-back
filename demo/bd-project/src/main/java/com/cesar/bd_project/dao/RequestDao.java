@@ -1,6 +1,8 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.AverageTicketDto;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
+import com.cesar.bd_project.dto.PendingRequestsPercentageDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.dto.TopClientsByRequestsDto;
 import com.cesar.bd_project.dto.TotalRequestsDto;
@@ -259,6 +261,53 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     
         return 0;
     }
+
+    public AverageTicketDto calcularTicketMedio() {
+    String sql = """
+        SELECT 
+            SUM(s.valor_pagamento) / COUNT(DISTINCT s.clientes_cpf) AS ticket_medio
+        FROM Solicitacoes s;
+    """;
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            double ticketMedio = rs.getDouble("ticket_medio");
+            return new AverageTicketDto(ticketMedio);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao calcular ticket médio: " + e.getMessage(), e);
+    }
+
+        return new AverageTicketDto(0.0);
+    }
+
+    public PendingRequestsPercentageDto calcularPercentualPendentes() {
+    String sql = """
+        SELECT 
+            (SUM(CASE WHEN s.status_pagamento = 'pendente' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS percentual_pendentes
+        FROM Solicitacoes s;
+    """;
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        if (rs.next()) {
+            double percentual = rs.getDouble("percentual_pendentes");
+            return new PendingRequestsPercentageDto(percentual);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao calcular percentual de solicitações pendentes: " + e.getMessage(), e);
+    }
+
+        return new PendingRequestsPercentageDto(0.0);
+    }
+
       
 
     @Override

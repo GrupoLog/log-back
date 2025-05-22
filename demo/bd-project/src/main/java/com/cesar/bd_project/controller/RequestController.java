@@ -1,6 +1,8 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.AverageTicketDto;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
+import com.cesar.bd_project.dto.PendingRequestsPercentageDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.dto.TopClientsByRequestsDto;
@@ -88,7 +90,18 @@ public class RequestController {
         return ResponseEntity.ok(total);
     }
 
+    @GetMapping("/ticket_medio")
+    public ResponseEntity<AverageTicketDto> getTicketMedio() {
+        AverageTicketDto resultado = requestService.calcularTicketMedio();
+        return ResponseEntity.ok(resultado);
+    }
 
+
+    @GetMapping("/percentual_pendentes")
+    public ResponseEntity<PendingRequestsPercentageDto> getPercentualPendentes() {
+        PendingRequestsPercentageDto resultado = requestService.calcularPercentualPendentes();
+        return ResponseEntity.ok(resultado);
+    }
 
      @PostMapping
      public ResponseEntity<?> insertRequest(@RequestBody RequestDto request) {
