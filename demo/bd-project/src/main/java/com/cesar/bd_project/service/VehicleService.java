@@ -2,6 +2,7 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
 import org.springframework.stereotype.Service;
@@ -95,6 +96,15 @@ public class VehicleService {
             throw new RuntimeException("Erro ao contar veículos: " + e.getMessage(), e);
         }
     }
+
+    public UnusedVehiclesCountDto countUnusedVehicles() {
+        try {
+            return vehicleDao.countUnusedVehicles();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao contar veículos não utilizados: " + e.getMessage(), e);
+        }
+    }
+
 
 
 }

@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
@@ -47,6 +48,18 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/total-ocioso")
+    public ResponseEntity<UnusedVehiclesCountDto> countUnusedVehicles() {
+        try {
+            UnusedVehiclesCountDto result = vehicleService.countUnusedVehicles();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     @PostMapping
     public ResponseEntity<?> insertVehicle(@RequestBody VehicleModel vehicle) {

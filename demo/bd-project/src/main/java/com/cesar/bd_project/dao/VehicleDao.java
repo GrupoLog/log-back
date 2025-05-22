@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
@@ -195,6 +196,30 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
             throw new RuntimeException("Erro ao contar veículos: " + e.getMessage(), e);
         }
     }
+
+    public UnusedVehiclesCountDto countUnusedVehicles() {
+        String SQL = """
+                        SELECT COUNT(*) AS total_nao_utilizados
+                        FROM Veiculo v
+                        WHERE v.chassi NOT IN (SELECT DISTINCT veiculo_chassi FROM Viagem)
+                        """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            if (rs.next()) {
+                Integer totalNaoUtilizados = rs.getInt("total_nao_utilizados");
+                return new UnusedVehiclesCountDto(totalNaoUtilizados);
+            }
+
+            return new UnusedVehiclesCountDto(0); // Return 0 if no unused vehicles found
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao contar veículos não utilizados: " + e.getMessage(), e);
+        }
+    }
+
 
 
 }
