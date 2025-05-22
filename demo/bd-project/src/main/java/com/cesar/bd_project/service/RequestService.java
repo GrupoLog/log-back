@@ -60,7 +60,8 @@ public class RequestService {
 
         DeliveryServiceModel deliveryService = deliveryServiceDao.findById(idServico);
         if (deliveryService != null) {
-            List<ProductModel> productList = productDao.findByService(idServico);
+            List<ProductModel> productList = productDao.findByService(requestModel.getIdSolicitacao());
+            System.out.println("Id solicitacao: " + requestModel.getIdSolicitacao() + "Lista de Produtos: " + productList + ".");
             return ClassMapper.toRequestWithDeliveryDetailDto(requestModel, deliveryService, productList, tripModel, clientModel);
         } else{
         TransportServiceModel transportServiceModel = transportServiceDao.findById(idServico);
