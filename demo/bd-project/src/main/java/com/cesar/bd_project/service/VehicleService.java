@@ -1,10 +1,7 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.VehicleDao;
-import com.cesar.bd_project.dto.MostUsedVehicleDto;
-import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
-import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
-import com.cesar.bd_project.dto.VehicleCountDto;
+import com.cesar.bd_project.dto.*;
 import com.cesar.bd_project.model.VehicleModel;
 import org.springframework.stereotype.Service;
 
@@ -113,6 +110,15 @@ public class VehicleService {
             throw new RuntimeException("Erro ao calcular percentagem de veículos terceirizados: " + e.getMessage(), e);
         }
     }
+
+    public List<VehicleTypePercentageDto> getVehicleTypePercentages() {
+        try {
+            return vehicleDao.getVehicleTypePercentagesEfficient();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao calcular percentagem de tipos de veículo: " + e.getMessage(), e);
+        }
+    }
+
 
 
 

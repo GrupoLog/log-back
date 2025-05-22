@@ -1,9 +1,6 @@
 package com.cesar.bd_project.controller;
 
-import com.cesar.bd_project.dto.MostUsedVehicleDto;
-import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
-import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
-import com.cesar.bd_project.dto.VehicleCountDto;
+import com.cesar.bd_project.dto.*;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VehicleService;
@@ -71,6 +68,18 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/tipo-veiculo-porcentagem")
+    public ResponseEntity<List<VehicleTypePercentageDto>> getVehicleTypePercentages() {
+        try {
+            List<VehicleTypePercentageDto> result = vehicleService.getVehicleTypePercentages();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 
 

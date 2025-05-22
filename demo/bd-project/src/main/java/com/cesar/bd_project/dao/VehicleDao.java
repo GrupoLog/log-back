@@ -1,9 +1,6 @@
 package com.cesar.bd_project.dao;
 
-import com.cesar.bd_project.dto.MostUsedVehicleDto;
-import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
-import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
-import com.cesar.bd_project.dto.VehicleCountDto;
+import com.cesar.bd_project.dto.*;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -249,5 +246,41 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
             throw new RuntimeException("Erro ao calcular percentagem de veículos terceirizados: " + e.getMessage(), e);
         }
     }
+
+    public List<VehicleTypePercentageDto> getVehicleTypePercentagesEfficient() {
+
+        List<VehicleTypePercentageDto> result = new ArrayList<>();
+        String SQL = """
+                        WITH type_counts AS (
+                         SELECT 'Moto' as tipo, COUNT(*) as quantidade FROM Moto
+                         UNION
+                         SELECT 'Van' as tipo, COUNT(*) as quantidade FROM Van
+                        ),
+                        total AS (
+                         SELECT COUNT(*) as total FROM Veiculo
+                        )
+                        SELECT tc.tipo, (tc.quantidade * 100.0 / t.total) as percentagem
+                        FROM type_counts tc, total t
+                        """;
+
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                String tipo = rs.getString("tipo");
+                double percentagem = rs.getDouble("percentagem");
+
+                result.add(new VehicleTypePercentageDto(tipo, percentagem));
+            }
+
+            return result;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular percentagem de tipos de veículo: " + e.getMessage(), e);
+        }
+    }
+
 
 }
