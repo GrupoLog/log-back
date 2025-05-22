@@ -7,10 +7,7 @@ import com.cesar.bd_project.service.RequestService;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -61,6 +58,21 @@ public class RequestController {
         return ResponseEntity.ok(resultado);
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findByIdWithDetails(@PathVariable ("id") Integer idSolicitacao) {
+        try {
+            Object request = requestService.findByIdWithDetail(idSolicitacao);
+            if (request != null) {
+                return ResponseEntity.ok(request);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar solicitação: " + e.getMessage());
+        }
+    }
+
     // @PostMapping
     // public ResponseEntity<SolicitacaoModel> criarSolicitacao(@RequestBody SolicitacaoModel solicitacao) {
     //     solicitacoes.add(solicitacao);
@@ -68,14 +80,6 @@ public class RequestController {
     // }
 
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<SolicitacaoModel> buscarSolicitacaoPorId(@PathVariable int id) {
-    //     return solicitacoes.stream()
-    //             .filter(solicitacao -> solicitacao.getIdSolicitacao() == id)
-    //             .findFirst()
-    //             .map(ResponseEntity::ok)
-    //             .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    // }
 
     // @PutMapping("/{id}")
     // public ResponseEntity<SolicitacaoModel> atualizarSolicitacao(@PathVariable int id, @RequestBody SolicitacaoModel solicitacaoAtualizada) {

@@ -65,6 +65,37 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
         return product;
     }
 
+    public List<ProductModel> findByService(Integer id) {
+        List<ProductModel> productList = new ArrayList<>();
+        String SQL = """
+                     SELECT produtos.id_produto, peso, data_validade, descricao
+                     FROM produtos
+                     JOIN contem ON produtos.id_produto = contem.id_produto
+                     WHERE contem.id_solicitacao = ?
+                     """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
+             stmt.setInt(1, id);
+             ResultSet rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ProductModel product = new ProductModel();
+                product.setIdProduto(rs.getInt("id_produto"));
+                product.setPeso(rs.getInt("peso"));
+                product.setDataValidade(rs.getDate("data_validade").toLocalDate());
+                product.setDescricao(rs.getString("descricao"));
+                productList.add(product);
+            }
+
+            System.out.println("Produtos listados com sucesso!");
+
+        }catch (SQLException e) {
+            throw new RuntimeException("Erro ao listar produtos: " + e.getMessage(), e);
+        }
+        return productList;
+    }
+
     @Override
     public void save(ProductModel product) {
 

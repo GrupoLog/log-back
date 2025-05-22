@@ -1,9 +1,14 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.ProductDao;
+import com.cesar.bd_project.dto.ClientWithPhoneDto;
+import com.cesar.bd_project.mapper.ClassMapper;
+import com.cesar.bd_project.model.ClientModel;
+import com.cesar.bd_project.model.PhoneModel;
 import com.cesar.bd_project.model.ProductModel;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,6 +39,13 @@ public class ProductService {
         }
         return productDao.findById(id);
     }
+
+    public List<ProductModel> findByServiceId(Integer idService) {
+        List<ProductModel> productsList = productDao.findByService(idService);
+
+        return productsList;
+    }
+
 
     public void insertProduct(ProductModel product) {
         productDao.save(product);
