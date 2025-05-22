@@ -1,6 +1,9 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.RequestDto;
+import com.cesar.bd_project.dto.RequestWithDetailDto;
+import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.service.RequestService;
 
@@ -30,6 +33,21 @@ public class RequestController {
         }
     }
 
+    @GetMapping("/{id}")
+    public ResponseEntity<?> findById(@PathVariable ("id") Integer idSolicitacao) {
+        try {
+            RequestWithDetailDto request = requestService.findByIdWithDetails(idSolicitacao);
+            if (request != null) {
+                return ResponseEntity.ok(request);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Solicitação não encontrada!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Erro ao buscar solicitação: " + e.getMessage());
+        }
+    }
+
     // @PostMapping
     // public ResponseEntity<SolicitacaoModel> criarSolicitacao(@RequestBody SolicitacaoModel solicitacao) {
     //     solicitacoes.add(solicitacao);
@@ -37,14 +55,6 @@ public class RequestController {
     // }
 
 
-    // @GetMapping("/{id}")
-    // public ResponseEntity<SolicitacaoModel> buscarSolicitacaoPorId(@PathVariable int id) {
-    //     return solicitacoes.stream()
-    //             .filter(solicitacao -> solicitacao.getIdSolicitacao() == id)
-    //             .findFirst()
-    //             .map(ResponseEntity::ok)
-    //             .orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
-    // }
 
     // @PutMapping("/{id}")
     // public ResponseEntity<SolicitacaoModel> atualizarSolicitacao(@PathVariable int id, @RequestBody SolicitacaoModel solicitacaoAtualizada) {

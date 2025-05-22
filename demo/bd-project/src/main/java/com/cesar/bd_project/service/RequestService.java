@@ -5,6 +5,7 @@ import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.mapper.ClassMapper;
 import com.cesar.bd_project.model.RequestModel;
 import org.springframework.stereotype.Service;
+import com.cesar.bd_project.dto.RequestWithDetailDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,6 +34,14 @@ public class RequestService {
             throw new RuntimeException("Erro ao listar solicitacoes: " + e.getMessage(), e);
         }
     }
+
+    public RequestWithDetailDto findByIdWithDetails(int id) {
+        if (id <= 0) {
+            throw new IllegalArgumentException("Id deve ser maior que zero");
+        }
+        return requestDao.findByIdWithDetail(id);
+    }
+
 
 //    public RequestModel criarSolicitacao(RequestModel solicitacao) {
 //        // Lógica de validação ou transformação antes de salvar
