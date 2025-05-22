@@ -3,6 +3,8 @@ package com.cesar.bd_project.controller;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
+import com.cesar.bd_project.dto.TopClientsByRequestsDto;
+import com.cesar.bd_project.dto.TotalRequestsDto;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.RequestService;
 
@@ -73,6 +75,20 @@ public class RequestController {
                     .body("Erro ao buscar solicitação: " + e.getMessage());
         }
     }
+
+    @GetMapping("/top_clientes")
+    public ResponseEntity<List<TopClientsByRequestsDto>> getClientesComMaisSolicitacoes() {
+        List<TopClientsByRequestsDto> resultado = requestService.buscarClientesComMaisSolicitacoes();
+        return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/total_solicitacoes_func")
+    public ResponseEntity<TotalRequestsDto> getTotalSolicitacoes() {
+        TotalRequestsDto total = requestService.contarTotalSolicitacoes();
+        return ResponseEntity.ok(total);
+    }
+
+
 
      @PostMapping
      public ResponseEntity<?> insertRequest(@RequestBody RequestDto request) {

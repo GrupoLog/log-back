@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 import com.cesar.bd_project.dao.ServiceDao;
 import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.dto.MonthlyServiceCountDto;
+import com.cesar.bd_project.dto.PaymentDistributionDto;
 import com.cesar.bd_project.dto.RevenueByServiceKind;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.model.TripModel;
@@ -56,6 +57,10 @@ public class ServiceService {
 
     public List<RevenueByServiceKind> calcularReceitaPorTipo() {
         return serviceDao.calcularReceitaPorTipo();
+    }
+
+    public List<PaymentDistributionDto> calcularDistribuicaoPorFormaPagamento() {
+        return serviceDao.calcularDistribuicaoPorFormaPagamento();
     }
 
 }

@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.cesar.bd_project.dto.MonthlyServiceCountDto;
+import com.cesar.bd_project.dto.PaymentDistributionDto;
 import com.cesar.bd_project.dto.RevenueByServiceKind;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.response.MessageResponse;
@@ -66,6 +67,12 @@ public class ServiceController {
     @GetMapping("/receita_por_tipo")
     public ResponseEntity<List<RevenueByServiceKind>> getReceitaPorTipo() {
         List<RevenueByServiceKind> resultado = serviceService.calcularReceitaPorTipo();
+        return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/distribuicao_pagamento")
+    public ResponseEntity<List<PaymentDistributionDto>> getDistribuicaoPorFormaPagamento() {
+        List<PaymentDistributionDto> resultado = serviceService.calcularDistribuicaoPorFormaPagamento();
         return ResponseEntity.ok(resultado);
     }
 
