@@ -1,5 +1,6 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.TotalTripDto;
 import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
@@ -55,6 +56,12 @@ public class TripController {
     public ResponseEntity<List<TripTypeCountDto>> contarViagensPorTipo(@RequestParam int ano) {
         List<TripTypeCountDto> resultado = tripService.contarViagensPorTipo(ano);
         return ResponseEntity.ok(resultado);
+    }
+
+    @GetMapping("/total-viagens")
+    public ResponseEntity<TotalTripDto> findTotalTrip() {
+        TotalTripDto result = tripService.findTotalTrip();
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping
