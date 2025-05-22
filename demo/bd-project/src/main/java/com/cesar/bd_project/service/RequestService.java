@@ -1,7 +1,9 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.*;
+import com.cesar.bd_project.dto.AverageTicketDto;
 import com.cesar.bd_project.dto.MonthlyRequestDto;
+import com.cesar.bd_project.dto.PendingRequestsPercentageDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.dto.TopClientsByRequestsDto;
@@ -124,6 +126,14 @@ public class RequestService {
     public TotalRequestsDto contarTotalSolicitacoes() {
         int total = requestDao.contarTotalSolicitacoes();
         return new TotalRequestsDto(total);
+    }
+
+    public AverageTicketDto calcularTicketMedio() {
+        return requestDao.calcularTicketMedio();
+    }
+
+    public PendingRequestsPercentageDto calcularPercentualPendentes() {
+        return requestDao.calcularPercentualPendentes();
     }
 
 }
