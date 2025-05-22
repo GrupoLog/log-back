@@ -2,9 +2,9 @@ package com.cesar.bd_project.mapper;
 
 import com.cesar.bd_project.dto.ClientWithPhoneDto;
 import com.cesar.bd_project.dto.RequestDto;
-import com.cesar.bd_project.model.ClientModel;
-import com.cesar.bd_project.model.PhoneModel;
-import com.cesar.bd_project.model.RequestModel;
+import com.cesar.bd_project.dto.RequestWithDeliveryDetailDto;
+import com.cesar.bd_project.dto.RequestWithTransportDetailDto;
+import com.cesar.bd_project.model.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -66,4 +66,79 @@ public class ClassMapper {
 
         return request;
     }
+
+    public static RequestWithTransportDetailDto toRequestWithTransportDetailDto(RequestModel requestModel, TransportServiceModel transportServiceModel, TripModel tripModel, ClientModel clientModel) {
+
+        RequestWithTransportDetailDto dto = new RequestWithTransportDetailDto();
+
+        // Map RequestModel attributes
+        dto.setIdSolicitacao(requestModel.getIdSolicitacao());
+        dto.setDataSolicitacao(requestModel.getDataSolicitacao());
+        dto.setFormaPagamento(requestModel.getFormaPagamento());
+        dto.setValorPagamento(requestModel.getValorPagamento());
+        dto.setClientesCpf(requestModel.getClientesCpf());
+        dto.setIdServico(requestModel.getIdServico());
+
+
+        dto.setPes(transportServiceModel.getQtdPassageiros());
+        dto.setDescricaoTransporte(transportServiceModel.getDescricaoTransporte());
+
+
+        // Map TripModel attributes
+        dto.setIdViagem(tripModel.getIdViagem());
+        dto.setDataViagem(tripModel.getDataViagem());
+        dto.setHoraViagem(tripModel.getHoraViagem());
+        dto.setOrigem(tripModel.getOrigem());
+        dto.setDestino(tripModel.getDestino());
+        dto.setVeiculoChassi(tripModel.getVeiculoChassi());
+        dto.setMotoristasCnh(tripModel.getMotoristasCnh());
+
+        // Map ClientModel attributes
+        dto.setCpf(clientModel.getCpf());
+        dto.setNome(clientModel.getNome());
+        dto.setSobrenome(clientModel.getSobrenome());
+        dto.setRua(clientModel.getRua());
+        dto.setBairro(clientModel.getBairro());
+        dto.setNumero(clientModel.getNumero());
+        dto.setCidade(clientModel.getCidade());
+
+        return dto;
+    }
+
+    public static RequestWithDeliveryDetailDto toRequestWithDeliveryDetailDto(RequestModel requestModel, DeliveryServiceModel deliveryServiceModel, TripModel tripModel, ClientModel clientModel) {
+
+        RequestWithDeliveryDetailDto dto = new RequestWithDeliveryDetailDto();
+
+        // Map RequestModel attributes
+        dto.setIdSolicitacao(requestModel.getIdSolicitacao());
+        dto.setDataSolicitacao(requestModel.getDataSolicitacao());
+        dto.setFormaPagamento(requestModel.getFormaPagamento());
+        dto.setValorPagamento(requestModel.getValorPagamento());
+        dto.setClientesCpf(requestModel.getClientesCpf());
+        dto.setIdServico(requestModel.getIdServico());
+
+        dto.setPesoTotal(deliveryServiceModel.getPesoTotal());
+        dto.setDescricaoProduto(deliveryServiceModel.getDescricaoProduto());
+
+        // Map TripModel attributes
+        dto.setIdViagem(tripModel.getIdViagem());
+        dto.setDataViagem(tripModel.getDataViagem());
+        dto.setHoraViagem(tripModel.getHoraViagem());
+        dto.setOrigem(tripModel.getOrigem());
+        dto.setDestino(tripModel.getDestino());
+        dto.setVeiculoChassi(tripModel.getVeiculoChassi());
+        dto.setMotoristasCnh(tripModel.getMotoristasCnh());
+
+        // Map ClientModel attributes
+        dto.setCpf(clientModel.getCpf());
+        dto.setNome(clientModel.getNome());
+        dto.setSobrenome(clientModel.getSobrenome());
+        dto.setRua(clientModel.getRua());
+        dto.setBairro(clientModel.getBairro());
+        dto.setNumero(clientModel.getNumero());
+        dto.setCidade(clientModel.getCidade());
+
+        return dto;
+    }
+
 }

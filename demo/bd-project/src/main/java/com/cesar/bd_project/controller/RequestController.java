@@ -2,10 +2,6 @@ package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
-import com.cesar.bd_project.dto.RequestWithDetailDto;
-import com.cesar.bd_project.dto.TripDto;
-import com.cesar.bd_project.dto.TripWithDetailDto;
-import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.service.RequestService;
 
 import org.springframework.http.HttpStatus;
@@ -51,9 +47,9 @@ public class RequestController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> findById(@PathVariable ("id") Integer idSolicitacao) {
+    public ResponseEntity<?> findByIdWithDetails(@PathVariable ("id") Integer idSolicitacao) {
         try {
-            RequestWithDetailDto request = requestService.findByIdWithDetails(idSolicitacao);
+            Object request = requestService.findByIdWithDetail(idSolicitacao);
             if (request != null) {
                 return ResponseEntity.ok(request);
             } else {

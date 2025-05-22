@@ -68,7 +68,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         }
     }
 
-    public RequestModel buscarPorId(int id) {
+    public RequestModel findById(int id) {
         String sql = "SELECT * FROM Solicitacoes WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();

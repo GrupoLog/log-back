@@ -1,12 +1,12 @@
 package com.cesar.bd_project.service;
 
-import com.cesar.bd_project.dao.RequestDao;
+import com.cesar.bd_project.dao.*;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.mapper.ClassMapper;
-import com.cesar.bd_project.model.RequestModel;
+import com.cesar.bd_project.model.*;
 import org.springframework.stereotype.Service;
-import com.cesar.bd_project.dto.RequestWithDetailDto;
+import com.cesar.bd_project.dto.RequestWithTransportDetailDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -15,10 +15,21 @@ import java.util.List;
 public class RequestService {
 
     private final RequestDao requestDao;
+    private final TripDao tripDao;
+    private final ServiceDao serviceDao;
+    private final ClientDao clientDao;
+    private final DeliveryServiceDao deliveryServiceDao;
+    private final TransportServiceDao transportServiceDao;
 
-    public RequestService(RequestDao requestDao){
+    public RequestService(RequestDao requestDao, TripDao tripDao, ServiceDao serviceDao, ClientDao clientDao, DeliveryServiceDao deliveryServiceDao, TransportServiceDao transportServiceDao) {
         this.requestDao = requestDao;
+        this.tripDao = tripDao;
+        this.serviceDao = serviceDao;
+        this.clientDao = clientDao;
+        this.deliveryServiceDao = deliveryServiceDao;
+        this.transportServiceDao = transportServiceDao;
     }
+
 
     public List<RequestDto> listRequests() {
         try {
@@ -36,11 +47,25 @@ public class RequestService {
         }
     }
 
-    public RequestWithDetailDto findByIdWithDetails(int id) {
-        if (id <= 0) {
-            throw new IllegalArgumentException("Id deve ser maior que zero");
-        }
-        return requestDao.findByIdWithDetail(id);
+    public Object findByIdWithDetail(int id) {
+        RequestModel requestModel = requestDao.findById(id);
+        Integer idServico = requestModel.getIdServico();
+        System.out.println(idServico);
+        Integer idTrip = serviceDao.findById(idServico).getIdViagem();
+        TripModel tripModel = tripDao.findById(idTrip);
+        ClientModel clientModel = clientDao.findById(requestModel.getClientesCpf());
+
+//        DeliveryServiceModel deliveryService = deliveryServiceDao.findById(idServico);
+//        if (deliveryService != null) {
+//            return ClassMapper.
+//        } else{
+        TransportServiceModel transportServiceModel = transportServiceDao.findById(idServico);
+        return ClassMapper.toRequestWithTransportDetailDto(requestModel, transportServiceModel, tripModel, clientModel);
+//        }
+
+        // Try to find it as a transport service
+
+//        return requestDao.findByIdWithDetail(id);
     }
 
 
