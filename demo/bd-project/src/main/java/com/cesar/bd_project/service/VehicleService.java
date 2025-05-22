@@ -1,6 +1,7 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.VehicleDao;
+import com.cesar.bd_project.dto.MostUsedVehicleDto;
 import com.cesar.bd_project.model.VehicleModel;
 import org.springframework.stereotype.Service;
 
@@ -81,5 +82,10 @@ public class VehicleService {
         }
         vehicleDao.delete(chassi);
     }
+
+    public List<MostUsedVehicleDto> listarVeiculosMaisUsados() {
+        return vehicleDao.listarVeiculosMaisUsados();
+    }
+
 
 }

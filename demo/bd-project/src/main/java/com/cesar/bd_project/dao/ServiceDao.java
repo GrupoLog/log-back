@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.springframework.stereotype.Repository;
 
+import com.cesar.bd_project.dto.MonthlyServiceCountDto;
 import com.cesar.bd_project.model.ServiceModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
@@ -104,6 +105,56 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
             throw new RuntimeException("Erro ao salvar serviço: " + e.getMessage(), e);
         }
     }
+
+    public List<MonthlyServiceCountDto> contarServicosPorMes(int ano) {
+    String sql = """
+        WITH servicos_tipo AS (
+            SELECT s.id_servico, 'Entrega' AS tipo_servico
+            FROM Servicos s
+            JOIN Servico_entrega se ON s.id_servico = se.id_servico
+
+            UNION ALL
+
+            SELECT s.id_servico, 'Transporte' AS tipo_servico
+            FROM Servicos s
+            JOIN Servico_transporte st ON s.id_servico = st.id_servico
+        )
+
+        SELECT 
+            MONTH(v.data_viagem) AS mes,
+            st.tipo_servico,
+            COUNT(*) AS total
+        FROM viagem v
+        JOIN Servicos s ON v.id_viagem = s.fk_viagem_id_viagem
+        JOIN servicos_tipo st ON s.id_servico = st.id_servico
+        WHERE YEAR(v.data_viagem) = ?
+        GROUP BY MONTH(v.data_viagem), st.tipo_servico
+        ORDER BY mes;
+    """;
+
+    List<MonthlyServiceCountDto> resultado = new ArrayList<>();
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql)) {
+
+        stmt.setInt(1, ano);
+        ResultSet rs = stmt.executeQuery();
+
+        while (rs.next()) {
+            MonthlyServiceCountDto dto = new MonthlyServiceCountDto();
+            dto.setMes(rs.getInt("mes"));
+            dto.setTipoServico(rs.getString("tipo_servico"));
+            dto.setQuantidade(rs.getInt("total"));
+            resultado.add(dto);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao contar serviços por mês: " + e.getMessage(), e);
+    }
+
+        return resultado;
+    }
+
 
     // Não faz sentido ter
     @Override

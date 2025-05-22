@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.model.RequestModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -132,6 +133,55 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         }
     }
 
+    public List<RevenueByPaymentKind> calcularReceitaPorFormaPagamento() {
+    String sql = """
+        SELECT forma_pagamento, SUM(valor_pagamento) AS receita
+        FROM Solicitacoes
+        GROUP BY forma_pagamento
+    """;
+
+    List<RevenueByPaymentKind> resultado = new ArrayList<>();
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            String formaPagamento = rs.getString("forma_pagamento");
+            Double receita = rs.getDouble("receita");
+            resultado.add(new RevenueByPaymentKind(formaPagamento, receita));
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao calcular receita por forma de pagamento: " + e.getMessage(), e);
+    }
+
+        return resultado;
+    }   
+
+    public Double calcularReceitaTotalPorAno(int ano) {
+        String sql = """
+            SELECT SUM(valor_pagamento) AS receita_total
+            FROM Solicitacoes
+            WHERE YEAR(data_solicitacao) = ?
+        """;
+    
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(sql)) {
+    
+            stmt.setInt(1, ano);
+            ResultSet rs = stmt.executeQuery();
+    
+            if (rs.next()) {
+                return rs.getDouble("receita_total");
+            }
+    
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular receita total por ano: " + e.getMessage(), e);
+        }
+    
+        return 0.0; 
+    }
 
     @Override
     public RequestModel findById(Integer integer) {

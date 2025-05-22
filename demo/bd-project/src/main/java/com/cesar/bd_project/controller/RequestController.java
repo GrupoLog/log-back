@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.RequestDto;
+import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.dto.RequestWithDetailDto;
 import com.cesar.bd_project.dto.TripDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
@@ -31,6 +32,22 @@ public class RequestController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar solicitacoes: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/receita_por_forma_pagamento")
+    public ResponseEntity<List<RevenueByPaymentKind>> getRevenueByPaymentKind() {
+        List<RevenueByPaymentKind> revenueList = requestService.getRevenueByPaymentKind();
+        return ResponseEntity.ok(revenueList);
+    }
+
+    @GetMapping("/revenue-total")
+    public ResponseEntity<Double> getReceitaTotalPorAno(@RequestParam(required = false) Integer ano) {
+        if (ano == null) {
+            ano = java.time.Year.now().getValue();
+        }
+
+        Double receitaTotal = requestService.getReceitaTotalPorAno(ano);
+        return ResponseEntity.ok(receitaTotal);
     }
 
     @GetMapping("/{id}")

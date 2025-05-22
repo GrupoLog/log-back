@@ -4,6 +4,7 @@ import com.cesar.bd_project.dao.DriverDao;
 import com.cesar.bd_project.dao.TripDao;
 import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.model.TripModel;
@@ -92,4 +93,9 @@ public class TripService {
         }
         tripDao.update(trip);
     }
+
+    public List<TripTypeCountDto> contarViagensPorTipo(int ano) {
+        return tripDao.contarViagensPorTipo(ano);
+    }
+    
 }

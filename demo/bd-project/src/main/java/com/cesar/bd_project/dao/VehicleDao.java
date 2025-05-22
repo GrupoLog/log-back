@@ -1,5 +1,6 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.MostUsedVehicleDto;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -137,4 +138,39 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
             throw new RuntimeException("Erro ao deletar veiculo: " + e.getMessage(), e);
         }
     }
+
+    public List<MostUsedVehicleDto> listarVeiculosMaisUsados() {
+    String sql = """
+        SELECT
+            v.chassi,
+            v.placa,
+            COUNT(*) AS total_viagens
+        FROM viagem vi
+        JOIN Veiculo v ON vi.veiculo_chassi = v.chassi
+        GROUP BY v.chassi, v.placa
+        ORDER BY total_viagens DESC
+        LIMIT 5;
+    """;
+
+    List<MostUsedVehicleDto> resultado = new ArrayList<>();
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(sql);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            MostUsedVehicleDto dto = new MostUsedVehicleDto();
+            dto.setChassi(rs.getString("chassi"));
+            dto.setPlaca(rs.getString("placa"));
+            dto.setTotalViagens(rs.getInt("total_viagens"));
+            resultado.add(dto);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao buscar veículos mais utilizados: " + e.getMessage(), e);
+    }
+
+        return resultado;
+    }
+
 }

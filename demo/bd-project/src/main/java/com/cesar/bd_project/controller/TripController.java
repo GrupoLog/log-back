@@ -1,11 +1,13 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.TripDto;
+import com.cesar.bd_project.dto.TripTypeCountDto;
 import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.TripService;
 import jakarta.validation.Valid;
+
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
@@ -23,6 +25,7 @@ public class TripController {
     public TripController(TripService tripService) {
         this.tripService = tripService;
     }
+
 
     @GetMapping
     public ResponseEntity<?> listTrips() {
@@ -46,6 +49,12 @@ public class TripController {
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar viagem: " + e.getMessage());
         }
+    }
+
+    @GetMapping("/contar_por_tipo")
+    public ResponseEntity<List<TripTypeCountDto>> contarViagensPorTipo(@RequestParam int ano) {
+        List<TripTypeCountDto> resultado = tripService.contarViagensPorTipo(ano);
+        return ResponseEntity.ok(resultado);
     }
 
     @PostMapping
