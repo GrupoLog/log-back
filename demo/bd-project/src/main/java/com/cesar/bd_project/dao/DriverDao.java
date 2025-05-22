@@ -1,5 +1,7 @@
 package com.cesar.bd_project.dao;
 
+import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
@@ -144,6 +146,61 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
             throw new RuntimeException("Erro ao atualizar motorista no banco de dados: " + e.getMessage(), e);
         }
     }
+
+    public List<TotalDriverByTypeDto> countDriversByType() {
+        List<TotalDriverByTypeDto> result = new ArrayList<>();
+        String SQL = """
+                    SELECT tipo AS tipo_motorista, COUNT(*) AS total_motoristas
+                    FROM Motoristas
+                    GROUP BY tipo
+                    """;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                String tipoMotorista = rs.getString("tipo_motorista");
+                Integer totalMotoristas = rs.getInt("total_motoristas");
+
+                result.add(new TotalDriverByTypeDto(tipoMotorista, totalMotoristas));
+            }
+
+            return result;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao contar motoristas por tipo: " + e.getMessage(), e);
+        }
+    }
+
+    public List<DriverTripCountDto> countTripsByDriver() {
+        List<DriverTripCountDto> result = new ArrayList<>();
+        String SQL = """
+                    SELECT m.nome AS nome_motorista, COUNT(v.id_viagem) AS total_viagens
+                    FROM Motoristas m
+                    LEFT JOIN Viagem v ON m.cnh = v.motoristas_cnh
+                    GROUP BY m.nome
+                    ORDER BY total_viagens DESC
+                    """;
+
+        try(Connection conn = ConnectionFactory.getConnection();
+            Statement stmt = conn.createStatement();
+            ResultSet rs = stmt.executeQuery(SQL)) {
+
+            while (rs.next()) {
+                String nomeMotorista = rs.getString("nome_motorista");
+                Integer totalViagens = rs.getInt("total_viagens");
+
+                result.add(new DriverTripCountDto(nomeMotorista, totalViagens));
+            }
+
+            return result;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao contar viagens por motorista: " + e.getMessage(), e);
+        }
+    }
+
 
     // Não faz sentido ter
     @Override

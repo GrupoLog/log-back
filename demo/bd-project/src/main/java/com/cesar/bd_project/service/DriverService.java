@@ -1,9 +1,12 @@
 package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.DriverDao;
+import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -74,4 +77,30 @@ public class DriverService {
         }
         driverDao.update(driver);
     }
+
+    public List<TotalDriverByTypeDto> countDriversByType() {
+        try {
+            List<TotalDriverByTypeDto> result = driverDao.countDriversByType();
+            if (result.isEmpty()) {
+                List<TotalDriverByTypeDto> defaultResult = new ArrayList<>();
+                defaultResult.add(new TotalDriverByTypeDto("Fixo", 0));
+                defaultResult.add(new TotalDriverByTypeDto("Terceirizado", 0));
+                return defaultResult;
+            }
+
+            return result;
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao contar motoristas por tipo: " + e.getMessage(), e);
+        }
+    }
+
+    public List<DriverTripCountDto> countTripsByDriver() {
+        try {
+            return driverDao.countTripsByDriver();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao contar viagens por motorista: " + e.getMessage(), e);
+        }
+    }
+
+
 }

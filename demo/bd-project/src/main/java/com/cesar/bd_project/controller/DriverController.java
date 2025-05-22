@@ -1,5 +1,7 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.DriverTripCountDto;
+import com.cesar.bd_project.dto.TotalDriverByTypeDto;
 import com.cesar.bd_project.model.DriverModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.DriverService;
@@ -35,6 +37,28 @@ public class DriverController {
     public ResponseEntity<DriverModel> findById(@PathVariable String cnh) {
         return ResponseEntity.ok(driverService.findById(cnh));
     }
+
+    @GetMapping("/total-por-tipo")
+    public ResponseEntity<List<TotalDriverByTypeDto>> countDriversByType() {
+        try {
+            List<TotalDriverByTypeDto> result = driverService.countDriversByType();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
+    @GetMapping("/viagens-por-motorista")
+    public ResponseEntity<List<DriverTripCountDto>> countTripsByDriver() {
+        try {
+            List<DriverTripCountDto> result = driverService.countTripsByDriver();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
     @PostMapping
     public ResponseEntity<?> insertDriver(@Valid @RequestBody DriverModel driver) {
