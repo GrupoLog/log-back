@@ -217,9 +217,10 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
 
     public List<TopClientsByRequestsDto> buscarClientesComMaisSolicitacoes() {
         String sql = """
-            SELECT s.clientes_cpf, COUNT(*) AS total_solicitacoes
+            SELECT c.nome, COUNT(*) AS total_solicitacoes
             FROM Solicitacoes s
-            GROUP BY s.clientes_cpf
+            JOIN Clientes c ON s.clientes_cpf = c.cpf
+            GROUP BY c.nome
             ORDER BY total_solicitacoes DESC
             LIMIT 5;
         """;
@@ -232,7 +233,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     
             while (rs.next()) {
                 resultado.add(new TopClientsByRequestsDto(
-                    rs.getString("clientes_cpf"),
+                    rs.getString("nome"),
                     rs.getInt("total_solicitacoes")
                 ));
             }

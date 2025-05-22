@@ -10,8 +10,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class TopClientsByRequestsDto {
 
-    @JsonProperty("clientes_cpf")
-    private String cpfCliente;
+    private String nome;
 
     @JsonProperty("total_solicitacoes")
     private int totalSolicitacoes;
