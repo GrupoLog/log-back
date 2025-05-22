@@ -2,6 +2,7 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.VehicleDao;
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
 import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
@@ -102,6 +103,14 @@ public class VehicleService {
             return vehicleDao.countUnusedVehicles();
         } catch (Exception e) {
             throw new RuntimeException("Erro ao contar veículos não utilizados: " + e.getMessage(), e);
+        }
+    }
+
+    public TerceirizadosPercentageDto getTerceirizadosPercentage() {
+        try {
+            return vehicleDao.getTerceirizadosPercentage();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao calcular percentagem de veículos terceirizados: " + e.getMessage(), e);
         }
     }
 

@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
 import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
@@ -59,6 +60,18 @@ public class VehicleController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
         }
     }
+
+    @GetMapping("/terceirizados-porcentagem")
+    public ResponseEntity<TerceirizadosPercentageDto> getTerceirizadosPercentage() {
+        try {
+            TerceirizadosPercentageDto result = vehicleService.getTerceirizadosPercentage();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 
     @PostMapping

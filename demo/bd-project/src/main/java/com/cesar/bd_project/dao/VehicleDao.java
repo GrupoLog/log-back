@@ -1,6 +1,7 @@
 package com.cesar.bd_project.dao;
 
 import com.cesar.bd_project.dto.MostUsedVehicleDto;
+import com.cesar.bd_project.dto.TerceirizadosPercentageDto;
 import com.cesar.bd_project.dto.UnusedVehiclesCountDto;
 import com.cesar.bd_project.dto.VehicleCountDto;
 import com.cesar.bd_project.model.VehicleModel;
@@ -220,6 +221,33 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
         }
     }
 
+    public TerceirizadosPercentageDto getTerceirizadosPercentage() {
+        String SQL = """
+                        SELECT
+                        COUNT(*) AS total,
+                        SUM(CASE WHEN proprietario = 'terceirizado' THEN 1 ELSE 0 END) AS total_terceirizados
+                     """;
 
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            double percentagem = 0.0;
+
+            if (rs.next()) {
+                int totalVeiculos = rs.getInt("total");
+                int totalTerceirizados = rs.getInt("total_terceirizados");
+
+                // Calculate the percentage
+                percentagem = totalVeiculos > 0 ?
+                        ((double) totalTerceirizados / totalVeiculos) * 100 : 0;
+            }
+
+            return new TerceirizadosPercentageDto(percentagem);
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao calcular percentagem de veículos terceirizados: " + e.getMessage(), e);
+        }
+    }
 
 }
