@@ -70,11 +70,11 @@ public class RequestService {
     }
 
 
-//    public RequestModel criarSolicitacao(RequestModel solicitacao) {
-//        // Lógica de validação ou transformação antes de salvar
-//        return requestDao.salvar(solicitacao);
+    public RequestModel criarSolicitacao(RequestModel solicitacao) {
+        // Lógica de validação ou transformação antes de salvar
+        return requestDao.save(solicitacao);
 
-//    }
+    }
 
 //    public RequestModel buscarSolicitacaoPorId(int id) {
 //        return requestDao.buscarPorId(id);

@@ -61,11 +61,11 @@ public class RequestController {
         }
     }
 
-    // @PostMapping
-    // public ResponseEntity<SolicitacaoModel> criarSolicitacao(@RequestBody SolicitacaoModel solicitacao) {
-    //     solicitacoes.add(solicitacao);
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(solicitacao);
-    // }
+     @PostMapping
+     public ResponseEntity<SolicitacaoModel> criarSolicitacao(@RequestBody SolicitacaoModel solicitacao) {
+         solicitacoes.add(solicitacao);
+         return ResponseEntity.status(HttpStatus.CREATED).body(solicitacao);
+     }
 
 
 
