@@ -4,6 +4,7 @@ import com.cesar.bd_project.dto.MonthlyRequestDto;
 import com.cesar.bd_project.dto.RequestDto;
 import com.cesar.bd_project.dto.RevenueByPaymentKind;
 import com.cesar.bd_project.dto.TopClientsByRequestsDto;
+import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.RequestService;
 
 import org.springframework.http.HttpStatus;
@@ -74,17 +75,25 @@ public class RequestController {
         }
     }
 
+    // Removed duplicate method
+
     @GetMapping("/top_clientes")
     public ResponseEntity<List<TopClientsByRequestsDto>> getClientesComMaisSolicitacoes() {
         List<TopClientsByRequestsDto> resultado = requestService.buscarClientesComMaisSolicitacoes();
         return ResponseEntity.ok(resultado);
     }
 
-    // @PostMapping
-    // public ResponseEntity<SolicitacaoModel> criarSolicitacao(@RequestBody SolicitacaoModel solicitacao) {
-    //     solicitacoes.add(solicitacao);
-    //     return ResponseEntity.status(HttpStatus.CREATED).body(solicitacao);
-    // }
+    //  @PostMapping
+    //  public ResponseEntity<?> insertRequest(@RequestBody RequestDto request) {
+    //      try {
+    //          requestService.insertRequest(request);
+    //          return ResponseEntity.status(HttpStatus.CREATED).body(new MessageResponse("Solicitacao inserida com sucesso!"));
+    //      } catch (IllegalArgumentException e) {
+    //          return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new MessageResponse("Erro de validação: " + e.getMessage()));
+    //      } catch (Exception e) {
+    //          return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(new MessageResponse("Erro ao inserir solicitacao: " + e.getMessage()));
+    //      }
+    //  }
 
 
 

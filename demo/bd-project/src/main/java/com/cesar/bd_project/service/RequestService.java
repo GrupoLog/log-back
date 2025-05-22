@@ -72,11 +72,12 @@ public class RequestService {
     }
 
 
-//    public RequestModel criarSolicitacao(RequestModel solicitacao) {
-//        // Lógica de validação ou transformação antes de salvar
-//        return requestDao.salvar(solicitacao);
+    public void insertRequest(RequestDto request) {
+        // Lógica de validação ou transformação antes de salvar
+        RequestModel requestModel = ClassMapper.toRequestModel(request);
+        requestDao.save(requestModel);
 
-//    }
+    }
 
 //    public RequestModel buscarSolicitacaoPorId(int id) {
 //        return requestDao.buscarPorId(id);

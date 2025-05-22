@@ -43,27 +43,20 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         return requestList;
     }
 
-    public void save(RequestModel solicitacao) {
-        String sql = "INSERT INTO Solicitacoes (id_solicitacao, data_solicitacao, forma_pagamento, valor_pagamento, clientes_cpf, id_servico) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+    public void save(RequestModel request) {
+        String sql = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, clientes_cpf, id_servico) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
 
-            stmt.setInt(1, solicitacao.getIdSolicitacao());
-            stmt.setDate(2, Date.valueOf(solicitacao.getDataSolicitacao()));
-            stmt.setString(3, solicitacao.getFormaPagamento());
-            stmt.setDouble(4, solicitacao.getValorPagamento());
-            stmt.setString(5, solicitacao.getClientesCpf());
-            stmt.setInt(6, solicitacao.getIdServico());
+            stmt.setDate(1, Date.valueOf(request.getDataSolicitacao()));
+            stmt.setString(2, request.getFormaPagamento());
+            stmt.setDouble(3, request.getValorPagamento());
+            stmt.setString(4, request.getClientesCpf());
+            stmt.setInt(5, request.getIdServico());
 
             stmt.executeUpdate();
-
-            // Recupera o ID gerado automaticamente (se aplicável)
-            ResultSet generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                solicitacao.setIdSolicitacao(generatedKeys.getInt(1));
-            }
 
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao salvar solicitação: " + e.getMessage(), e);

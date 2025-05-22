@@ -27,4 +27,8 @@ public class RequestDto {
     @JsonProperty("clientes_cpf")
     private String clientesCpf;
 
+    @JsonProperty("id_servico")
+    private int idServico;
+
+
 }
