@@ -119,6 +119,14 @@ public class VehicleService {
         }
     }
 
+    public List<VehicleTypeMonthlyTripsDto> getVehicleTypeMonthlyTrips() {
+        try {
+            return vehicleDao.getVehicleTypeMonthlyTrips();
+        } catch (Exception e) {
+            throw new RuntimeException("Erro ao obter quantidade de viagens por tipo de veículo e mês: " + e.getMessage(), e);
+        }
+    }
+
 
 
 

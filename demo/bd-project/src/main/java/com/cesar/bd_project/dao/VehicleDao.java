@@ -220,9 +220,9 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
 
     public TerceirizadosPercentageDto getTerceirizadosPercentage() {
         String SQL = """
-                        SELECT
-                        COUNT(*) AS total,
+                        SELECT COUNT(*) AS total,
                         SUM(CASE WHEN proprietario = 'terceirizado' THEN 1 ELSE 0 END) AS total_terceirizados
+                        FROM Veiculo
                      """;
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -282,5 +282,55 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
         }
     }
 
+
+    public List<VehicleTypeMonthlyTripsDto> getVehicleTypeMonthlyTrips() {
+
+        List<VehicleTypeMonthlyTripsDto> result = new ArrayList<>();
+        String SQL = """
+                SELECT
+                   CASE
+                        WHEN m.veiculo_chassi IS NOT NULL THEN 'Moto'
+                        WHEN van.veiculo_chassi IS NOT NULL THEN 'Van'
+                        ELSE 'Outro'
+                   END AS tipo_veiculo,
+                   MONTH(v.data_viagem) AS mes, YEAR(v.data_viagem) AS ano, COUNT(*) AS quantidade_viagens
+                FROM Viagem v
+                JOIN Veiculo veic ON v.veiculo_chassi = veic.chassi
+                LEFT JOIN Moto m ON veic.chassi = m.veiculo_chassi
+                LEFT JOIN Van van ON veic.chassi = van.veiculo_chassi
+                GROUP BY tipo_veiculo, YEAR(v.data_viagem), MONTH(v.data_viagem)
+                ORDER BY YEAR(v.data_viagem), MONTH(v.data_viagem), tipo_veiculo
+                """;
+
+        try (Connection conn = ConnectionFactory.getConnection();
+             PreparedStatement stmt = conn.prepareStatement(SQL);
+             ResultSet rs = stmt.executeQuery()) {
+
+            // Map of month numbers to names in Portuguese
+            String[] monthNames = {
+                    "", // Index 0 is empty since months start at 1
+                    "Janeiro", "Fevereiro", "Março", "Abril",
+                    "Maio", "Junho", "Julho", "Agosto",
+                    "Setembro", "Outubro", "Novembro", "Dezembro"
+            };
+
+            while (rs.next()) {
+                String tipoVeiculo = rs.getString("tipo_veiculo");
+                Integer mes = rs.getInt("mes");
+                Integer ano = rs.getInt("ano");
+                Integer quantidadeViagens = rs.getInt("quantidade_viagens");
+
+                // Get month name based on the month number
+                String nomeMes = (mes >= 1 && mes <= 12) ? monthNames[mes] : "Desconhecido";
+
+                result.add(new VehicleTypeMonthlyTripsDto(tipoVeiculo, mes, nomeMes, ano, quantidadeViagens));
+            }
+
+            return result;
+
+        } catch (SQLException e) {
+            throw new RuntimeException("Erro ao obter quantidade de viagens por tipo de veículo e mês: " + e.getMessage(), e);
+        }
+    }
 
 }

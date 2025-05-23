@@ -80,6 +80,17 @@ public class VehicleController {
         }
     }
 
+    @GetMapping("/tipo-veiculo-viagens-mes")
+    public ResponseEntity<List<VehicleTypeMonthlyTripsDto>> getVehicleTypeMonthlyTrips() {
+        try {
+            List<VehicleTypeMonthlyTripsDto> result = vehicleService.getVehicleTypeMonthlyTrips();
+            return ResponseEntity.ok(result);
+        } catch (Exception e) {
+            // Log the exception
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(null);
+        }
+    }
+
 
 
 
