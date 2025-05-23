@@ -1,6 +1,7 @@
 package com.cesar.bd_project.controller;
 
 import com.cesar.bd_project.dto.*;
+import com.cesar.bd_project.model.MotoModel;
 import com.cesar.bd_project.model.VehicleModel;
 import com.cesar.bd_project.response.MessageResponse;
 import com.cesar.bd_project.service.VehicleService;
@@ -27,6 +28,20 @@ public class VehicleController {
             return ResponseEntity.ok(vehicleList);
         } catch (Exception e) {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar veiculos: " + e.getMessage());
+        }
+    }
+
+    @GetMapping("/{chassi}")
+    public ResponseEntity<?> findById(@PathVariable String chassi) {
+        try {
+            VehicleModel moto = vehicleService.findById(chassi);
+            if (moto != null) {
+                return ResponseEntity.ok(moto);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Veiculo não encontrada!");
+            }
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao buscar moto: " + e.getMessage());
         }
     }
 
