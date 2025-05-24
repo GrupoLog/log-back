@@ -18,12 +18,12 @@ import java.util.List;
 public class RequestDao implements GenericDao<RequestModel, Integer>{
 
     public List<RequestModel> list() {
-        String sql = "SELECT * FROM Solicitacoes";
+        String SQL = "SELECT * FROM Solicitacoes";
         List<RequestModel> requestList = new ArrayList<>();
 
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
-             ResultSet rs = stmt.executeQuery(sql)) {
+             ResultSet rs = stmt.executeQuery(SQL)) {
 
             while (rs.next()) {
                 RequestModel request = new RequestModel();
@@ -48,11 +48,11 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public void save(RequestModel request) {
-        String sql = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, status_pagamento, clientes_cpf, id_servico) " +
+        String SQL = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, status_pagamento, clientes_cpf, id_servico) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
 
             stmt.setDate(1, Date.valueOf(request.getDataSolicitacao()));
             stmt.setString(2, request.getFormaPagamento());
@@ -68,25 +68,25 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public RequestModel findById(int id) {
-        String sql = "SELECT * FROM Solicitacoes WHERE id_solicitacao = ?";
+        String SQL = "SELECT * FROM Solicitacoes WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, id);
             ResultSet rs = stmt.executeQuery();
 
             if (rs.next()) {
-                RequestModel solicitacao = new RequestModel();
-                solicitacao.setIdSolicitacao(rs.getInt("id_solicitacao"));
-                solicitacao.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
-                solicitacao.setFormaPagamento(rs.getString("forma_pagamento"));
-                solicitacao.setValorPagamento(rs.getDouble("valor_pagamento"));
-                solicitacao.setStatusPagamento(rs.getString("status_pagamento"));
-                solicitacao.setClientesCpf(rs.getString("clientes_cpf"));
-                solicitacao.setIdServico(rs.getInt("id_servico"));
+                RequestModel request = new RequestModel();
+                request.setIdSolicitacao(rs.getInt("id_solicitacao"));
+                request.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
+                request.setFormaPagamento(rs.getString("forma_pagamento"));
+                request.setValorPagamento(rs.getDouble("valor_pagamento"));
+                request.setStatusPagamento(rs.getString("status_pagamento"));
+                request.setClientesCpf(rs.getString("clientes_cpf"));
+                request.setIdServico(rs.getInt("id_servico"));
 
-                return solicitacao;
+                return request;
             }
 
         } catch (SQLException e) {
@@ -97,11 +97,11 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public boolean atualizar(int id, RequestModel solicitacaoAtualizada) {
-        String sql = "UPDATE Solicitacoes SET data_solicitacao = ?, forma_pagamento = ?, valor_pagamento = ?, status_pagamento = ?, clientes_cpf = ?, id_servico = ? " +
+        String SQL = "UPDATE Solicitacoes SET data_solicitacao = ?, forma_pagamento = ?, valor_pagamento = ?, status_pagamento = ?, clientes_cpf = ?, id_servico = ? " +
                      "WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setDate(1, Date.valueOf(solicitacaoAtualizada.getDataSolicitacao()));
             stmt.setString(2, solicitacaoAtualizada.getFormaPagamento());
@@ -120,10 +120,10 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public boolean deletar(int id) {
-        String sql = "DELETE FROM Solicitacoes WHERE id_solicitacao = ?";
+        String SQL = "DELETE FROM Solicitacoes WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
             stmt.setInt(1, id);
             int rowsAffected = stmt.executeUpdate();
@@ -135,7 +135,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public List<RevenueByPaymentKind> calcularReceitaPorFormaPagamento() {
-    String sql = """
+    String SQL = """
         SELECT forma_pagamento, SUM(valor_pagamento) AS receita
         FROM Solicitacoes
         GROUP BY forma_pagamento
@@ -144,7 +144,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     List<RevenueByPaymentKind> resultado = new ArrayList<>();
 
     try (Connection conn = ConnectionFactory.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
+         PreparedStatement stmt = conn.prepareStatement(SQL);
          ResultSet rs = stmt.executeQuery()) {
 
         while (rs.next()) {
@@ -161,14 +161,14 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }   
 
     public Double calcularReceitaTotalPorAno(int ano) {
-        String sql = """
+        String SQL = """
             SELECT SUM(valor_pagamento) AS receita_total
             FROM Solicitacoes
             WHERE YEAR(data_solicitacao) = ?
         """;
     
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql)) {
+             PreparedStatement stmt = conn.prepareStatement(SQL)) {
     
             stmt.setInt(1, ano);
             ResultSet rs = stmt.executeQuery();
@@ -185,8 +185,8 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public List<MonthlyRequestDto> contarSolicitacoesPorMes(int ano) {
-    String sql = """
-        SELECT 
+    String SQL = """
+        SELECT
             DATE_FORMAT(v.data_viagem, '%Y-%m') AS mes,
             COUNT(s.id_servico) AS total
         FROM Servicos s
@@ -199,7 +199,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     List<MonthlyRequestDto> resultado = new ArrayList<>();
 
     try (Connection conn = ConnectionFactory.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql)) {
+         PreparedStatement stmt = conn.prepareStatement(SQL)) {
 
         stmt.setInt(1, ano);
         ResultSet rs = stmt.executeQuery();
@@ -219,7 +219,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public List<TopClientsByRequestsDto> buscarClientesComMaisSolicitacoes() {
-        String sql = """
+        String SQL = """
             SELECT c.nome, COUNT(*) AS total_solicitacoes
             FROM Solicitacoes s
             JOIN Clientes c ON s.clientes_cpf = c.cpf
@@ -231,7 +231,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
         List<TopClientsByRequestsDto> resultado = new ArrayList<>();
     
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement stmt = conn.prepareStatement(SQL);
              ResultSet rs = stmt.executeQuery()) {
     
             while (rs.next()) {
@@ -249,10 +249,10 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public int contarTotalSolicitacoes() {
-        String sql = "SELECT COUNT(*) AS total FROM Solicitacoes";
+        String SQL = "SELECT COUNT(*) AS total FROM Solicitacoes";
     
         try (Connection conn = ConnectionFactory.getConnection();
-             PreparedStatement stmt = conn.prepareStatement(sql);
+             PreparedStatement stmt = conn.prepareStatement(SQL);
              ResultSet rs = stmt.executeQuery()) {
     
             if (rs.next()) {
@@ -267,14 +267,14 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public AverageTicketDto calcularTicketMedio() {
-    String sql = """
-        SELECT 
+    String SQL = """
+        SELECT
             SUM(s.valor_pagamento) / COUNT(DISTINCT s.clientes_cpf) AS ticket_medio
         FROM Solicitacoes s;
     """;
 
     try (Connection conn = ConnectionFactory.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
+         PreparedStatement stmt = conn.prepareStatement(SQL);
          ResultSet rs = stmt.executeQuery()) {
 
         if (rs.next()) {
@@ -290,14 +290,14 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public PendingRequestsPercentageDto calcularPercentualPendentes() {
-    String sql = """
-        SELECT 
+    String SQL = """
+        SELECT
             (SUM(CASE WHEN s.status_pagamento = 'pendente' THEN 1 ELSE 0 END) * 100.0 / COUNT(*)) AS percentual_pendentes
         FROM Solicitacoes s;
     """;
 
     try (Connection conn = ConnectionFactory.getConnection();
-         PreparedStatement stmt = conn.prepareStatement(sql);
+         PreparedStatement stmt = conn.prepareStatement(SQL);
          ResultSet rs = stmt.executeQuery()) {
 
         if (rs.next()) {
