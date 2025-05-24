@@ -24,6 +24,9 @@ public class RequestDto {
     @JsonProperty("valor_pagamento")
     private Double valorPagamento;
 
+    @JsonProperty("status_pagamento")
+    private String statusPagamento;
+
     @JsonProperty("clientes_cpf")
     private String clientesCpf;
 

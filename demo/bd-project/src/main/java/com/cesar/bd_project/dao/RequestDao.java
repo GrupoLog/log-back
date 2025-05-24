@@ -31,6 +31,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
                 request.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
                 request.setFormaPagamento(rs.getString("forma_pagamento"));
                 request.setValorPagamento(rs.getDouble("valor_pagamento"));
+                request.setStatusPagamento(rs.getString("status_pagamento"));
                 request.setClientesCpf(rs.getString("clientes_cpf"));
                 request.setIdServico(rs.getInt("id_servico"));
 
@@ -47,7 +48,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public void save(RequestModel request) {
-        String sql = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, clientes_cpf, id_servico) " +
+        String sql = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, status_pagamento, clientes_cpf, id_servico) " +
                      "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -81,6 +82,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
                 solicitacao.setDataSolicitacao(rs.getDate("data_solicitacao").toLocalDate());
                 solicitacao.setFormaPagamento(rs.getString("forma_pagamento"));
                 solicitacao.setValorPagamento(rs.getDouble("valor_pagamento"));
+                solicitacao.setStatusPagamento(rs.getString("status_pagamento"));
                 solicitacao.setClientesCpf(rs.getString("clientes_cpf"));
                 solicitacao.setIdServico(rs.getInt("id_servico"));
 
@@ -95,7 +97,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public boolean atualizar(int id, RequestModel solicitacaoAtualizada) {
-        String sql = "UPDATE Solicitacoes SET data_solicitacao = ?, forma_pagamento = ?, valor_pagamento = ?, clientes_cpf = ?, id_servico = ? " +
+        String sql = "UPDATE Solicitacoes SET data_solicitacao = ?, forma_pagamento = ?, valor_pagamento = ?, status_pagamento = ?, clientes_cpf = ?, id_servico = ? " +
                      "WHERE id_solicitacao = ?";
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -104,6 +106,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
             stmt.setDate(1, Date.valueOf(solicitacaoAtualizada.getDataSolicitacao()));
             stmt.setString(2, solicitacaoAtualizada.getFormaPagamento());
             stmt.setDouble(3, solicitacaoAtualizada.getValorPagamento());
+            stmt.setString(4, solicitacaoAtualizada.getStatusPagamento());
             stmt.setString(5, solicitacaoAtualizada.getClientesCpf());
             stmt.setInt(6, solicitacaoAtualizada.getIdServico());
             stmt.setInt(7, id);
