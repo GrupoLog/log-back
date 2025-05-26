@@ -78,6 +78,7 @@ public class ClassMapper {
         model.setDataSolicitacao(dto.getDataSolicitacao());
         model.setFormaPagamento(dto.getFormaPagamento());
         model.setValorPagamento(dto.getValorPagamento());
+        model.setStatusPagamento(dto.getStatusPagamento());
         model.setClientesCpf(dto.getClientesCpf());
         model.setIdServico(dto.getIdServico());
 
