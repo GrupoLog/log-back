@@ -48,8 +48,10 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
     }
 
     public void save(RequestModel request) {
-        String SQL = "INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, status_pagamento, clientes_cpf, id_servico) " +
-                     "VALUES (?, ?, ?, ?, ?, ?)";
+        String SQL = """
+                     INSERT INTO Solicitacoes (data_solicitacao, forma_pagamento, valor_pagamento, status_pagamento, clientes_cpf, id_servico)
+                     VALUES (?, ?, ?, ?, ?, ?)
+                     """;
 
         try (Connection conn = ConnectionFactory.getConnection();
              PreparedStatement stmt = conn.prepareStatement(SQL, Statement.RETURN_GENERATED_KEYS)) {
@@ -57,8 +59,9 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
             stmt.setDate(1, Date.valueOf(request.getDataSolicitacao()));
             stmt.setString(2, request.getFormaPagamento());
             stmt.setDouble(3, request.getValorPagamento());
-            stmt.setString(4, request.getClientesCpf());
-            stmt.setInt(5, request.getIdServico());
+            stmt.setString(4, request.getStatusPagamento());
+            stmt.setString(5, request.getClientesCpf());
+            stmt.setInt(6, request.getIdServico());
 
             stmt.executeUpdate();
 
