@@ -93,6 +93,33 @@ spring.sql.init.mode=never
 ```
 Este passo é essencial, caso deseje rodar a aplicação novamente. Dessa forma, ao inicializar a aplicação novamente, o Spring não vai executar os scripts sql (criando as mesmas tabelas e dados) e vai buildar normalmente.
 
+## 🧩 Componentes Extras
+### 🔁 Trigger: Log de Novos Clientes
+```
+DROP TRIGGER IF EXISTS trg_log_novo_cliente;
+
+CREATE TRIGGER trg_log_novo_cliente
+AFTER INSERT ON Clientes
+FOR EACH ROW
+INSERT INTO Log_Clientes (cpf, nome)
+VALUES (NEW.cpf, NEW.nome);
+```
+
+### 📊 Procedure: Contar Viagens por Tipo de Veículo
+```
+DROP PROCEDURE IF EXISTS sp_contar_viagens_por_tipo;
+
+CREATE PROCEDURE sp_contar_viagens_por_tipo(IN ano INT)
+SELECT 'van' AS tipo, COUNT(*) AS total
+FROM Viagem vi
+JOIN Van van ON vi.veiculo_chassi = van.veiculo_chassi
+WHERE YEAR(vi.data_viagem) = ano
+UNION ALL
+SELECT 'moto' AS tipo, COUNT(*) AS total
+FROM Viagem vi
+JOIN Moto moto ON vi.veiculo_chassi = moto.veiculo_chassi
+WHERE YEAR(vi.data_viagem) = ano;
+```
 
 ## 👥 Integrantes do Grupo
 
