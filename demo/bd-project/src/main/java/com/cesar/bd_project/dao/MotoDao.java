@@ -17,8 +17,8 @@ public class MotoDao implements GenericDao<MotoModel, String>{
         List<MotoModel> motoList = new ArrayList<>();
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
-                FROM veiculo v
-                JOIN moto m ON v.chassi = m.veiculo_chassi
+                FROM Veiculo v
+                JOIN Moto m ON v.chassi = m.veiculo_chassi
                 """;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -48,8 +48,8 @@ public class MotoDao implements GenericDao<MotoModel, String>{
 
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_carga
-                FROM veiculo v
-                JOIN moto m ON v.chassi = m.veiculo_chassi
+                FROM Veiculo v
+                JOIN Moto m ON v.chassi = m.veiculo_chassi
                 WHERE v.chassi = ?
                 """;
         MotoModel moto = null;
@@ -78,7 +78,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     @Override
     public void save(MotoModel moto) {
 
-        String SQL = "INSERT INTO moto(veiculo_chassi, cap_carga) VALUES (?, ?)";
+        String SQL = "INSERT INTO Moto(veiculo_chassi, cap_carga) VALUES (?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
         PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -95,7 +95,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     @Override
     public void update(MotoModel moto) {
 
-        String SQL = "UPDATE moto SET cap_carga = ? WHERE veiculo_chassi = ?";
+        String SQL = "UPDATE Moto SET cap_carga = ? WHERE veiculo_chassi = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -112,7 +112,7 @@ public class MotoDao implements GenericDao<MotoModel, String>{
     @Override
     public void delete(String chassi) {
 
-        String SQL = "DELETE FROM moto WHERE veiculo_chassi = ?";
+        String SQL = "DELETE FROM Moto WHERE veiculo_chassi = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {

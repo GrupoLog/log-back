@@ -16,8 +16,8 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
         List<TransportServiceModel> transportServiceList = new ArrayList<>();
         String SQL = """
                 SELECT s.id_servico, s.id_viagem, st.qtd_passageiros, st.descricao_transporte
-                FROM servicos s
-                JOIN servico_transporte st ON s.id_servico  = st.id_servico
+                FROM Servicos s
+                JOIN Servico_Transporte st ON s.id_servico  = st.id_servico
                 """;
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
@@ -44,8 +44,8 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
     public TransportServiceModel findById(Integer id) {
         String SQL = """
                 SELECT s.id_servico, s.id_viagem, st.qtd_passageiros, st.descricao_transporte
-                FROM servicos s
-                JOIN servico_transporte st ON s.id_servico  = st.id_servico
+                FROM Servicos s
+                JOIN Servico_Transporte st ON s.id_servico  = st.id_servico
                 WHERE s.id_servico = ?
                 """;
         TransportServiceModel transportService = null;
@@ -74,7 +74,7 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
 
     @Override
     public void save(TransportServiceModel transportService) {
-        String SQL = "INSERT INTO servico_transporte(id_servico, qtd_passageiros, descricao_transporte) VALUES (?, ?, ?)";
+        String SQL = "INSERT INTO Servico_Transporte(id_servico, qtd_passageiros, descricao_transporte) VALUES (?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -92,7 +92,7 @@ public class TransportServiceDao implements GenericDao<TransportServiceModel, In
     @Override
     public void update(TransportServiceModel transportService) {
 
-        String SQL = "UPDATE servico_transporte SET qtd_passageiros = ?, descricao_transporte = ? WHERE id_servico = ?";
+        String SQL = "UPDATE Servico_Transporte SET qtd_passageiros = ?, descricao_transporte = ? WHERE id_servico = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {

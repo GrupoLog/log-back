@@ -165,7 +165,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
 
     public Double calcularReceitaTotalPorAno(int ano) {
         String SQL = """
-            SELECT SUM(valor_pagamento) AS receita_total
+            SELECT ROUND(SUM(valor_pagamento), 2) AS receita_total
             FROM Solicitacoes
             WHERE YEAR(data_solicitacao) = ?
         """;
@@ -193,7 +193,7 @@ public class RequestDao implements GenericDao<RequestModel, Integer>{
             DATE_FORMAT(v.data_viagem, '%Y-%m') AS mes,
             COUNT(s.id_servico) AS total
         FROM Servicos s
-        JOIN viagem v ON s.id_viagem = v.id_viagem
+        JOIN Viagem v ON s.id_viagem = v.id_viagem
         WHERE YEAR(v.data_viagem) = ?
         GROUP BY mes
         ORDER BY mes;

@@ -17,8 +17,8 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
         List<DeliveryServiceModel> deliveryServiceList = new ArrayList<>();
         String SQL = """
                 SELECT s.id_servico, s.id_viagem, se.destinatario, se.peso_total, se.descricao_produto
-                FROM servicos s
-                JOIN servico_entrega se ON s.id_servico  = se.id_servico
+                FROM Servicos s
+                JOIN Servico_Entrega se ON s.id_servico  = se.id_servico
                 """;
         try (Connection conn = ConnectionFactory.getConnection();
             Statement stmt = conn.createStatement();
@@ -47,8 +47,8 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
 
         String SQL = """
                 SELECT s.id_servico, s.id_viagem, se.destinatario, se.peso_total, se.descricao_produto
-                FROM servicos s
-                JOIN servico_entrega se ON s.id_servico  = se.id_servico
+                FROM Servicos s
+                JOIN Servico_Entrega se ON s.id_servico  = se.id_servico
                 WHERE s.id_servico = ?
                 """;
         DeliveryServiceModel deliveryService = null;
@@ -79,7 +79,7 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
     @Override
     public void save(DeliveryServiceModel deliveryService) {
 
-        String SQL = "INSERT INTO servico_entrega(id_servico, destinatario, peso_total, descricao_produto) VALUES (?, ?, ?, ?)";
+        String SQL = "INSERT INTO Servico_Entrega(id_servico, destinatario, peso_total, descricao_produto) VALUES (?, ?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -99,7 +99,7 @@ public class DeliveryServiceDao implements GenericDao<DeliveryServiceModel, Inte
     @Override
     public void update(DeliveryServiceModel deliveryService) {
 
-        String SQL = "UPDATE servico_entrega SET destinatario = ?, descricao_produto = ? WHERE id_servico = ?";
+        String SQL = "UPDATE Servico_Entrega SET destinatario = ?, descricao_produto = ? WHERE id_servico = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {

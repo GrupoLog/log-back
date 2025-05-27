@@ -26,7 +26,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
     public List<ServiceModel> list() {
 
         List<ServiceModel> serviceList = new ArrayList<>();
-        String SQL = "SELECT * FROM servicos";
+        String SQL = "SELECT * FROM Servicos";
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
              ResultSet rs = stmt.executeQuery(SQL)) {
@@ -49,7 +49,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
     @Override
     public ServiceModel findById(Integer id) {
 
-        String SQL = "SELECT * FROM servicos WHERE id_servico = ?";
+        String SQL = "SELECT * FROM Servicos WHERE id_servico = ?";
         ServiceModel service = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -75,7 +75,7 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
     @Override
     public void save(ServiceModel service) {
 
-        String SQL = "INSERT INTO servicos(id_viagem) VALUES (?)";
+        String SQL = "INSERT INTO Servicos(id_viagem) VALUES (?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -116,20 +116,20 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         WITH servicos_tipo AS (
             SELECT s.id_servico, 'Entrega' AS tipo_servico
             FROM Servicos s
-            JOIN Servico_entrega se ON s.id_servico = se.id_servico
+            JOIN Servico_Entrega se ON s.id_servico = se.id_servico
 
             UNION ALL
 
             SELECT s.id_servico, 'Transporte' AS tipo_servico
             FROM Servicos s
-            JOIN Servico_transporte st ON s.id_servico = st.id_servico
+            JOIN Servico_Transporte st ON s.id_servico = st.id_servico
         )
 
         SELECT 
             MONTH(v.data_viagem) AS mes,
             st.tipo_servico,
             COUNT(*) AS total
-        FROM viagem v
+        FROM Viagem v
         JOIN Servicos s ON v.id_viagem = s.id_viagem
         JOIN servicos_tipo st ON s.id_servico = st.id_servico
         WHERE YEAR(v.data_viagem) = ?
@@ -164,12 +164,12 @@ public class ServiceDao implements GenericDao<ServiceModel, Integer> {
         String sql = """
             WITH servicos_tipo AS (
                 SELECT se.id_servico, 'entrega' AS tipo
-                FROM Servico_entrega se
+                FROM Servico_Entrega se
 
                 UNION ALL
 
                 SELECT st.id_servico, 'transporte' AS tipo
-                FROM Servico_transporte st
+                FROM Servico_Transporte st
             )
 
             SELECT st.tipo, SUM(soli.valor_pagamento) AS receita_total

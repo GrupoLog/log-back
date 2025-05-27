@@ -41,7 +41,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     @Override
     public VehicleModel findById(String chassi) {
 
-        String SQL = "SELECT * FROM veiculo WHERE chassi = ?";
+        String SQL = "SELECT * FROM Veiculo WHERE chassi = ?";
         VehicleModel vehicle = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -65,7 +65,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
 
     public VehicleModel findByPlate(String plate) {
 
-        String SQL = "SELECT * FROM veiculo WHERE placa = ?";
+        String SQL = "SELECT * FROM Veiculo WHERE placa = ?";
         VehicleModel vehicle = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -90,7 +90,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     @Override
     public void save(VehicleModel vehicle) {
 
-        String SQL = "INSERT INTO veiculo(chassi, proprietario, placa) VALUES (?, ?, ?)";
+        String SQL = "INSERT INTO Veiculo(chassi, proprietario, placa) VALUES (?, ?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
         PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -127,7 +127,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
     @Override
     public void delete(String chassi) {
 
-        String SQL = "DELETE FROM veiculo WHERE chassi = ?";
+        String SQL = "DELETE FROM Veiculo WHERE chassi = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -145,7 +145,7 @@ public class VehicleDao implements GenericDao<VehicleModel, String> {
             v.chassi,
             v.placa,
             COUNT(*) AS total_viagens
-        FROM viagem vi
+        FROM Viagem vi
         JOIN Veiculo v ON vi.veiculo_chassi = v.chassi
         GROUP BY v.chassi, v.placa
         ORDER BY total_viagens DESC

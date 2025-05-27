@@ -17,8 +17,8 @@ public class VanDao implements GenericDao<VanModel, String>{
         List<VanModel> vanList = new ArrayList<>();
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_passageiros
-                FROM veiculo v
-                JOIN van m ON v.chassi = m.veiculo_chassi
+                FROM Veiculo v
+                JOIN Van m ON v.chassi = m.veiculo_chassi
                 """;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -48,8 +48,8 @@ public class VanDao implements GenericDao<VanModel, String>{
 
         String SQL = """
                 SELECT v.chassi, v.proprietario, v.placa, m.cap_passageiros
-                FROM veiculo v
-                JOIN van m ON v.chassi = m.veiculo_chassi
+                FROM Veiculo v
+                JOIN Van m ON v.chassi = m.veiculo_chassi
                 WHERE v.chassi = ?
                 """;
         VanModel van = null;
@@ -78,7 +78,7 @@ public class VanDao implements GenericDao<VanModel, String>{
     @Override
     public void save(VanModel van) {
 
-        String SQL = "INSERT INTO van(veiculo_chassi, cap_passageiros) VALUES (?, ?)";
+        String SQL = "INSERT INTO Van(veiculo_chassi, cap_passageiros) VALUES (?, ?)";
 
         try(Connection conn = ConnectionFactory.getConnection();
         PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -95,7 +95,7 @@ public class VanDao implements GenericDao<VanModel, String>{
     @Override
     public void update(VanModel van) {
 
-        String SQL = "UPDATE van SET cap_passageiros = ? WHERE veiculo_chassi = ?";
+        String SQL = "UPDATE Van SET cap_passageiros = ? WHERE veiculo_chassi = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {
@@ -112,7 +112,7 @@ public class VanDao implements GenericDao<VanModel, String>{
     @Override
     public void delete(String chassi) {
 
-        String SQL = "DELETE FROM van WHERE veiculo_chassi = ?";
+        String SQL = "DELETE FROM Van WHERE veiculo_chassi = ?";
 
         try(Connection conn = ConnectionFactory.getConnection();
             PreparedStatement stmt = conn.prepareStatement(SQL)) {

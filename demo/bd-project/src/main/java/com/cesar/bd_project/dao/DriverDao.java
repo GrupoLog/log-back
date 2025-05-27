@@ -19,7 +19,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     public List<DriverModel> list() {
 
         List<DriverModel> driverList = new ArrayList<>();
-        String SQL = "SELECT * FROM motoristas";
+        String SQL = "SELECT * FROM Motoristas";
 
         try(Connection conn = ConnectionFactory.getConnection();
             Statement stmt = conn.createStatement();
@@ -48,7 +48,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     @Override
     public DriverModel findById(String cnh) {
 
-        String SQL = "SELECT * FROM motoristas WHERE cnh = ?";
+        String SQL = "SELECT * FROM Motoristas WHERE cnh = ?";
         DriverModel driver = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -75,7 +75,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
 
     public DriverModel findByCpf(String cpf) {
 
-        String SQL = "SELECT * FROM motoristas WHERE cpf = ?";
+        String SQL = "SELECT * FROM Motoristas WHERE cpf = ?";
         DriverModel driver = null;
 
         try(Connection conn = ConnectionFactory.getConnection();
@@ -104,7 +104,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     public void save(DriverModel driver) {
 
         String SQL = """
-                INSERT INTO motoristas (cnh, tipo_cnh, cpf, nome, tipo, telefone_um, telefone_dois, cnh_supervisionado) 
+                INSERT INTO Motoristas (cnh, tipo_cnh, cpf, nome, tipo, telefone_um, telefone_dois, cnh_supervisionado) 
                 VALUES (?, ?, ?, ?, ?, ?, ?, ?)
                 """;
 
@@ -129,7 +129,7 @@ public class DriverDao implements GenericDao<DriverModel, String>  {
     @Override
     public void update(DriverModel driver) {
         String SQL = """
-                UPDATE motoristas SET tipo_cnh = ?, nome = ?, tipo = ?, telefone_um = ?, telefone_dois = ?, cnh_supervisionado = ? 
+                UPDATE Motoristas SET tipo_cnh = ?, nome = ?, tipo = ?, telefone_um = ?, telefone_dois = ?, cnh_supervisionado = ? 
                 WHERE cnh = ?
                 """;
 

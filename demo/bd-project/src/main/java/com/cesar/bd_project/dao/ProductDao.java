@@ -68,10 +68,10 @@ public class ProductDao implements GenericDao<ProductModel, Integer>{
     public List<ProductModel> findByService(Integer id) {
         List<ProductModel> productList = new ArrayList<>();
         String SQL = """
-                     SELECT produtos.id_produto, peso, data_validade, descricao
-                     FROM produtos
-                     JOIN contem ON produtos.id_produto = contem.id_produto
-                     WHERE contem.id_solicitacao = ?
+                     SELECT p.id_produto, peso, data_validade, descricao
+                     FROM Produtos p
+                     JOIN Contem c ON p.id_produto = c.id_produto
+                     WHERE c.id_solicitacao = ?
                      """;
 
         try (Connection conn = ConnectionFactory.getConnection();

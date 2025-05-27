@@ -18,7 +18,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
     @Override
     public List<TripModel> list() {
         List<TripModel> tripList = new ArrayList<>();
-        String SQL = "SELECT * FROM viagem";
+        String SQL = "SELECT * FROM Viagem";
 
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
@@ -49,9 +49,9 @@ public class TripDao implements GenericDao<TripModel, Integer>{
         String SQL = """
                 SELECT v.id_viagem, v.data_viagem, v.hora_viagem, v.origem, v.destino,
                 ve.placa, m.nome  
-                FROM viagem v
-                JOIN veiculo ve ON ve.chassi = v.veiculo_chassi
-                JOIN motoristas m ON m.cnh = v.motoristas_cnh
+                FROM Viagem v
+                JOIN Veiculo ve ON ve.chassi = v.veiculo_chassi
+                JOIN Motoristas m ON m.cnh = v.motoristas_cnh
                 """;
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -81,7 +81,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
     @Override
     public TripModel findById(Integer id) {
 
-        String SQL = "SELECT * FROM viagem WHERE id_viagem = ?";
+        String SQL = "SELECT * FROM Viagem WHERE id_viagem = ?";
         TripModel trip = null;
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -115,9 +115,9 @@ public class TripDao implements GenericDao<TripModel, Integer>{
                 SELECT v.id_viagem, v.data_viagem, v.hora_viagem, v.origem, v.destino,
                 m.cnh, m.nome, m.tipo, m.tipo_cnh, m.telefone_um,  
                 ve.placa, ve.chassi, ve.proprietario
-                FROM viagem v
-                JOIN motoristas m ON m.cnh = v.motoristas_cnh
-                JOIN veiculo ve ON ve.chassi = v.veiculo_chassi
+                FROM Viagem v
+                JOIN Motoristas m ON m.cnh = v.motoristas_cnh
+                JOIN Veiculo ve ON ve.chassi = v.veiculo_chassi
                 WHERE id_viagem = ?
                 """;
 
@@ -155,7 +155,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
         TotalTripDto totalTrip = new TotalTripDto();
         String SQL = """
                       SELECT COUNT(*) as total_viagens
-                      FROM viagem
+                      FROM Viagem
                       """;
 
         try (Connection conn = ConnectionFactory.getConnection();
@@ -176,7 +176,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
     public void save(TripModel trip) {
 
         String SQL = """
-                INSERT INTO viagem (data_viagem, hora_viagem, origem, destino, veiculo_chassi, motoristas_cnh)
+                INSERT INTO Viagem (data_viagem, hora_viagem, origem, destino, veiculo_chassi, motoristas_cnh)
                 VALUES (?, ?, ?, ?, ?, ?)
                 """;
 
@@ -200,7 +200,7 @@ public class TripDao implements GenericDao<TripModel, Integer>{
     @Override
     public void update(TripModel trip) {
         String SQL = """
-                UPDATE viagem SET data_viagem = ?, hora_viagem = ?, origem = ?, destino = ?, veiculo_chassi = ?, motoristas_cnh = ?
+                UPDATE Viagem SET data_viagem = ?, hora_viagem = ?, origem = ?, destino = ?, veiculo_chassi = ?, motoristas_cnh = ?
                 WHERE id_viagem = ?
                 """;
 
