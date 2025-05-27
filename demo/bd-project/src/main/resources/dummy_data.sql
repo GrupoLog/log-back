@@ -1,4 +1,4 @@
-USE GrupoLog
+USE GrupoLog;
 
 INSERT INTO Clientes (cpf, nome, sobrenome, rua, bairro, numero, cidade) VALUES
 ('48567923182', 'Joaquim', 'Ferreira', 'Aeroporto de da Rosa', 'Solimoes', 1825, 'Recife'),
