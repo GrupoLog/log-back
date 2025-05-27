@@ -1,4 +1,4 @@
-USE GrupoLog;
+USE GrupoLog_DB;
 
 -- Tabela Produtos
 CREATE TABLE Produtos (
@@ -9,18 +9,18 @@ CREATE TABLE Produtos (
 );
 
 -- Tabela Clientes
-   CREATE TABLE Clientes (
+CREATE TABLE Clientes (
     cpf VARCHAR(11) PRIMARY KEY,
-    nome VARCHAR(30) NOT NULL,
-    sobrenome VARCHAR(30) NOT NULL,
-    rua VARCHAR(30)NOT NULL,
-    bairro VARCHAR(30) NOT NULL,
+    nome VARCHAR(50) NOT NULL,
+    sobrenome VARCHAR(50) NOT NULL,
+    rua VARCHAR(100) NOT NULL,
+    bairro VARCHAR(100) NOT NULL,
     numero INT CHECK (numero > 0) NOT NULL,
     cidade VARCHAR(30) DEFAULT 'Recife' NOT NULL
 );
 
 -- Tabela Telefone
-    CREATE TABLE Telefone (
+CREATE TABLE Telefone (
     telefone VARCHAR(11) PRIMARY KEY,
     clientes_cpf VARCHAR(11) NOT NULL,
     FOREIGN KEY (clientes_cpf) REFERENCES Clientes (cpf)
@@ -86,7 +86,7 @@ CREATE TABLE Viagem (
     CREATE TABLE Servicos (
     id_servico INT PRIMARY KEY AUTO_INCREMENT,
     id_viagem INT NOT NULL,
-    FOREIGN KEY (id_viagem) REFERENCES viagem (id_viagem)
+    FOREIGN KEY (id_viagem) REFERENCES Viagem (id_viagem)
 
 );
 
@@ -128,3 +128,34 @@ CREATE TABLE Viagem (
     FOREIGN KEY (id_solicitacao) REFERENCES Solicitacoes (id_solicitacao),
     FOREIGN KEY (id_produto) REFERENCES Produtos (id_produto)
 );
+
+-- Tabela Log_Clientes
+CREATE TABLE Log_Clientes (
+    id_log INT AUTO_INCREMENT PRIMARY KEY,
+    cpf VARCHAR(11),
+    nome VARCHAR(100),
+    data_cadastro TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);
+
+-- Trigger para log de novos clientes
+DROP TRIGGER IF EXISTS trg_log_novo_cliente;
+
+CREATE TRIGGER trg_log_novo_cliente
+AFTER INSERT ON Clientes
+FOR EACH ROW
+INSERT INTO Log_Clientes (cpf, nome)
+VALUES (NEW.cpf, NEW.nome);
+
+-- Procedure para contar viagens por tipo de veiculo
+DROP PROCEDURE IF EXISTS sp_contar_viagens_por_tipo;
+
+CREATE PROCEDURE sp_contar_viagens_por_tipo(IN ano INT)
+SELECT 'van' AS tipo, COUNT(*) AS total
+FROM Viagem vi
+JOIN Van van ON vi.veiculo_chassi = van.veiculo_chassi
+WHERE YEAR(vi.data_viagem) = ano
+UNION ALL
+SELECT 'moto' AS tipo, COUNT(*) AS total
+FROM Viagem vi
+JOIN Moto moto ON vi.veiculo_chassi = moto.veiculo_chassi
+WHERE YEAR(vi.data_viagem) = ano;

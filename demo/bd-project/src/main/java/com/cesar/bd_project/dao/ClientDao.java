@@ -5,11 +5,15 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 
 import org.springframework.stereotype.Repository;
+
+import com.cesar.bd_project.dto.ClientWithCadastroDto;
 import com.cesar.bd_project.model.ClientModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 
@@ -20,7 +24,7 @@ public class ClientDao implements GenericDao<ClientModel, String> {
     public List<ClientModel> list() {
 
         List<ClientModel> clientList = new ArrayList<>();
-        String SQL = "SELECT * FROM Clientes";
+        String SQL = "SELECT * FROM Clientes c";
 
         try (Connection conn = ConnectionFactory.getConnection();
              Statement stmt = conn.createStatement();
@@ -75,6 +79,42 @@ public class ClientDao implements GenericDao<ClientModel, String> {
         }
         return client;
     }
+
+    public List<ClientWithCadastroDto> listClientsWithDataCadastro() {
+    List<ClientWithCadastroDto> clientList = new ArrayList<>();
+
+    String SQL = """
+        SELECT l.cpf, l.nome, l.data_cadastro
+        FROM Log_Clientes l
+    """;
+
+    try (Connection conn = ConnectionFactory.getConnection();
+         PreparedStatement stmt = conn.prepareStatement(SQL);
+         ResultSet rs = stmt.executeQuery()) {
+
+        while (rs.next()) {
+            String cpf = rs.getString("cpf");
+            String nome = rs.getString("nome");
+            Date data = rs.getDate("data_cadastro");
+
+            ClientWithCadastroDto dto = new ClientWithCadastroDto();
+            dto.setCpf(cpf);
+            dto.setNome(nome);
+            if (data != null) {
+                dto.setDataCadastro(((java.sql.Date) data).toLocalDate());
+            }
+
+
+            clientList.add(dto);
+        }
+
+    } catch (SQLException e) {
+        throw new RuntimeException("Erro ao listar clientes com data de cadastro: " + e.getMessage(), e);
+    }
+
+        return clientList;
+    }
+
 
     @Override
     public void save(ClientModel client) {

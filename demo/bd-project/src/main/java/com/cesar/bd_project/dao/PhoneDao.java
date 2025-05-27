@@ -73,7 +73,6 @@ public class PhoneDao implements GenericDao<PhoneModel, String>{
                 PhoneModel phone = new PhoneModel();
                 phone.setTelefone(rs.getString("telefone"));
                 phoneList.add(phone);
-                System.out.println("Telefone encontrado!");
             }
         } catch (SQLException e) {
             throw new RuntimeException("Erro ao buscar telefone: " + e.getMessage(), e);

@@ -1,6 +1,9 @@
 package com.cesar.bd_project.controller;
 
+import com.cesar.bd_project.dto.ClientWithCadastroDto;
 import com.cesar.bd_project.dto.ClientWithPhoneDto;
+import com.cesar.bd_project.model.ClientModel;
+
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -10,6 +13,7 @@ import com.cesar.bd_project.service.ClientService;
 import com.cesar.bd_project.response.MessageResponse;
 
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/clientes")
@@ -23,6 +27,12 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    @GetMapping("/todos")
+    public ResponseEntity<List<ClientModel>> listarTodosClientes() {
+        List<ClientModel> clientes = clientService.listClients();
+        return ResponseEntity.ok(clientes);
+    }
+
     @GetMapping
     public ResponseEntity<?> listClientsWithPhone() {
         try {
@@ -32,6 +42,18 @@ public class ClientController {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao listar clientes: " + e.getMessage());
         }
     }
+
+    @GetMapping("/cadastro")
+    public ResponseEntity<?> listClientsWithCadastro() {
+        try {
+            List<ClientWithCadastroDto> clientes = clientService.listClientsWithCadastro();
+            return ResponseEntity.ok(clientes);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                                .body("Erro ao listar clientes com data de cadastro: " + e.getMessage());
+        }
+    }
+
 
     @GetMapping("/{cpf}")
     public ResponseEntity<?> findById(@PathVariable String cpf) {

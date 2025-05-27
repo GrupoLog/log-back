@@ -7,6 +7,7 @@ import com.cesar.bd_project.dto.TripWithDetailDto;
 import com.cesar.bd_project.model.TripModel;
 import com.cesar.bd_project.utils.ConnectionFactory;
 import org.springframework.stereotype.Repository;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -223,23 +224,8 @@ public class TripDao implements GenericDao<TripModel, Integer>{
 
     public List<TripTypeCountDto> contarViagensPorTipo(int ano) {
         String sql = """
-            WITH tipo_veiculos AS (
-                SELECT v.chassi, 'van' AS tipo
-                FROM Veiculo v
-                JOIN Van van ON v.chassi = van.veiculo_chassi
-
-                UNION ALL
-
-                SELECT v.chassi, 'moto' AS tipo
-                FROM Veiculo v
-                JOIN Moto moto ON v.chassi = moto.veiculo_chassi
-            )
-
-            SELECT tv.tipo, COUNT(*) AS total
-            FROM viagem vi
-            JOIN tipo_veiculos tv ON vi.veiculo_chassi = tv.chassi
-            WHERE YEAR(vi.data_viagem) = ?
-            GROUP BY tv.tipo;
+            CALL sp_contar_viagens_por_tipo( ? )
+            
         """;
     
         List<TripTypeCountDto> resultado = new ArrayList<>();

@@ -2,6 +2,7 @@ package com.cesar.bd_project.service;
 
 import com.cesar.bd_project.dao.ClientDao;
 import com.cesar.bd_project.dao.PhoneDao;
+import com.cesar.bd_project.dto.ClientWithCadastroDto;
 import com.cesar.bd_project.dto.ClientWithPhoneDto;
 import com.cesar.bd_project.mapper.ClassMapper;
 import com.cesar.bd_project.model.PhoneModel;
@@ -96,6 +97,11 @@ public class ClientService {
             phoneDao.save(phone);
         }
     }
+
+    public List<ClientWithCadastroDto> listClientsWithCadastro() {
+        return clientDao.listClientsWithDataCadastro();
+    }
+
 
     //Não faz sentido ter
     public void deleteClient(String cpf) {

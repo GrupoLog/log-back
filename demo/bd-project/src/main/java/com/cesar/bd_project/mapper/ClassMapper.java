@@ -62,6 +62,7 @@ public class ClassMapper {
         request.setDataSolicitacao(requestModel.getDataSolicitacao());
         request.setFormaPagamento(requestModel.getFormaPagamento());
         request.setValorPagamento(requestModel.getValorPagamento());
+        request.setStatusPagamento(requestModel.getStatusPagamento());
         request.setClientesCpf(requestModel.getClientesCpf());
         request.setIdServico(requestModel.getIdServico());
 

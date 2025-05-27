@@ -23,7 +23,7 @@ public class RequestModel {
 
     @JsonProperty("valor_pagamento")
     private Double valorPagamento;
-
+    
     @JsonProperty("status_pagamento")
     private String statusPagamento;
 
